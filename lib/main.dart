@@ -62,6 +62,30 @@ class _MyHomePageState extends State<MyHomePage> {
         hoursEnd: 20,
         pictureUrl:
             "https://www.lib.umich.edu/static/a702abfd347b4a1f3591d9f4ad572594/f9008/shapiro-4-june2019_edited.jpg"),
+    StudySpace(
+        name: "Asian Library",
+        hoursStart: 8,
+        hoursEnd: 17,
+        pictureUrl:
+            "https://www.lib.umich.edu/static/50a94f6a1ea2e98354f34892825c57d0/fddf6/AsiaLibrary.jpg"),
+    StudySpace(
+        name: "Taubman Health Sciences Library",
+        hoursStart: 9,
+        hoursEnd: 17,
+        pictureUrl:
+            "https://www.lib.umich.edu/static/ba2f579811238c27e92075de164c5c65/fddf6/taubman-3-june2019_edited.jpg"),
+    StudySpace(
+        name: "Askwith Media Library",
+        hoursStart: 9,
+        hoursEnd: 18,
+        pictureUrl:
+            "https://www.lib.umich.edu/static/f38a16cbb3e878b965464909b31067b8/fddf6/Shapiro-Askwith3-Feb2020_edited.jpg"),
+    StudySpace(
+        name: "Music Library",
+        hoursStart: 9,
+        hoursEnd: 17,
+        pictureUrl:
+            "https://www.lib.umich.edu/static/4f747347e1b9c383e2c178100c9e0869/fddf6/earlmoore4-june2019_edited.jpg"),
   ];
 
   @override
@@ -70,16 +94,20 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          showFeaturedListItem(studySpaces[0]),
-          ...studySpaces.sublist(1).map(showListItem).toList(),
-        ]),
-      ),
+      body: ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: studySpaces.length,
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
+              return showFeaturedListItem(studySpaces[index]);
+            } else {
+              return showListItem(studySpaces[index]);
+            }
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: showFilters,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        tooltip: 'Filter',
+        child: const Icon(Icons.filter_alt),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
@@ -91,24 +119,32 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
       ListTile(
         title: Text(studySpace.name),
-        subtitle: Text(studySpace.hoursStart.toString() +
-            "-" +
-            studySpace.hoursEnd.toString()),
+        subtitle: Text(hourToString(studySpace.hoursStart) +
+            " - " +
+            hourToString(studySpace.hoursEnd)),
       ),
     ]));
   }
 
   Widget showFeaturedListItem(StudySpace studySpace) {
     return Card(
-        child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          Image.network(studySpace.pictureUrl),
-          ListTile(
-            title: Text(studySpace.name),
-            subtitle: Text(studySpace.hoursStart.toString() +
-                "-" +
-                studySpace.hoursEnd.toString()),
-          ),
-        ]),
-        margin: const EdgeInsets.all(10));
+      child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        Image.network(studySpace.pictureUrl),
+        ListTile(
+          title: Text(studySpace.name),
+          subtitle: Text(hourToString(studySpace.hoursStart) +
+              " - " +
+              hourToString(studySpace.hoursEnd)),
+        ),
+      ]),
+    );
+  }
+
+  String hourToString(int hour) {
+    if (hour > 12) {
+      return (hour - 12).toString() + "PM";
+    } else {
+      return hour.toString() + "AM";
+    }
   }
 }
