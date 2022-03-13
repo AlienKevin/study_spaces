@@ -182,6 +182,17 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         // itemExtent: 100,
       ),
+      floatingActionButton: appState == AppState.startingSearch
+          ? FloatingActionButton.extended(
+              onPressed: () {
+                // Add your onPressed code here!
+              },
+              label: const Text('Search with filters'),
+              icon: const Icon(Icons.filter_alt),
+              backgroundColor: Theme.of(context).primaryColor,
+            )
+          : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
     );
   }
 
