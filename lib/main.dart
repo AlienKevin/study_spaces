@@ -51,6 +51,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String queryName = "";
+  bool isSearching = false;
   final queryController = TextEditingController();
 
   final List<StudySpace> studySpaces = [
@@ -119,22 +120,36 @@ class _MyHomePageState extends State<MyHomePage> {
         title: TextField(
           onChanged: (String name) {
             setState(() {
+              isSearching = true;
               queryName = name;
+            });
+          },
+          onTap: () {
+            setState(() {
+              isSearching = true;
             });
           },
           decoration: InputDecoration(
               hintText: 'Where are you studying?',
-              prefixIcon: (queryName.isNotEmpty)
+              prefixIcon: isSearching
                   ? GestureDetector(
                       child: const Icon(Icons.arrow_back_ios_new),
                       onTap: () {
                         setState(() {
+                          isSearching = false;
                           queryName = "";
                           queryController.clear();
                         });
                       },
                     )
-                  : const Icon(Icons.search)),
+                  : GestureDetector(
+                      child: const Icon(Icons.search),
+                      onTap: () {
+                        setState(() {
+                          isSearching = true;
+                        });
+                      },
+                    )),
           controller: queryController,
         ),
         backgroundColor: Theme.of(context).canvasColor,
