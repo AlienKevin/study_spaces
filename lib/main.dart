@@ -130,6 +130,12 @@ class _MyHomePageState extends State<MyHomePage> {
             });
           },
           decoration: InputDecoration(
+              focusedBorder: isSearching
+                  ? UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Theme.of(context).primaryColor, width: 2.0),
+                    )
+                  : InputBorder.none,
               hintText: 'Where are you studying?',
               prefixIcon: isSearching
                   ? GestureDetector(
