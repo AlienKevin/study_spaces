@@ -49,10 +49,18 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+enum AppState {
+  home,
+  startingSearch,
+  keywordSearch,
+  filterSearch,
+}
+
 class _MyHomePageState extends State<MyHomePage> {
   String queryName = "";
-  bool isSearching = false;
+  AppState appState = AppState.home;
   final queryController = TextEditingController();
+  final FocusNode queryFocusNode = FocusNode();
 
   final List<StudySpace> studySpaces = [
     StudySpace(
@@ -118,31 +126,33 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: TextField(
+          focusNode: queryFocusNode,
           onChanged: (String name) {
             setState(() {
-              isSearching = true;
+              appState = AppState.keywordSearch;
               queryName = name;
             });
           },
           onTap: () {
             setState(() {
-              isSearching = true;
+              appState = AppState.startingSearch;
             });
           },
           decoration: InputDecoration(
-              focusedBorder: isSearching
+              focusedBorder: appState == AppState.keywordSearch
                   ? UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: Theme.of(context).primaryColor, width: 2.0),
                     )
                   : InputBorder.none,
               hintText: 'Where are you studying?',
-              prefixIcon: isSearching
+              prefixIcon: appState == AppState.keywordSearch
                   ? GestureDetector(
                       child: const Icon(Icons.arrow_back_ios_new),
                       onTap: () {
                         setState(() {
-                          isSearching = false;
+                          appState = AppState.home;
+                          queryFocusNode.unfocus();
                           queryName = "";
                           queryController.clear();
                         });
@@ -152,7 +162,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: const Icon(Icons.search),
                       onTap: () {
                         setState(() {
-                          isSearching = true;
+                          appState = AppState.startingSearch;
+                          queryFocusNode.requestFocus();
                         });
                       },
                     )),
@@ -197,5 +208,12 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       return hour.toString() + "AM";
     }
+  }
+
+  @override
+  void dispose() {
+    queryFocusNode.dispose();
+    queryController.dispose();
+    super.dispose();
   }
 }
