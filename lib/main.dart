@@ -156,14 +156,14 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         // itemExtent: 100,
       ),
-      floatingActionButton: appState == const AppState.startingSearch()
-          ? FloatingActionButton.extended(
-              onPressed: startFiltering,
-              label: const Text('Search with filters'),
-              icon: const Icon(Icons.filter_alt),
-              backgroundColor: Theme.of(context).primaryColor,
-            )
-          : null,
+      floatingActionButton: Visibility(
+          visible: appState == const AppState.startingSearch(),
+          child: FloatingActionButton.extended(
+            onPressed: startFiltering,
+            label: const Text('Search with filters'),
+            icon: const Icon(Icons.filter_alt),
+            backgroundColor: Theme.of(context).primaryColor,
+          )),
       floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
     );
   }
