@@ -171,12 +171,15 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         backgroundColor: Theme.of(context).canvasColor,
       ),
-      body: ListView.builder(
+      body: ListView.separated(
         padding: const EdgeInsets.all(8),
         itemCount: filteredStudySpaces.length,
         itemBuilder: (BuildContext context, int index) {
           return showListItem(filteredStudySpaces[index]);
         },
+        separatorBuilder: (context, index) => SizedBox(
+          height: Theme.of(context).textTheme.bodySmall!.fontSize! / 2,
+        ),
         // itemExtent: 100,
       ),
     );
@@ -184,22 +187,40 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget showListItem(StudySpace studySpace) {
     return Card(
-        child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-      SizedBox(
-          child: ListTile(
-        trailing: AspectRatio(
-            aspectRatio: 1,
-            child: Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(studySpace.pictureUrl))))),
-        title: Text(studySpace.name),
-        subtitle: Text(hourToString(studySpace.hoursStart) +
-            " - " +
-            hourToString(studySpace.hoursEnd)),
-      )),
-    ]));
+        child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Expanded(
+            child: Column(
+          children: [
+            Text(
+              studySpace.name,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            SizedBox(
+                height: Theme.of(context).textTheme.bodySmall!.fontSize! / 2),
+            Text(
+                hourToString(studySpace.hoursStart) +
+                    " - " +
+                    hourToString(studySpace.hoursEnd),
+                style: Theme.of(context).textTheme.bodyMedium),
+          ],
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+        )),
+        SizedBox(
+            width: 80,
+            height: 80,
+            child: AspectRatio(
+                aspectRatio: 1,
+                child: Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            fit: BoxFit.fitHeight,
+                            image: NetworkImage(studySpace.pictureUrl)))))),
+      ]),
+    ));
   }
 
   String hourToString(int hour) {
