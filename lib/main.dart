@@ -172,17 +172,17 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Row(children: [
           backToHomeIconButton(),
           SizedBox(
-              width: Theme.of(context).textTheme.titleLarge!.fontSize! / 2),
+              width: Theme.of(context).textTheme.titleMedium!.fontSize! / 2),
           TextButton(
             style: TextButton.styleFrom(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
-                    Theme.of(context).textTheme.titleLarge!.fontSize!),
+                    Theme.of(context).textTheme.titleMedium!.fontSize! * 2),
               ),
               padding: EdgeInsets.all(
-                  Theme.of(context).textTheme.titleLarge!.fontSize! / 2),
+                  Theme.of(context).textTheme.titleMedium!.fontSize! / 1.5),
               primary: Colors.white,
-              textStyle: Theme.of(context).textTheme.titleLarge,
+              textStyle: Theme.of(context).textTheme.titleMedium,
               backgroundColor: Theme.of(context).primaryColor,
             ),
             onPressed: startFiltering,
@@ -267,6 +267,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: MediaQuery.of(context).size.width,
                 height: 450,
                 child: TimeRangePicker(
+                    timeTextStyle: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(color: Colors.white),
+                    activeTimeTextStyle: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(color: Colors.white),
                     hideButtons: true,
                     onStartChange: (start) {
                       setState(() {
