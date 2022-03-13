@@ -50,7 +50,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String? queryName;
+  String queryName = "";
+  final queryController = TextEditingController();
 
   final List<StudySpace> studySpaces = [
     StudySpace(
@@ -100,11 +101,11 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     var wordBoundary = RegExp(r'\W');
-    var filteredStudySpaces = (queryName != null && queryName!.isNotEmpty)
+    var filteredStudySpaces = queryName.isNotEmpty
         ? studySpaces
             .where((space) =>
                 space.name.toLowerCase().split(wordBoundary).any((word) {
-                  return queryName!
+                  return queryName
                       .toLowerCase()
                       .split(wordBoundary)
                       .any((queryWord) {
@@ -121,9 +122,20 @@ class _MyHomePageState extends State<MyHomePage> {
               queryName = name;
             });
           },
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
               hintText: 'Where are you studying?',
-              prefixIcon: Icon(Icons.search)),
+              prefixIcon: (queryName.isNotEmpty)
+                  ? GestureDetector(
+                      child: const Icon(Icons.arrow_back_ios_new),
+                      onTap: () {
+                        setState(() {
+                          queryName = "";
+                          queryController.clear();
+                        });
+                      },
+                    )
+                  : const Icon(Icons.search)),
+          controller: queryController,
         ),
         backgroundColor: Theme.of(context).canvasColor,
       ),
