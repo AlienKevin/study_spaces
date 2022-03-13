@@ -12,6 +12,16 @@ class OpeningHours with _$OpeningHours {
       RangeOpeningHours;
 }
 
+@freezed
+class AppState with _$AppState {
+  const factory AppState.home() = HomeAppState;
+  const factory AppState.startingSearch() = StartingSearchAppState;
+  const factory AppState.keywordSearch() = KeywordSearchAppState;
+  const factory AppState.filterSearch() = FilterSearchAppState;
+  const factory AppState.filterResults({required OpeningHours openingHours}) =
+      FilterResultsAppState;
+}
+
 void main() {
   runApp(const MyApp());
 }
@@ -58,16 +68,9 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-enum AppState {
-  home,
-  startingSearch,
-  keywordSearch,
-  filterSearch,
-}
-
 class _MyHomePageState extends State<MyHomePage> {
   String queryName = "";
-  AppState appState = AppState.home;
+  AppState appState = const AppState.home();
   final queryController = TextEditingController();
   final FocusNode queryFocusNode = FocusNode();
 
@@ -118,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     var wordBoundary = RegExp(r'\W');
-    var filteredStudySpaces = queryName.isNotEmpty
+    var queryFilteredStudySpaces = queryName.isNotEmpty
         ? studySpaces
             .where((space) =>
                 space.name.toLowerCase().split(wordBoundary).any((word) {
@@ -131,8 +134,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 }))
             .toList()
         : studySpaces;
+    var filteredStudySpaces = appState.when(
+      filterResults: (filterOpeningHours) => studySpaces
+          .where(
+              (space) => isOpenDuring(filterOpeningHours, space.openingHours))
+          .toList(),
+      keywordSearch: () => queryFilteredStudySpaces,
+      filterSearch: () => queryFilteredStudySpaces,
+      home: () => queryFilteredStudySpaces,
+      startingSearch: () => queryFilteredStudySpaces,
+    );
     return Scaffold(
-      appBar: appState == AppState.filterSearch
+      appBar: appState == const AppState.filterSearch()
           ? AppBar(
               toolbarHeight: 10,
               backgroundColor: Theme.of(context).canvasColor,
@@ -143,17 +156,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 focusNode: queryFocusNode,
                 onChanged: (String name) {
                   setState(() {
-                    appState = AppState.keywordSearch;
+                    appState = const AppState.keywordSearch();
                     queryName = name;
                   });
                 },
                 onTap: () {
                   setState(() {
-                    appState = AppState.startingSearch;
+                    appState = const AppState.startingSearch();
                   });
                 },
                 decoration: InputDecoration(
-                    focusedBorder: appState == AppState.keywordSearch
+                    focusedBorder: appState == const AppState.keywordSearch()
                         ? UnderlineInputBorder(
                             borderSide: BorderSide(
                                 color: Theme.of(context).primaryColor,
@@ -161,12 +174,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           )
                         : InputBorder.none,
                     hintText: 'Where are you studying?',
-                    prefixIcon: appState == AppState.keywordSearch
+                    prefixIcon: appState == const AppState.keywordSearch()
                         ? GestureDetector(
                             child: const Icon(Icons.arrow_back_ios_new),
                             onTap: () {
                               setState(() {
-                                appState = AppState.home;
+                                appState = const AppState.home();
                                 queryFocusNode.unfocus();
                                 queryName = "";
                                 queryController.clear();
@@ -177,7 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: const Icon(Icons.search),
                             onTap: () {
                               setState(() {
-                                appState = AppState.startingSearch;
+                                appState = const AppState.startingSearch();
                                 queryFocusNode.requestFocus();
                               });
                             },
@@ -197,16 +210,47 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         // itemExtent: 100,
       ),
-      floatingActionButton: appState == AppState.startingSearch
+      floatingActionButton: appState == const AppState.startingSearch()
           ? FloatingActionButton.extended(
-              onPressed: () async {
-                setState(() {
-                  appState = AppState.filterSearch;
-                });
-                TimeRange? result = await showTimeRangePicker(
-                    context: context,
-                    start: const TimeOfDay(hour: 9, minute: 0),
-                    end: const TimeOfDay(hour: 22, minute: 0),
+              onPressed: startFiltering,
+              label: const Text('Search with filters'),
+              icon: const Icon(Icons.filter_alt),
+              backgroundColor: Theme.of(context).primaryColor,
+            )
+          : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
+    );
+  }
+
+  void startFiltering() async {
+    setState(() {
+      appState = const AppState.filterSearch();
+    });
+    TimeOfDay _startTime = TimeOfDay.now();
+    TimeOfDay _endTime = const TimeOfDay(hour: 22, minute: 0);
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.zero,
+            title: const Text("Opening Hours"),
+            content: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 450,
+                child: TimeRangePicker(
+                    hideButtons: true,
+                    onStartChange: (start) {
+                      setState(() {
+                        _startTime = start;
+                      });
+                    },
+                    onEndChange: (end) {
+                      setState(() {
+                        _endTime = end;
+                      });
+                    },
+                    start: _startTime,
+                    end: _endTime,
                     interval: const Duration(minutes: 30),
                     minDuration: const Duration(minutes: 30),
                     snap: true,
@@ -231,16 +275,29 @@ class _MyHomePageState extends State<MyHomePage> {
                     }).toList(),
                     labelOffset: 35,
                     rotateLabels: false,
-                    padding: 60);
-                print("result: " + result.toString());
-              },
-              label: const Text('Search with filters'),
-              icon: const Icon(Icons.filter_alt),
-              backgroundColor: Theme.of(context).primaryColor,
-            )
-          : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
-    );
+                    padding: 60)),
+            actions: <Widget>[
+              TextButton(
+                  child: const Text('Back'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    setState(() {
+                      appState = const AppState.home();
+                    });
+                  }),
+              TextButton(
+                child: const Text('Filter'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  setState(() {
+                    appState = AppState.filterResults(
+                        openingHours: OpeningHours.range(_startTime, _endTime));
+                  });
+                },
+              ),
+            ],
+          );
+        });
   }
 
   Widget showListItem(StudySpace studySpace) {
@@ -303,6 +360,27 @@ class _MyHomePageState extends State<MyHomePage> {
           "AM";
     }
   }
+
+  bool isOpenDuring(OpeningHours queryHours, OpeningHours duringHours) {
+    return duringHours.when(
+        allDay: () => true,
+        range: (TimeOfDay duringStart, TimeOfDay duringEnd) => queryHours.when(
+            range: (TimeOfDay queryStart, TimeOfDay queryEnd) {
+              // print("queryStart: " + queryStart.toString());
+              // print("queryEnd: " + queryEnd.toString());
+              // print("duringStart: " + duringStart.toString());
+              // print("duringEnd: " + duringEnd.toString());
+              return timeOfDayLessThanEqual(duringStart, queryStart) &&
+                  timeOfDayLessThanEqual(queryEnd, duringEnd);
+            },
+            allDay: () => false));
+  }
+
+  bool timeOfDayLessThanEqual(TimeOfDay t1, TimeOfDay t2) =>
+      timeOfDayToDouble(t1) <= timeOfDayToDouble(t2);
+
+  double timeOfDayToDouble(TimeOfDay myTime) =>
+      myTime.hour + myTime.minute / 60.0;
 
   @override
   void dispose() {

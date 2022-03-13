@@ -341,3 +341,763 @@ abstract class RangeOpeningHours implements OpeningHours {
   $RangeOpeningHoursCopyWith<RangeOpeningHours> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+class _$AppStateTearOff {
+  const _$AppStateTearOff();
+
+  HomeAppState home() {
+    return const HomeAppState();
+  }
+
+  StartingSearchAppState startingSearch() {
+    return const StartingSearchAppState();
+  }
+
+  KeywordSearchAppState keywordSearch() {
+    return const KeywordSearchAppState();
+  }
+
+  FilterSearchAppState filterSearch() {
+    return const FilterSearchAppState();
+  }
+
+  FilterResultsAppState filterResults({required OpeningHours openingHours}) {
+    return FilterResultsAppState(
+      openingHours: openingHours,
+    );
+  }
+}
+
+/// @nodoc
+const $AppState = _$AppStateTearOff();
+
+/// @nodoc
+mixin _$AppState {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() home,
+    required TResult Function() startingSearch,
+    required TResult Function() keywordSearch,
+    required TResult Function() filterSearch,
+    required TResult Function(OpeningHours openingHours) filterResults,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? home,
+    TResult Function()? startingSearch,
+    TResult Function()? keywordSearch,
+    TResult Function()? filterSearch,
+    TResult Function(OpeningHours openingHours)? filterResults,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? home,
+    TResult Function()? startingSearch,
+    TResult Function()? keywordSearch,
+    TResult Function()? filterSearch,
+    TResult Function(OpeningHours openingHours)? filterResults,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(HomeAppState value) home,
+    required TResult Function(StartingSearchAppState value) startingSearch,
+    required TResult Function(KeywordSearchAppState value) keywordSearch,
+    required TResult Function(FilterSearchAppState value) filterSearch,
+    required TResult Function(FilterResultsAppState value) filterResults,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(HomeAppState value)? home,
+    TResult Function(StartingSearchAppState value)? startingSearch,
+    TResult Function(KeywordSearchAppState value)? keywordSearch,
+    TResult Function(FilterSearchAppState value)? filterSearch,
+    TResult Function(FilterResultsAppState value)? filterResults,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(HomeAppState value)? home,
+    TResult Function(StartingSearchAppState value)? startingSearch,
+    TResult Function(KeywordSearchAppState value)? keywordSearch,
+    TResult Function(FilterSearchAppState value)? filterSearch,
+    TResult Function(FilterResultsAppState value)? filterResults,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AppStateCopyWith<$Res> {
+  factory $AppStateCopyWith(AppState value, $Res Function(AppState) then) =
+      _$AppStateCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$AppStateCopyWithImpl<$Res> implements $AppStateCopyWith<$Res> {
+  _$AppStateCopyWithImpl(this._value, this._then);
+
+  final AppState _value;
+  // ignore: unused_field
+  final $Res Function(AppState) _then;
+}
+
+/// @nodoc
+abstract class $HomeAppStateCopyWith<$Res> {
+  factory $HomeAppStateCopyWith(
+          HomeAppState value, $Res Function(HomeAppState) then) =
+      _$HomeAppStateCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$HomeAppStateCopyWithImpl<$Res> extends _$AppStateCopyWithImpl<$Res>
+    implements $HomeAppStateCopyWith<$Res> {
+  _$HomeAppStateCopyWithImpl(
+      HomeAppState _value, $Res Function(HomeAppState) _then)
+      : super(_value, (v) => _then(v as HomeAppState));
+
+  @override
+  HomeAppState get _value => super._value as HomeAppState;
+}
+
+/// @nodoc
+
+class _$HomeAppState implements HomeAppState {
+  const _$HomeAppState();
+
+  @override
+  String toString() {
+    return 'AppState.home()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is HomeAppState);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() home,
+    required TResult Function() startingSearch,
+    required TResult Function() keywordSearch,
+    required TResult Function() filterSearch,
+    required TResult Function(OpeningHours openingHours) filterResults,
+  }) {
+    return home();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? home,
+    TResult Function()? startingSearch,
+    TResult Function()? keywordSearch,
+    TResult Function()? filterSearch,
+    TResult Function(OpeningHours openingHours)? filterResults,
+  }) {
+    return home?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? home,
+    TResult Function()? startingSearch,
+    TResult Function()? keywordSearch,
+    TResult Function()? filterSearch,
+    TResult Function(OpeningHours openingHours)? filterResults,
+    required TResult orElse(),
+  }) {
+    if (home != null) {
+      return home();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(HomeAppState value) home,
+    required TResult Function(StartingSearchAppState value) startingSearch,
+    required TResult Function(KeywordSearchAppState value) keywordSearch,
+    required TResult Function(FilterSearchAppState value) filterSearch,
+    required TResult Function(FilterResultsAppState value) filterResults,
+  }) {
+    return home(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(HomeAppState value)? home,
+    TResult Function(StartingSearchAppState value)? startingSearch,
+    TResult Function(KeywordSearchAppState value)? keywordSearch,
+    TResult Function(FilterSearchAppState value)? filterSearch,
+    TResult Function(FilterResultsAppState value)? filterResults,
+  }) {
+    return home?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(HomeAppState value)? home,
+    TResult Function(StartingSearchAppState value)? startingSearch,
+    TResult Function(KeywordSearchAppState value)? keywordSearch,
+    TResult Function(FilterSearchAppState value)? filterSearch,
+    TResult Function(FilterResultsAppState value)? filterResults,
+    required TResult orElse(),
+  }) {
+    if (home != null) {
+      return home(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class HomeAppState implements AppState {
+  const factory HomeAppState() = _$HomeAppState;
+}
+
+/// @nodoc
+abstract class $StartingSearchAppStateCopyWith<$Res> {
+  factory $StartingSearchAppStateCopyWith(StartingSearchAppState value,
+          $Res Function(StartingSearchAppState) then) =
+      _$StartingSearchAppStateCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$StartingSearchAppStateCopyWithImpl<$Res>
+    extends _$AppStateCopyWithImpl<$Res>
+    implements $StartingSearchAppStateCopyWith<$Res> {
+  _$StartingSearchAppStateCopyWithImpl(StartingSearchAppState _value,
+      $Res Function(StartingSearchAppState) _then)
+      : super(_value, (v) => _then(v as StartingSearchAppState));
+
+  @override
+  StartingSearchAppState get _value => super._value as StartingSearchAppState;
+}
+
+/// @nodoc
+
+class _$StartingSearchAppState implements StartingSearchAppState {
+  const _$StartingSearchAppState();
+
+  @override
+  String toString() {
+    return 'AppState.startingSearch()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is StartingSearchAppState);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() home,
+    required TResult Function() startingSearch,
+    required TResult Function() keywordSearch,
+    required TResult Function() filterSearch,
+    required TResult Function(OpeningHours openingHours) filterResults,
+  }) {
+    return startingSearch();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? home,
+    TResult Function()? startingSearch,
+    TResult Function()? keywordSearch,
+    TResult Function()? filterSearch,
+    TResult Function(OpeningHours openingHours)? filterResults,
+  }) {
+    return startingSearch?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? home,
+    TResult Function()? startingSearch,
+    TResult Function()? keywordSearch,
+    TResult Function()? filterSearch,
+    TResult Function(OpeningHours openingHours)? filterResults,
+    required TResult orElse(),
+  }) {
+    if (startingSearch != null) {
+      return startingSearch();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(HomeAppState value) home,
+    required TResult Function(StartingSearchAppState value) startingSearch,
+    required TResult Function(KeywordSearchAppState value) keywordSearch,
+    required TResult Function(FilterSearchAppState value) filterSearch,
+    required TResult Function(FilterResultsAppState value) filterResults,
+  }) {
+    return startingSearch(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(HomeAppState value)? home,
+    TResult Function(StartingSearchAppState value)? startingSearch,
+    TResult Function(KeywordSearchAppState value)? keywordSearch,
+    TResult Function(FilterSearchAppState value)? filterSearch,
+    TResult Function(FilterResultsAppState value)? filterResults,
+  }) {
+    return startingSearch?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(HomeAppState value)? home,
+    TResult Function(StartingSearchAppState value)? startingSearch,
+    TResult Function(KeywordSearchAppState value)? keywordSearch,
+    TResult Function(FilterSearchAppState value)? filterSearch,
+    TResult Function(FilterResultsAppState value)? filterResults,
+    required TResult orElse(),
+  }) {
+    if (startingSearch != null) {
+      return startingSearch(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class StartingSearchAppState implements AppState {
+  const factory StartingSearchAppState() = _$StartingSearchAppState;
+}
+
+/// @nodoc
+abstract class $KeywordSearchAppStateCopyWith<$Res> {
+  factory $KeywordSearchAppStateCopyWith(KeywordSearchAppState value,
+          $Res Function(KeywordSearchAppState) then) =
+      _$KeywordSearchAppStateCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$KeywordSearchAppStateCopyWithImpl<$Res>
+    extends _$AppStateCopyWithImpl<$Res>
+    implements $KeywordSearchAppStateCopyWith<$Res> {
+  _$KeywordSearchAppStateCopyWithImpl(
+      KeywordSearchAppState _value, $Res Function(KeywordSearchAppState) _then)
+      : super(_value, (v) => _then(v as KeywordSearchAppState));
+
+  @override
+  KeywordSearchAppState get _value => super._value as KeywordSearchAppState;
+}
+
+/// @nodoc
+
+class _$KeywordSearchAppState implements KeywordSearchAppState {
+  const _$KeywordSearchAppState();
+
+  @override
+  String toString() {
+    return 'AppState.keywordSearch()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is KeywordSearchAppState);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() home,
+    required TResult Function() startingSearch,
+    required TResult Function() keywordSearch,
+    required TResult Function() filterSearch,
+    required TResult Function(OpeningHours openingHours) filterResults,
+  }) {
+    return keywordSearch();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? home,
+    TResult Function()? startingSearch,
+    TResult Function()? keywordSearch,
+    TResult Function()? filterSearch,
+    TResult Function(OpeningHours openingHours)? filterResults,
+  }) {
+    return keywordSearch?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? home,
+    TResult Function()? startingSearch,
+    TResult Function()? keywordSearch,
+    TResult Function()? filterSearch,
+    TResult Function(OpeningHours openingHours)? filterResults,
+    required TResult orElse(),
+  }) {
+    if (keywordSearch != null) {
+      return keywordSearch();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(HomeAppState value) home,
+    required TResult Function(StartingSearchAppState value) startingSearch,
+    required TResult Function(KeywordSearchAppState value) keywordSearch,
+    required TResult Function(FilterSearchAppState value) filterSearch,
+    required TResult Function(FilterResultsAppState value) filterResults,
+  }) {
+    return keywordSearch(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(HomeAppState value)? home,
+    TResult Function(StartingSearchAppState value)? startingSearch,
+    TResult Function(KeywordSearchAppState value)? keywordSearch,
+    TResult Function(FilterSearchAppState value)? filterSearch,
+    TResult Function(FilterResultsAppState value)? filterResults,
+  }) {
+    return keywordSearch?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(HomeAppState value)? home,
+    TResult Function(StartingSearchAppState value)? startingSearch,
+    TResult Function(KeywordSearchAppState value)? keywordSearch,
+    TResult Function(FilterSearchAppState value)? filterSearch,
+    TResult Function(FilterResultsAppState value)? filterResults,
+    required TResult orElse(),
+  }) {
+    if (keywordSearch != null) {
+      return keywordSearch(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class KeywordSearchAppState implements AppState {
+  const factory KeywordSearchAppState() = _$KeywordSearchAppState;
+}
+
+/// @nodoc
+abstract class $FilterSearchAppStateCopyWith<$Res> {
+  factory $FilterSearchAppStateCopyWith(FilterSearchAppState value,
+          $Res Function(FilterSearchAppState) then) =
+      _$FilterSearchAppStateCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$FilterSearchAppStateCopyWithImpl<$Res>
+    extends _$AppStateCopyWithImpl<$Res>
+    implements $FilterSearchAppStateCopyWith<$Res> {
+  _$FilterSearchAppStateCopyWithImpl(
+      FilterSearchAppState _value, $Res Function(FilterSearchAppState) _then)
+      : super(_value, (v) => _then(v as FilterSearchAppState));
+
+  @override
+  FilterSearchAppState get _value => super._value as FilterSearchAppState;
+}
+
+/// @nodoc
+
+class _$FilterSearchAppState implements FilterSearchAppState {
+  const _$FilterSearchAppState();
+
+  @override
+  String toString() {
+    return 'AppState.filterSearch()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is FilterSearchAppState);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() home,
+    required TResult Function() startingSearch,
+    required TResult Function() keywordSearch,
+    required TResult Function() filterSearch,
+    required TResult Function(OpeningHours openingHours) filterResults,
+  }) {
+    return filterSearch();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? home,
+    TResult Function()? startingSearch,
+    TResult Function()? keywordSearch,
+    TResult Function()? filterSearch,
+    TResult Function(OpeningHours openingHours)? filterResults,
+  }) {
+    return filterSearch?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? home,
+    TResult Function()? startingSearch,
+    TResult Function()? keywordSearch,
+    TResult Function()? filterSearch,
+    TResult Function(OpeningHours openingHours)? filterResults,
+    required TResult orElse(),
+  }) {
+    if (filterSearch != null) {
+      return filterSearch();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(HomeAppState value) home,
+    required TResult Function(StartingSearchAppState value) startingSearch,
+    required TResult Function(KeywordSearchAppState value) keywordSearch,
+    required TResult Function(FilterSearchAppState value) filterSearch,
+    required TResult Function(FilterResultsAppState value) filterResults,
+  }) {
+    return filterSearch(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(HomeAppState value)? home,
+    TResult Function(StartingSearchAppState value)? startingSearch,
+    TResult Function(KeywordSearchAppState value)? keywordSearch,
+    TResult Function(FilterSearchAppState value)? filterSearch,
+    TResult Function(FilterResultsAppState value)? filterResults,
+  }) {
+    return filterSearch?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(HomeAppState value)? home,
+    TResult Function(StartingSearchAppState value)? startingSearch,
+    TResult Function(KeywordSearchAppState value)? keywordSearch,
+    TResult Function(FilterSearchAppState value)? filterSearch,
+    TResult Function(FilterResultsAppState value)? filterResults,
+    required TResult orElse(),
+  }) {
+    if (filterSearch != null) {
+      return filterSearch(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class FilterSearchAppState implements AppState {
+  const factory FilterSearchAppState() = _$FilterSearchAppState;
+}
+
+/// @nodoc
+abstract class $FilterResultsAppStateCopyWith<$Res> {
+  factory $FilterResultsAppStateCopyWith(FilterResultsAppState value,
+          $Res Function(FilterResultsAppState) then) =
+      _$FilterResultsAppStateCopyWithImpl<$Res>;
+  $Res call({OpeningHours openingHours});
+
+  $OpeningHoursCopyWith<$Res> get openingHours;
+}
+
+/// @nodoc
+class _$FilterResultsAppStateCopyWithImpl<$Res>
+    extends _$AppStateCopyWithImpl<$Res>
+    implements $FilterResultsAppStateCopyWith<$Res> {
+  _$FilterResultsAppStateCopyWithImpl(
+      FilterResultsAppState _value, $Res Function(FilterResultsAppState) _then)
+      : super(_value, (v) => _then(v as FilterResultsAppState));
+
+  @override
+  FilterResultsAppState get _value => super._value as FilterResultsAppState;
+
+  @override
+  $Res call({
+    Object? openingHours = freezed,
+  }) {
+    return _then(FilterResultsAppState(
+      openingHours: openingHours == freezed
+          ? _value.openingHours
+          : openingHours // ignore: cast_nullable_to_non_nullable
+              as OpeningHours,
+    ));
+  }
+
+  @override
+  $OpeningHoursCopyWith<$Res> get openingHours {
+    return $OpeningHoursCopyWith<$Res>(_value.openingHours, (value) {
+      return _then(_value.copyWith(openingHours: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$FilterResultsAppState implements FilterResultsAppState {
+  const _$FilterResultsAppState({required this.openingHours});
+
+  @override
+  final OpeningHours openingHours;
+
+  @override
+  String toString() {
+    return 'AppState.filterResults(openingHours: $openingHours)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is FilterResultsAppState &&
+            const DeepCollectionEquality()
+                .equals(other.openingHours, openingHours));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(openingHours));
+
+  @JsonKey(ignore: true)
+  @override
+  $FilterResultsAppStateCopyWith<FilterResultsAppState> get copyWith =>
+      _$FilterResultsAppStateCopyWithImpl<FilterResultsAppState>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() home,
+    required TResult Function() startingSearch,
+    required TResult Function() keywordSearch,
+    required TResult Function() filterSearch,
+    required TResult Function(OpeningHours openingHours) filterResults,
+  }) {
+    return filterResults(openingHours);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? home,
+    TResult Function()? startingSearch,
+    TResult Function()? keywordSearch,
+    TResult Function()? filterSearch,
+    TResult Function(OpeningHours openingHours)? filterResults,
+  }) {
+    return filterResults?.call(openingHours);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? home,
+    TResult Function()? startingSearch,
+    TResult Function()? keywordSearch,
+    TResult Function()? filterSearch,
+    TResult Function(OpeningHours openingHours)? filterResults,
+    required TResult orElse(),
+  }) {
+    if (filterResults != null) {
+      return filterResults(openingHours);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(HomeAppState value) home,
+    required TResult Function(StartingSearchAppState value) startingSearch,
+    required TResult Function(KeywordSearchAppState value) keywordSearch,
+    required TResult Function(FilterSearchAppState value) filterSearch,
+    required TResult Function(FilterResultsAppState value) filterResults,
+  }) {
+    return filterResults(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(HomeAppState value)? home,
+    TResult Function(StartingSearchAppState value)? startingSearch,
+    TResult Function(KeywordSearchAppState value)? keywordSearch,
+    TResult Function(FilterSearchAppState value)? filterSearch,
+    TResult Function(FilterResultsAppState value)? filterResults,
+  }) {
+    return filterResults?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(HomeAppState value)? home,
+    TResult Function(StartingSearchAppState value)? startingSearch,
+    TResult Function(KeywordSearchAppState value)? keywordSearch,
+    TResult Function(FilterSearchAppState value)? filterSearch,
+    TResult Function(FilterResultsAppState value)? filterResults,
+    required TResult orElse(),
+  }) {
+    if (filterResults != null) {
+      return filterResults(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class FilterResultsAppState implements AppState {
+  const factory FilterResultsAppState({required OpeningHours openingHours}) =
+      _$FilterResultsAppState;
+
+  OpeningHours get openingHours;
+  @JsonKey(ignore: true)
+  $FilterResultsAppStateCopyWith<FilterResultsAppState> get copyWith =>
+      throw _privateConstructorUsedError;
+}
