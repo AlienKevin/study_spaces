@@ -169,21 +169,26 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   AppBar filterResultsAppBar(OpeningHours openingHours) => AppBar(
-        title: TextButton(
-          style: TextButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                  Theme.of(context).textTheme.titleLarge!.fontSize!),
+        title: Row(children: [
+          backToHomeIconButton(),
+          SizedBox(
+              width: Theme.of(context).textTheme.titleLarge!.fontSize! / 2),
+          TextButton(
+            style: TextButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                    Theme.of(context).textTheme.titleLarge!.fontSize!),
+              ),
+              padding: EdgeInsets.all(
+                  Theme.of(context).textTheme.titleLarge!.fontSize! / 2),
+              primary: Colors.white,
+              textStyle: Theme.of(context).textTheme.titleLarge,
+              backgroundColor: Theme.of(context).primaryColor,
             ),
-            padding: EdgeInsets.all(
-                Theme.of(context).textTheme.titleLarge!.fontSize! / 2),
-            primary: Colors.white,
-            textStyle: Theme.of(context).textTheme.titleLarge,
-            backgroundColor: Theme.of(context).primaryColor,
-          ),
-          onPressed: startFiltering,
-          child: Text(openingHoursToString(openingHours)),
-        ),
+            onPressed: startFiltering,
+            child: Text(openingHoursToString(openingHours)),
+          )
+        ]),
         backgroundColor: Theme.of(context).canvasColor,
       );
 
@@ -216,29 +221,34 @@ class _MyHomePageState extends State<MyHomePage> {
                   : InputBorder.none,
               hintText: 'Where are you studying?',
               prefixIcon: appState == const AppState.keywordSearch()
-                  ? GestureDetector(
-                      child: const Icon(Icons.arrow_back_ios_new),
-                      onTap: () {
-                        setState(() {
-                          appState = const AppState.home();
-                          queryFocusNode.unfocus();
-                          queryName = "";
-                          queryController.clear();
-                        });
-                      },
-                    )
-                  : GestureDetector(
-                      child: const Icon(Icons.search),
-                      onTap: () {
-                        setState(() {
-                          appState = const AppState.startingSearch();
-                          queryFocusNode.requestFocus();
-                        });
-                      },
-                    )),
+                  ? backToHomeIconButton()
+                  : startSearchingIconButton()),
           controller: queryController,
         ),
         backgroundColor: Theme.of(context).canvasColor,
+      );
+
+  Widget startSearchingIconButton() => GestureDetector(
+        child: const Icon(Icons.search),
+        onTap: () {
+          setState(() {
+            appState = const AppState.startingSearch();
+            queryFocusNode.requestFocus();
+          });
+        },
+      );
+
+  Widget backToHomeIconButton() => GestureDetector(
+        child: Icon(Icons.arrow_back_ios_new,
+            color: Theme.of(context).primaryColor),
+        onTap: () {
+          setState(() {
+            appState = const AppState.home();
+            queryFocusNode.unfocus();
+            queryName = "";
+            queryController.clear();
+          });
+        },
       );
 
   void startFiltering() async {
