@@ -138,60 +138,13 @@ class _MyHomePageState extends State<MyHomePage> {
       startingSearch: () => queryFilteredStudySpaces,
     );
     return Scaffold(
-      appBar: appState == const AppState.filterSearch()
-          ? AppBar(
-              toolbarHeight: 10,
-              backgroundColor: Theme.of(context).canvasColor,
-              elevation: 0,
-            )
-          : AppBar(
-              title: TextField(
-                focusNode: queryFocusNode,
-                onChanged: (String name) {
-                  setState(() {
-                    appState = const AppState.keywordSearch();
-                    queryName = name;
-                  });
-                },
-                onTap: () {
-                  setState(() {
-                    appState = const AppState.startingSearch();
-                  });
-                },
-                decoration: InputDecoration(
-                    focusedBorder: appState == const AppState.keywordSearch()
-                        ? UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                                width: 2.0),
-                          )
-                        : InputBorder.none,
-                    hintText: 'Where are you studying?',
-                    prefixIcon: appState == const AppState.keywordSearch()
-                        ? GestureDetector(
-                            child: const Icon(Icons.arrow_back_ios_new),
-                            onTap: () {
-                              setState(() {
-                                appState = const AppState.home();
-                                queryFocusNode.unfocus();
-                                queryName = "";
-                                queryController.clear();
-                              });
-                            },
-                          )
-                        : GestureDetector(
-                            child: const Icon(Icons.search),
-                            onTap: () {
-                              setState(() {
-                                appState = const AppState.startingSearch();
-                                queryFocusNode.requestFocus();
-                              });
-                            },
-                          )),
-                controller: queryController,
-              ),
-              backgroundColor: Theme.of(context).canvasColor,
-            ),
+      appBar: appState.when(
+        filterSearch: () => filterSearchAppBar(),
+        filterResults: filterResultsAppBar,
+        startingSearch: () => searchAppBar(),
+        keywordSearch: () => searchAppBar(),
+        home: () => searchAppBar(),
+      ),
       body: ListView.separated(
         padding: const EdgeInsets.all(8),
         itemCount: filteredStudySpaces.length,
@@ -214,6 +167,79 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
     );
   }
+
+  AppBar filterResultsAppBar(OpeningHours openingHours) => AppBar(
+        title: TextButton(
+          style: TextButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                  Theme.of(context).textTheme.titleLarge!.fontSize!),
+            ),
+            padding: EdgeInsets.all(
+                Theme.of(context).textTheme.titleLarge!.fontSize! / 2),
+            primary: Colors.white,
+            textStyle: Theme.of(context).textTheme.titleLarge,
+            backgroundColor: Theme.of(context).primaryColor,
+          ),
+          onPressed: startFiltering,
+          child: Text(openingHoursToString(openingHours)),
+        ),
+        backgroundColor: Theme.of(context).canvasColor,
+      );
+
+  AppBar filterSearchAppBar() => AppBar(
+        toolbarHeight: 10,
+        backgroundColor: Theme.of(context).canvasColor,
+        elevation: 0,
+      );
+
+  AppBar searchAppBar() => AppBar(
+        title: TextField(
+          focusNode: queryFocusNode,
+          onChanged: (String name) {
+            setState(() {
+              appState = const AppState.keywordSearch();
+              queryName = name;
+            });
+          },
+          onTap: () {
+            setState(() {
+              appState = const AppState.startingSearch();
+            });
+          },
+          decoration: InputDecoration(
+              focusedBorder: appState == const AppState.keywordSearch()
+                  ? UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Theme.of(context).primaryColor, width: 2.0),
+                    )
+                  : InputBorder.none,
+              hintText: 'Where are you studying?',
+              prefixIcon: appState == const AppState.keywordSearch()
+                  ? GestureDetector(
+                      child: const Icon(Icons.arrow_back_ios_new),
+                      onTap: () {
+                        setState(() {
+                          appState = const AppState.home();
+                          queryFocusNode.unfocus();
+                          queryName = "";
+                          queryController.clear();
+                        });
+                      },
+                    )
+                  : GestureDetector(
+                      child: const Icon(Icons.search),
+                      onTap: () {
+                        setState(() {
+                          appState = const AppState.startingSearch();
+                          queryFocusNode.requestFocus();
+                        });
+                      },
+                    )),
+          controller: queryController,
+        ),
+        backgroundColor: Theme.of(context).canvasColor,
+      );
 
   void startFiltering() async {
     setState(() {
