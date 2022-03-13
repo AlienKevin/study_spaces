@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:string_similarity/string_similarity.dart';
+import 'package:time_range_picker/time_range_picker.dart';
 
 void main() {
   runApp(const MyApp());
@@ -124,53 +125,60 @@ class _MyHomePageState extends State<MyHomePage> {
             .toList()
         : studySpaces;
     return Scaffold(
-      appBar: AppBar(
-        title: TextField(
-          focusNode: queryFocusNode,
-          onChanged: (String name) {
-            setState(() {
-              appState = AppState.keywordSearch;
-              queryName = name;
-            });
-          },
-          onTap: () {
-            setState(() {
-              appState = AppState.startingSearch;
-            });
-          },
-          decoration: InputDecoration(
-              focusedBorder: appState == AppState.keywordSearch
-                  ? UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor, width: 2.0),
-                    )
-                  : InputBorder.none,
-              hintText: 'Where are you studying?',
-              prefixIcon: appState == AppState.keywordSearch
-                  ? GestureDetector(
-                      child: const Icon(Icons.arrow_back_ios_new),
-                      onTap: () {
-                        setState(() {
-                          appState = AppState.home;
-                          queryFocusNode.unfocus();
-                          queryName = "";
-                          queryController.clear();
-                        });
-                      },
-                    )
-                  : GestureDetector(
-                      child: const Icon(Icons.search),
-                      onTap: () {
-                        setState(() {
-                          appState = AppState.startingSearch;
-                          queryFocusNode.requestFocus();
-                        });
-                      },
-                    )),
-          controller: queryController,
-        ),
-        backgroundColor: Theme.of(context).canvasColor,
-      ),
+      appBar: appState == AppState.filterSearch
+          ? AppBar(
+              toolbarHeight: 10,
+              backgroundColor: Theme.of(context).canvasColor,
+              elevation: 0,
+            )
+          : AppBar(
+              title: TextField(
+                focusNode: queryFocusNode,
+                onChanged: (String name) {
+                  setState(() {
+                    appState = AppState.keywordSearch;
+                    queryName = name;
+                  });
+                },
+                onTap: () {
+                  setState(() {
+                    appState = AppState.startingSearch;
+                  });
+                },
+                decoration: InputDecoration(
+                    focusedBorder: appState == AppState.keywordSearch
+                        ? UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Theme.of(context).primaryColor,
+                                width: 2.0),
+                          )
+                        : InputBorder.none,
+                    hintText: 'Where are you studying?',
+                    prefixIcon: appState == AppState.keywordSearch
+                        ? GestureDetector(
+                            child: const Icon(Icons.arrow_back_ios_new),
+                            onTap: () {
+                              setState(() {
+                                appState = AppState.home;
+                                queryFocusNode.unfocus();
+                                queryName = "";
+                                queryController.clear();
+                              });
+                            },
+                          )
+                        : GestureDetector(
+                            child: const Icon(Icons.search),
+                            onTap: () {
+                              setState(() {
+                                appState = AppState.startingSearch;
+                                queryFocusNode.requestFocus();
+                              });
+                            },
+                          )),
+                controller: queryController,
+              ),
+              backgroundColor: Theme.of(context).canvasColor,
+            ),
       body: ListView.separated(
         padding: const EdgeInsets.all(8),
         itemCount: filteredStudySpaces.length,
@@ -184,8 +192,40 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: appState == AppState.startingSearch
           ? FloatingActionButton.extended(
-              onPressed: () {
-                // Add your onPressed code here!
+              onPressed: () async {
+                setState(() {
+                  appState = AppState.filterSearch;
+                });
+                TimeRange? result = await showTimeRangePicker(
+                    context: context,
+                    start: const TimeOfDay(hour: 9, minute: 0),
+                    end: const TimeOfDay(hour: 22, minute: 0),
+                    interval: const Duration(minutes: 30),
+                    minDuration: const Duration(minutes: 30),
+                    snap: true,
+                    use24HourFormat: false,
+                    strokeWidth: 4,
+                    ticks: 24,
+                    ticksOffset: -7,
+                    ticksLength: 15,
+                    ticksColor: Colors.grey,
+                    labels: [
+                      "12 am",
+                      "3 am",
+                      "6 am",
+                      "9 am",
+                      "12 pm",
+                      "3 pm",
+                      "6 pm",
+                      "9 pm"
+                    ].asMap().entries.map((e) {
+                      return ClockLabel.fromIndex(
+                          idx: e.key, length: 8, text: e.value);
+                    }).toList(),
+                    labelOffset: 35,
+                    rotateLabels: false,
+                    padding: 60);
+                print("result: " + result.toString());
               },
               label: const Text('Search with filters'),
               icon: const Icon(Icons.filter_alt),
