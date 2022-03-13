@@ -13,8 +13,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Study spaces',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          primarySwatch: Colors.blue,
+          inputDecorationTheme: const InputDecorationTheme(
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            disabledBorder: InputBorder.none,
+          )),
       home: MyHomePage(title: 'Opening Now'),
     );
   }
@@ -92,7 +98,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const TextField(
+          decoration: InputDecoration(
+              hintText: 'Where are you studying?',
+              prefixIcon: Icon(Icons.search)),
+        ),
+        backgroundColor: Theme.of(context).canvasColor,
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(8),
@@ -102,15 +113,8 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         // itemExtent: 100,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: showFilters,
-        tooltip: 'Filter',
-        child: const Icon(Icons.filter_alt),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-
-  void showFilters() {}
 
   Widget showListItem(StudySpace studySpace) {
     return Card(
