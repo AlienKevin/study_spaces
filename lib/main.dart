@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:string_similarity/string_similarity.dart';
 
 void main() {
   runApp(const MyApp());
@@ -49,6 +50,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String? queryName;
+
   final List<StudySpace> studySpaces = [
     StudySpace(
         name: "Art, Architecture, and Engineering Library",
@@ -96,10 +99,29 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var wordBoundary = RegExp(r'\W');
+    var filteredStudySpaces = (queryName != null && queryName!.isNotEmpty)
+        ? studySpaces
+            .where((space) =>
+                space.name.toLowerCase().split(wordBoundary).any((word) {
+                  return queryName!
+                      .toLowerCase()
+                      .split(wordBoundary)
+                      .any((queryWord) {
+                    return word.similarityTo(queryWord) > 0.4;
+                  });
+                }))
+            .toList()
+        : studySpaces;
     return Scaffold(
       appBar: AppBar(
-        title: const TextField(
-          decoration: InputDecoration(
+        title: TextField(
+          onChanged: (String name) {
+            setState(() {
+              queryName = name;
+            });
+          },
+          decoration: const InputDecoration(
               hintText: 'Where are you studying?',
               prefixIcon: Icon(Icons.search)),
         ),
@@ -107,9 +129,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(8),
-        itemCount: studySpaces.length,
+        itemCount: filteredStudySpaces.length,
         itemBuilder: (BuildContext context, int index) {
-          return showListItem(studySpaces[index]);
+          return showListItem(filteredStudySpaces[index]);
         },
         // itemExtent: 100,
       ),
