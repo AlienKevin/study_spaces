@@ -95,15 +95,13 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: ListView.builder(
-          padding: const EdgeInsets.all(8),
-          itemCount: studySpaces.length,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return showFeaturedListItem(studySpaces[index]);
-            } else {
-              return showListItem(studySpaces[index]);
-            }
-          }),
+        padding: const EdgeInsets.all(8),
+        itemCount: studySpaces.length,
+        itemBuilder: (BuildContext context, int index) {
+          return showListItem(studySpaces[index]);
+        },
+        // itemExtent: 100,
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: showFilters,
         tooltip: 'Filter',
@@ -117,27 +115,21 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget showListItem(StudySpace studySpace) {
     return Card(
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-      ListTile(
+      SizedBox(
+          child: ListTile(
+        trailing: AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(studySpace.pictureUrl))))),
         title: Text(studySpace.name),
         subtitle: Text(hourToString(studySpace.hoursStart) +
             " - " +
             hourToString(studySpace.hoursEnd)),
-      ),
+      )),
     ]));
-  }
-
-  Widget showFeaturedListItem(StudySpace studySpace) {
-    return Card(
-      child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        Image.network(studySpace.pictureUrl),
-        ListTile(
-          title: Text(studySpace.name),
-          subtitle: Text(hourToString(studySpace.hoursStart) +
-              " - " +
-              hourToString(studySpace.hoursEnd)),
-        ),
-      ]),
-    );
   }
 
   String hourToString(int hour) {
