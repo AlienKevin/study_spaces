@@ -79,43 +79,36 @@ class _MyHomePageState extends State<MyHomePage> {
         name: "Art, Architecture, and Engineering Library",
         openingHours: const OpeningHours.range(
             TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 22, minute: 0)),
-        pictureUrl:
-            "https://www.lib.umich.edu/static/542b6db6cb4cb1f683c44314617cebf8/fddf6/duderstadt2-june2019_edited.jpg"),
+        pictureUrl: "images/duderstadt.jpeg"),
     StudySpace(
         name: "Hatcher Library",
         openingHours: const OpeningHours.range(
             TimeOfDay(hour: 8, minute: 0), TimeOfDay(hour: 19, minute: 0)),
-        pictureUrl:
-            "https://www.lib.umich.edu/static/db8149c1851a919702b5eeda601def8e/fddf6/hatcher-5-june2019_edited.jpg"),
+        pictureUrl: "images/hatcher.jpeg"),
     StudySpace(
         name: "Shapiro Library",
         openingHours: const OpeningHours.allDay(),
-        pictureUrl:
-            "https://www.lib.umich.edu/static/a702abfd347b4a1f3591d9f4ad572594/f9008/shapiro-4-june2019_edited.jpg"),
+        pictureUrl: "images/shapiro.jpeg"),
     StudySpace(
         name: "Asian Library",
         openingHours: const OpeningHours.range(
             TimeOfDay(hour: 8, minute: 0), TimeOfDay(hour: 17, minute: 0)),
-        pictureUrl:
-            "https://www.lib.umich.edu/static/50a94f6a1ea2e98354f34892825c57d0/fddf6/AsiaLibrary.jpg"),
+        pictureUrl: "images/asian.jpeg"),
     StudySpace(
         name: "Taubman Health Sciences Library",
         openingHours: const OpeningHours.range(
             TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0)),
-        pictureUrl:
-            "https://www.lib.umich.edu/static/ba2f579811238c27e92075de164c5c65/fddf6/taubman-3-june2019_edited.jpg"),
+        pictureUrl: "images/taubman.jpeg"),
     StudySpace(
         name: "Askwith Media Library",
         openingHours: const OpeningHours.range(
             TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 18, minute: 0)),
-        pictureUrl:
-            "https://www.lib.umich.edu/static/f38a16cbb3e878b965464909b31067b8/fddf6/Shapiro-Askwith3-Feb2020_edited.jpg"),
+        pictureUrl: "images/askwith_media.jpeg"),
     StudySpace(
         name: "Music Library",
         openingHours: const OpeningHours.range(
             TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0)),
-        pictureUrl:
-            "https://www.lib.umich.edu/static/4f747347e1b9c383e2c178100c9e0869/fddf6/earlmoore4-june2019_edited.jpg"),
+        pictureUrl: "images/music.jpeg"),
   ];
 
   @override
@@ -330,7 +323,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     decoration: BoxDecoration(
                         image: DecorationImage(
                             fit: BoxFit.fitHeight,
-                            image: NetworkImage(studySpace.pictureUrl)))))),
+                            image: AssetImage(studySpace.pictureUrl)))))),
       ]),
     ));
   }
