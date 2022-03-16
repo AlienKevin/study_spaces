@@ -267,6 +267,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 450,
                 child: TimeRangePicker(
                     paintingStyle: PaintingStyle.fill,
+                    strokeColor:
+                        Theme.of(context).primaryColor.withOpacity(0.5),
                     timeTextStyle: Theme.of(context)
                         .textTheme
                         .titleLarge
