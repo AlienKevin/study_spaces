@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:string_similarity/string_similarity.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
@@ -35,6 +36,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Study spaces',
       theme: ThemeData(
+          textTheme: GoogleFonts.robotoTextTheme(
+            Theme.of(context).textTheme,
+          ),
           primarySwatch: Colors.blue,
           inputDecorationTheme: const InputDecorationTheme(
             border: InputBorder.none,
