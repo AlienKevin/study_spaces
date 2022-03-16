@@ -164,7 +164,6 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: const Icon(Icons.filter_alt),
             backgroundColor: Theme.of(context).primaryColor,
           )),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
     );
   }
 
@@ -267,6 +266,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: MediaQuery.of(context).size.width,
                 height: 450,
                 child: TimeRangePicker(
+                    paintingStyle: PaintingStyle.fill,
                     timeTextStyle: Theme.of(context)
                         .textTheme
                         .titleLarge
