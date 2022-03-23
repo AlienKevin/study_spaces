@@ -1,6 +1,9 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:json_api/client.dart';
+import 'package:json_api/routing.dart';
 import 'package:string_similarity/string_similarity.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
@@ -11,6 +14,7 @@ class OpeningHours with _$OpeningHours {
   const factory OpeningHours.allDay() = AllDayOpeningHours;
   const factory OpeningHours.range(TimeOfDay start, TimeOfDay end) =
       RangeOpeningHours;
+  const factory OpeningHours.closed() = ClosedOpeningHours;
 }
 
 @freezed
@@ -21,6 +25,19 @@ class AppState with _$AppState {
   const factory AppState.filterSearch() = FilterSearchAppState;
   const factory AppState.filterResults({required OpeningHours openingHours}) =
       FilterResultsAppState;
+}
+
+class OpeningDateAndHours {
+  late String id;
+  final DateTime startDate;
+  final DateTime endDate;
+  final List<OpeningHours> hoursByDayOfWeek;
+
+  OpeningDateAndHours(
+      {required this.id,
+      required this.startDate,
+      required this.endDate,
+      required this.hoursByDayOfWeek});
 }
 
 void main() {
@@ -54,7 +71,7 @@ class MyApp extends StatelessWidget {
 
 class StudySpace {
   final String name;
-  final OpeningHours openingHours;
+  final List<OpeningHours> openingHours;
   final String pictureUrl;
 
   StudySpace(
@@ -81,39 +98,61 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<StudySpace> studySpaces = [
     StudySpace(
         name: "Art, Architecture, and Engineering Library",
-        openingHours: const OpeningHours.range(
-            TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 22, minute: 0)),
+        openingHours: [const OpeningHours.allDay()],
         pictureUrl: "images/duderstadt.jpeg"),
     StudySpace(
         name: "Hatcher Library",
-        openingHours: const OpeningHours.range(
-            TimeOfDay(hour: 8, minute: 0), TimeOfDay(hour: 19, minute: 0)),
+        openingHours: [
+          const OpeningHours.range(
+              TimeOfDay(hour: 8, minute: 0), TimeOfDay(hour: 19, minute: 0))
+        ],
         pictureUrl: "images/hatcher.jpeg"),
     StudySpace(
         name: "Shapiro Library",
-        openingHours: const OpeningHours.allDay(),
+        openingHours: [const OpeningHours.allDay()],
         pictureUrl: "images/shapiro.jpeg"),
     StudySpace(
-        name: "Asian Library",
-        openingHours: const OpeningHours.range(
-            TimeOfDay(hour: 8, minute: 0), TimeOfDay(hour: 17, minute: 0)),
+        name: "Fine Arts Library",
+        openingHours: [
+          const OpeningHours.range(
+              TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
+        ],
+        pictureUrl: "images/fine_arts.jpeg"),
+    StudySpace(
+        name: "Asia Library",
+        openingHours: [
+          const OpeningHours.range(
+              TimeOfDay(hour: 8, minute: 0), TimeOfDay(hour: 19, minute: 0))
+        ],
         pictureUrl: "images/asian.jpeg"),
     StudySpace(
         name: "Taubman Health Sciences Library",
-        openingHours: const OpeningHours.range(
-            TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0)),
+        openingHours: [
+          const OpeningHours.range(
+              TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
+        ],
         pictureUrl: "images/taubman.jpeg"),
     StudySpace(
         name: "Askwith Media Library",
-        openingHours: const OpeningHours.range(
-            TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 18, minute: 0)),
+        openingHours: [
+          const OpeningHours.range(
+              TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 19, minute: 0))
+        ],
         pictureUrl: "images/askwith_media.jpeg"),
     StudySpace(
         name: "Music Library",
-        openingHours: const OpeningHours.range(
-            TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0)),
-        pictureUrl: "images/music.jpeg"),
+        openingHours: [
+          const OpeningHours.range(
+              TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
+        ],
+        pictureUrl: "images/music.jpeg")
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    getOpeningHours().then((value) => print("Got opening hours."));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,8 +172,8 @@ class _MyHomePageState extends State<MyHomePage> {
         : studySpaces;
     var filteredStudySpaces = appState.when(
       filterResults: (filterOpeningHours) => studySpaces
-          .where(
-              (space) => isOpenDuring(filterOpeningHours, space.openingHours))
+          .where((space) =>
+              isOpenDuring(filterOpeningHours, space.openingHours[0]))
           .toList(),
       keywordSearch: () => queryFilteredStudySpaces,
       filterSearch: () => queryFilteredStudySpaces,
@@ -357,7 +396,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             SizedBox(
                 height: Theme.of(context).textTheme.bodySmall!.fontSize! / 2),
-            Text(openingHoursToString(studySpace.openingHours),
+            Text(openingHoursToString(studySpace.openingHours[0]),
                 style: Theme.of(context).textTheme.bodyMedium),
           ],
           mainAxisAlignment: MainAxisAlignment.start,
@@ -380,6 +419,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String openingHoursToString(OpeningHours hours) {
     return hours.when(
+        closed: () => "Closed",
         allDay: () => "24H",
         range: (start, end) =>
             timeOfDayToString(start) + " - " + timeOfDayToString(end));
@@ -406,8 +446,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool isOpenDuring(OpeningHours queryHours, OpeningHours duringHours) {
     return duringHours.when(
+        closed: () => false,
         allDay: () => true,
         range: (TimeOfDay duringStart, TimeOfDay duringEnd) => queryHours.when(
+            closed: () => false,
+            allDay: () => false,
             range: (TimeOfDay queryStart, TimeOfDay queryEnd) {
               // print("queryStart: " + queryStart.toString());
               // print("queryEnd: " + queryEnd.toString());
@@ -415,8 +458,82 @@ class _MyHomePageState extends State<MyHomePage> {
               // print("duringEnd: " + duringEnd.toString());
               return timeOfDayLessThanEqual(duringStart, queryStart) &&
                   timeOfDayLessThanEqual(queryEnd, duringEnd);
-            },
-            allDay: () => false));
+            }));
+  }
+
+  TimeOfDay intToTimeOfDay(int n) => TimeOfDay(hour: n ~/ 100, minute: n % 100);
+
+  Future<void> getOpeningHours() async {
+    const baseUri = 'https://cms.lib.umich.edu/jsonapi/node/building/';
+
+    final uriDesign = StandardUriDesign(Uri.parse(baseUri));
+
+    final client = RoutingClient(uriDesign);
+
+    try {
+      /// Fetch the collection.
+      /// See other methods to query and manipulate resources.
+      final response = await client.fetchCollection("", fields: {
+        "node--building": ["title", "field_hours_open"]
+      }, include: [
+        "field_hours_open"
+      ]);
+
+      Map<String, Map<String, List<OpeningDateAndHours>>> spaceOpeningHours =
+          {};
+
+      response.collection.forEach((resource) {
+        String title = resource.attributes["title"]! as String;
+        if (studySpaces.map((space) => space.name).contains(title)) {
+          resource.relationships["field_hours_open"]?.forEach((fieldHoursOpen) {
+            var emptyOpeningHoursWithId = OpeningDateAndHours(
+              id: fieldHoursOpen.id,
+              hoursByDayOfWeek: [],
+              endDate: DateTime(-1),
+              startDate: DateTime(-1),
+            );
+            spaceOpeningHours
+                .putIfAbsent(fieldHoursOpen.type, () => {})
+                .putIfAbsent(title, () => [emptyOpeningHoursWithId])
+                .add(emptyOpeningHoursWithId);
+          });
+        }
+      });
+      response.included.forEach((paragraph) {
+        final dynamic fieldDateRange = paragraph.attributes["field_date_range"];
+        final dynamic fieldHoursOpen = paragraph.attributes["field_hours_open"];
+        if (fieldDateRange == null || fieldHoursOpen == null) {
+          return;
+        }
+        // print(fieldDateRange["value"]);
+        // print(fieldDateRange["end_value"]);
+        spaceOpeningHours[paragraph.type]!.entries.mapIndexed((index, entry) =>
+            entry.value.map((period) => period.id == paragraph.id
+                ? OpeningDateAndHours(
+                    id: paragraph.id,
+                    startDate: DateTime.parse(fieldDateRange["value"]),
+                    endDate: DateTime.parse(fieldDateRange["end_value"]),
+                    hoursByDayOfWeek: (fieldHoursOpen as List).map((day) {
+                      int startHours = day["starthours"];
+                      int endHours = day["endhours"];
+                      String? comment = day["comment"];
+                      // print("$startHours $endHours $comment");
+                      if (comment == "24 hours") {
+                        return const OpeningHours.allDay();
+                      } else if (comment == "Closed") {
+                        return const OpeningHours.closed();
+                      } else {
+                        return OpeningHours.range(intToTimeOfDay(startHours),
+                            intToTimeOfDay(endHours));
+                      }
+                    }).toList())
+                : period));
+      });
+      print(spaceOpeningHours);
+    } on RequestFailure catch (e) {
+      /// Catch error response
+      e.errors.forEach((error) => print('${error.title}'));
+    }
   }
 
   bool timeOfDayLessThanEqual(TimeOfDay t1, TimeOfDay t2) =>

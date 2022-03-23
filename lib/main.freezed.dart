@@ -28,6 +28,10 @@ class _$OpeningHoursTearOff {
       end,
     );
   }
+
+  ClosedOpeningHours closed() {
+    return const ClosedOpeningHours();
+  }
 }
 
 /// @nodoc
@@ -39,18 +43,21 @@ mixin _$OpeningHours {
   TResult when<TResult extends Object?>({
     required TResult Function() allDay,
     required TResult Function(TimeOfDay start, TimeOfDay end) range,
+    required TResult Function() closed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? allDay,
     TResult Function(TimeOfDay start, TimeOfDay end)? range,
+    TResult Function()? closed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? allDay,
     TResult Function(TimeOfDay start, TimeOfDay end)? range,
+    TResult Function()? closed,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -58,18 +65,21 @@ mixin _$OpeningHours {
   TResult map<TResult extends Object?>({
     required TResult Function(AllDayOpeningHours value) allDay,
     required TResult Function(RangeOpeningHours value) range,
+    required TResult Function(ClosedOpeningHours value) closed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AllDayOpeningHours value)? allDay,
     TResult Function(RangeOpeningHours value)? range,
+    TResult Function(ClosedOpeningHours value)? closed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AllDayOpeningHours value)? allDay,
     TResult Function(RangeOpeningHours value)? range,
+    TResult Function(ClosedOpeningHours value)? closed,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -134,6 +144,7 @@ class _$AllDayOpeningHours implements AllDayOpeningHours {
   TResult when<TResult extends Object?>({
     required TResult Function() allDay,
     required TResult Function(TimeOfDay start, TimeOfDay end) range,
+    required TResult Function() closed,
   }) {
     return allDay();
   }
@@ -143,6 +154,7 @@ class _$AllDayOpeningHours implements AllDayOpeningHours {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? allDay,
     TResult Function(TimeOfDay start, TimeOfDay end)? range,
+    TResult Function()? closed,
   }) {
     return allDay?.call();
   }
@@ -152,6 +164,7 @@ class _$AllDayOpeningHours implements AllDayOpeningHours {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? allDay,
     TResult Function(TimeOfDay start, TimeOfDay end)? range,
+    TResult Function()? closed,
     required TResult orElse(),
   }) {
     if (allDay != null) {
@@ -165,6 +178,7 @@ class _$AllDayOpeningHours implements AllDayOpeningHours {
   TResult map<TResult extends Object?>({
     required TResult Function(AllDayOpeningHours value) allDay,
     required TResult Function(RangeOpeningHours value) range,
+    required TResult Function(ClosedOpeningHours value) closed,
   }) {
     return allDay(this);
   }
@@ -174,6 +188,7 @@ class _$AllDayOpeningHours implements AllDayOpeningHours {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AllDayOpeningHours value)? allDay,
     TResult Function(RangeOpeningHours value)? range,
+    TResult Function(ClosedOpeningHours value)? closed,
   }) {
     return allDay?.call(this);
   }
@@ -183,6 +198,7 @@ class _$AllDayOpeningHours implements AllDayOpeningHours {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AllDayOpeningHours value)? allDay,
     TResult Function(RangeOpeningHours value)? range,
+    TResult Function(ClosedOpeningHours value)? closed,
     required TResult orElse(),
   }) {
     if (allDay != null) {
@@ -273,6 +289,7 @@ class _$RangeOpeningHours implements RangeOpeningHours {
   TResult when<TResult extends Object?>({
     required TResult Function() allDay,
     required TResult Function(TimeOfDay start, TimeOfDay end) range,
+    required TResult Function() closed,
   }) {
     return range(start, end);
   }
@@ -282,6 +299,7 @@ class _$RangeOpeningHours implements RangeOpeningHours {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? allDay,
     TResult Function(TimeOfDay start, TimeOfDay end)? range,
+    TResult Function()? closed,
   }) {
     return range?.call(start, end);
   }
@@ -291,6 +309,7 @@ class _$RangeOpeningHours implements RangeOpeningHours {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? allDay,
     TResult Function(TimeOfDay start, TimeOfDay end)? range,
+    TResult Function()? closed,
     required TResult orElse(),
   }) {
     if (range != null) {
@@ -304,6 +323,7 @@ class _$RangeOpeningHours implements RangeOpeningHours {
   TResult map<TResult extends Object?>({
     required TResult Function(AllDayOpeningHours value) allDay,
     required TResult Function(RangeOpeningHours value) range,
+    required TResult Function(ClosedOpeningHours value) closed,
   }) {
     return range(this);
   }
@@ -313,6 +333,7 @@ class _$RangeOpeningHours implements RangeOpeningHours {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(AllDayOpeningHours value)? allDay,
     TResult Function(RangeOpeningHours value)? range,
+    TResult Function(ClosedOpeningHours value)? closed,
   }) {
     return range?.call(this);
   }
@@ -322,6 +343,7 @@ class _$RangeOpeningHours implements RangeOpeningHours {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AllDayOpeningHours value)? allDay,
     TResult Function(RangeOpeningHours value)? range,
+    TResult Function(ClosedOpeningHours value)? closed,
     required TResult orElse(),
   }) {
     if (range != null) {
@@ -340,6 +362,117 @@ abstract class RangeOpeningHours implements OpeningHours {
   @JsonKey(ignore: true)
   $RangeOpeningHoursCopyWith<RangeOpeningHours> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ClosedOpeningHoursCopyWith<$Res> {
+  factory $ClosedOpeningHoursCopyWith(
+          ClosedOpeningHours value, $Res Function(ClosedOpeningHours) then) =
+      _$ClosedOpeningHoursCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$ClosedOpeningHoursCopyWithImpl<$Res>
+    extends _$OpeningHoursCopyWithImpl<$Res>
+    implements $ClosedOpeningHoursCopyWith<$Res> {
+  _$ClosedOpeningHoursCopyWithImpl(
+      ClosedOpeningHours _value, $Res Function(ClosedOpeningHours) _then)
+      : super(_value, (v) => _then(v as ClosedOpeningHours));
+
+  @override
+  ClosedOpeningHours get _value => super._value as ClosedOpeningHours;
+}
+
+/// @nodoc
+
+class _$ClosedOpeningHours implements ClosedOpeningHours {
+  const _$ClosedOpeningHours();
+
+  @override
+  String toString() {
+    return 'OpeningHours.closed()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is ClosedOpeningHours);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() allDay,
+    required TResult Function(TimeOfDay start, TimeOfDay end) range,
+    required TResult Function() closed,
+  }) {
+    return closed();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? allDay,
+    TResult Function(TimeOfDay start, TimeOfDay end)? range,
+    TResult Function()? closed,
+  }) {
+    return closed?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? allDay,
+    TResult Function(TimeOfDay start, TimeOfDay end)? range,
+    TResult Function()? closed,
+    required TResult orElse(),
+  }) {
+    if (closed != null) {
+      return closed();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AllDayOpeningHours value) allDay,
+    required TResult Function(RangeOpeningHours value) range,
+    required TResult Function(ClosedOpeningHours value) closed,
+  }) {
+    return closed(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(AllDayOpeningHours value)? allDay,
+    TResult Function(RangeOpeningHours value)? range,
+    TResult Function(ClosedOpeningHours value)? closed,
+  }) {
+    return closed?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AllDayOpeningHours value)? allDay,
+    TResult Function(RangeOpeningHours value)? range,
+    TResult Function(ClosedOpeningHours value)? closed,
+    required TResult orElse(),
+  }) {
+    if (closed != null) {
+      return closed(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ClosedOpeningHours implements OpeningHours {
+  const factory ClosedOpeningHours() = _$ClosedOpeningHours;
 }
 
 /// @nodoc

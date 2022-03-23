@@ -14,6 +14,8 @@ dependencies:
   time_range_picker: ^2.1.0
   freezed_annotation:
   google_fonts: ^2.3.1
+  json_api: ^5.0.5
+  collection: ^1.15.0
 
 dev_dependencies:
   flutter_test:

@@ -128,7 +128,7 @@ packages:
     source: hosted
     version: "4.1.0"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       url: "https://pub.dartlang.org"
@@ -291,6 +291,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.4.0"
+  json_api:
+    dependency: "direct main"
+    description:
+      name: json_api
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.5"
   lints:
     dependency: transitive
     description:
