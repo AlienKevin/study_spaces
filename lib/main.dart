@@ -40,6 +40,12 @@ class OpeningDateAndHours {
       required this.hoursByDayOfWeek});
 }
 
+typedef HoursType = String;
+typedef SpaceTitle = String;
+typedef FieldOpeningHours
+    = Map<HoursType, Map<SpaceTitle, List<OpeningDateAndHours>>>;
+typedef ProcessedOpeningHours = Map<SpaceTitle, List<OpeningDateAndHours>>;
+
 void main() {
   runApp(const MyApp());
 }
@@ -70,12 +76,12 @@ class MyApp extends StatelessWidget {
 }
 
 class StudySpace {
-  final String name;
-  final List<OpeningHours> openingHours;
+  final String title;
+  List<OpeningHours> openingHours;
   final String pictureUrl;
 
   StudySpace(
-      {required this.name,
+      {required this.title,
       required this.openingHours,
       required this.pictureUrl});
 }
@@ -94,53 +100,54 @@ class _MyHomePageState extends State<MyHomePage> {
   AppState appState = const AppState.home();
   final queryController = TextEditingController();
   final FocusNode queryFocusNode = FocusNode();
+  late ProcessedOpeningHours openingHours;
 
-  final List<StudySpace> studySpaces = [
+  List<StudySpace> studySpaces = [
     StudySpace(
-        name: "Art, Architecture, and Engineering Library",
+        title: "Art, Architecture, and Engineering Library",
         openingHours: [const OpeningHours.allDay()],
         pictureUrl: "images/duderstadt.jpeg"),
     StudySpace(
-        name: "Hatcher Library",
+        title: "Hatcher Library",
         openingHours: [
           const OpeningHours.range(
               TimeOfDay(hour: 8, minute: 0), TimeOfDay(hour: 19, minute: 0))
         ],
         pictureUrl: "images/hatcher.jpeg"),
     StudySpace(
-        name: "Shapiro Library",
+        title: "Shapiro Library",
         openingHours: [const OpeningHours.allDay()],
         pictureUrl: "images/shapiro.jpeg"),
     StudySpace(
-        name: "Fine Arts Library",
+        title: "Fine Arts Library",
         openingHours: [
           const OpeningHours.range(
               TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
         ],
         pictureUrl: "images/fine_arts.jpeg"),
     StudySpace(
-        name: "Asia Library",
+        title: "Asia Library",
         openingHours: [
           const OpeningHours.range(
               TimeOfDay(hour: 8, minute: 0), TimeOfDay(hour: 19, minute: 0))
         ],
         pictureUrl: "images/asian.jpeg"),
     StudySpace(
-        name: "Taubman Health Sciences Library",
+        title: "Taubman Health Sciences Library",
         openingHours: [
           const OpeningHours.range(
               TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
         ],
         pictureUrl: "images/taubman.jpeg"),
     StudySpace(
-        name: "Askwith Media Library",
+        title: "Askwith Media Library",
         openingHours: [
           const OpeningHours.range(
               TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 19, minute: 0))
         ],
         pictureUrl: "images/askwith_media.jpeg"),
     StudySpace(
-        name: "Music Library",
+        title: "Music Library",
         openingHours: [
           const OpeningHours.range(
               TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
@@ -151,7 +158,19 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    getOpeningHours().then((value) => print("Got opening hours."));
+    getFieldOpeningHours().then((hours) {
+      openingHours = processFieldOpeningHours(hours);
+      var testDay = DateTime(2022, DateTime.march, 26);
+      studySpaces = studySpaces.map((space) {
+        var newOpeningHours = getOpeningHours(space.title, testDay);
+        print(
+            "new opening hours for ${space.title} on ${testDay.year}-${testDay.month}-${testDay.day} is ${newOpeningHours}.");
+        if (newOpeningHours != null) {
+          space.openingHours[0] = newOpeningHours;
+        }
+        return space;
+      }).toList();
+    });
   }
 
   @override
@@ -160,7 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var queryFilteredStudySpaces = queryName.isNotEmpty
         ? studySpaces
             .where((space) =>
-                space.name.toLowerCase().split(wordBoundary).any((word) {
+                space.title.toLowerCase().split(wordBoundary).any((word) {
                   return queryName
                       .toLowerCase()
                       .split(wordBoundary)
@@ -391,7 +410,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
           children: [
             Text(
-              studySpace.name,
+              studySpace.title,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             SizedBox(
@@ -463,12 +482,67 @@ class _MyHomePageState extends State<MyHomePage> {
 
   TimeOfDay intToTimeOfDay(int n) => TimeOfDay(hour: n ~/ 100, minute: n % 100);
 
-  Future<void> getOpeningHours() async {
+  OpeningHours? getOpeningHours(String queryTitle, DateTime queryDate) {
+    // print(openingHours[queryTitle]
+    //     ?.map((hours) => "${hours.startDate} - ${hours.endDate}"));
+    var dateAndHours = openingHours[queryTitle]?.firstWhere(
+        (hours) =>
+            (hours.startDate.isBefore(queryDate) ||
+                hours.startDate.isAtSameMomentAs(queryDate)) &&
+            (hours.endDate.isAfter(queryDate) ||
+                hours.endDate.isAtSameMomentAs(queryDate)),
+        orElse: () => throw "Can't find opening hours for $queryDate.");
+    if (dateAndHours != null) {
+      return dateAndHoursToHours(queryDate, dateAndHours);
+    } else {
+      return null;
+    }
+  }
+
+  OpeningHours dateAndHoursToHours(
+          DateTime queryDate, OpeningDateAndHours hours) =>
+      // DateTime weekdays start from Monday with a value of 1
+      // M Library API weekdays start from Sunday with a value of 0
+      hours.hoursByDayOfWeek[queryDate.weekday % 7];
+
+  ProcessedOpeningHours processFieldOpeningHours(
+      FieldOpeningHours fieldOpeningHours) {
+    const specialTypes = [
+      "paragraph--hours_exceptions",
+      "paragraph--fall_and_winter_semester_hours"
+    ];
+    FieldOpeningHours exception = Map.from(fieldOpeningHours);
+    exception.removeWhere((hoursType, _) => hoursType != specialTypes[0]);
+    FieldOpeningHours fallAndWinter = Map.from(fieldOpeningHours);
+    fallAndWinter.removeWhere((hoursType, _) => hoursType != specialTypes[1]);
+    FieldOpeningHours allOtherTypes = Map.from(fieldOpeningHours);
+    allOtherTypes
+        .removeWhere((hoursType, _) => !specialTypes.contains(hoursType));
+    List<Map<SpaceTitle, List<OpeningDateAndHours>>> prioritizedHours = [
+      ...exception.values,
+      ...allOtherTypes.values,
+      ...fallAndWinter.values
+    ];
+    ProcessedOpeningHours result = {};
+    studySpaces.forEach((space) {
+      prioritizedHours.forEach((hours) {
+        if (hours[space.title] != null) {
+          result.putIfAbsent(space.title, () => []).addAll(hours[space.title]!);
+        }
+      });
+    });
+    return result;
+  }
+
+  Future<FieldOpeningHours> getFieldOpeningHours() async {
     const baseUri = 'https://cms.lib.umich.edu/jsonapi/node/building/';
 
     final uriDesign = StandardUriDesign(Uri.parse(baseUri));
 
     final client = RoutingClient(uriDesign);
+
+    // A Map from fieldHoursOpen.type (eg paragraph__hours_exceptions) to a Map from study space title to its opening hours
+    FieldOpeningHours fieldOpeningHours = {};
 
     try {
       /// Fetch the collection.
@@ -479,12 +553,9 @@ class _MyHomePageState extends State<MyHomePage> {
         "field_hours_open"
       ]);
 
-      Map<String, Map<String, List<OpeningDateAndHours>>> spaceOpeningHours =
-          {};
-
       response.collection.forEach((resource) {
         String title = resource.attributes["title"]! as String;
-        if (studySpaces.map((space) => space.name).contains(title)) {
+        if (studySpaces.map((space) => space.title).contains(title)) {
           resource.relationships["field_hours_open"]?.forEach((fieldHoursOpen) {
             var emptyOpeningHoursWithId = OpeningDateAndHours(
               id: fieldHoursOpen.id,
@@ -492,7 +563,7 @@ class _MyHomePageState extends State<MyHomePage> {
               endDate: DateTime(-1),
               startDate: DateTime(-1),
             );
-            spaceOpeningHours
+            fieldOpeningHours
                 .putIfAbsent(fieldHoursOpen.type, () => {})
                 .putIfAbsent(title, () => [emptyOpeningHoursWithId])
                 .add(emptyOpeningHoursWithId);
@@ -507,33 +578,42 @@ class _MyHomePageState extends State<MyHomePage> {
         }
         // print(fieldDateRange["value"]);
         // print(fieldDateRange["end_value"]);
-        spaceOpeningHours[paragraph.type]!.entries.mapIndexed((index, entry) =>
-            entry.value.map((period) => period.id == paragraph.id
-                ? OpeningDateAndHours(
-                    id: paragraph.id,
-                    startDate: DateTime.parse(fieldDateRange["value"]),
-                    endDate: DateTime.parse(fieldDateRange["end_value"]),
-                    hoursByDayOfWeek: (fieldHoursOpen as List).map((day) {
-                      int startHours = day["starthours"];
-                      int endHours = day["endhours"];
-                      String? comment = day["comment"];
-                      // print("$startHours $endHours $comment");
-                      if (comment == "24 hours") {
-                        return const OpeningHours.allDay();
-                      } else if (comment == "Closed") {
-                        return const OpeningHours.closed();
-                      } else {
-                        return OpeningHours.range(intToTimeOfDay(startHours),
-                            intToTimeOfDay(endHours));
-                      }
-                    }).toList())
-                : period));
+        fieldOpeningHours[paragraph.type] = Map.fromEntries(
+            fieldOpeningHours[paragraph.type]!.entries.mapIndexed(
+                (index, entry) => MapEntry(
+                    entry.key,
+                    entry.value
+                        .map((period) => period.id == paragraph.id
+                            ? OpeningDateAndHours(
+                                id: paragraph.id,
+                                startDate:
+                                    DateTime.parse(fieldDateRange["value"]),
+                                endDate:
+                                    DateTime.parse(fieldDateRange["end_value"]),
+                                hoursByDayOfWeek:
+                                    (fieldHoursOpen as List).map((day) {
+                                  int startHours = day["starthours"];
+                                  int endHours = day["endhours"];
+                                  String? comment = day["comment"];
+                                  // print("$startHours $endHours $comment");
+                                  if (comment == "24 hours") {
+                                    return const OpeningHours.allDay();
+                                  } else if (comment == "Closed") {
+                                    return const OpeningHours.closed();
+                                  } else {
+                                    return OpeningHours.range(
+                                        intToTimeOfDay(startHours),
+                                        intToTimeOfDay(endHours));
+                                  }
+                                }).toList())
+                            : period)
+                        .toList())));
       });
-      print(spaceOpeningHours);
     } on RequestFailure catch (e) {
       /// Catch error response
       e.errors.forEach((error) => print('${error.title}'));
     }
+    return fieldOpeningHours;
   }
 
   bool timeOfDayLessThanEqual(TimeOfDay t1, TimeOfDay t2) =>
