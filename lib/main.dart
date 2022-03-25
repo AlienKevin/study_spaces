@@ -100,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
   AppState appState = const AppState.home();
   final queryController = TextEditingController();
   final FocusNode queryFocusNode = FocusNode();
-  late ProcessedOpeningHours openingHours;
+  ProcessedOpeningHours openingHours = {};
 
   List<StudySpace> studySpaces = [
     StudySpace(
@@ -158,19 +158,33 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    getFieldOpeningHours().then((hours) {
-      openingHours = processFieldOpeningHours(hours);
-      var testDay = DateTime(2022, DateTime.march, 26);
-      studySpaces = studySpaces.map((space) {
-        var newOpeningHours = getOpeningHours(space.title, testDay);
-        print(
-            "new opening hours for ${space.title} on ${testDay.year}-${testDay.month}-${testDay.day} is ${newOpeningHours}.");
-        if (newOpeningHours != null) {
-          space.openingHours[0] = newOpeningHours;
-        }
-        return space;
-      }).toList();
+    getFieldOpeningHours("building").then((hours) {
+      openingHours = {
+        ...processFieldOpeningHours(hours),
+        ...openingHours,
+      };
+      printTestOpeningHours();
     });
+    getFieldOpeningHours("location").then((hours) {
+      openingHours = {
+        ...processFieldOpeningHours(hours),
+        ...openingHours,
+      };
+      printTestOpeningHours();
+    });
+  }
+
+  void printTestOpeningHours() {
+    var testDay = DateTime(2022, DateTime.march, 26);
+    studySpaces = studySpaces.map((space) {
+      var newOpeningHours = getOpeningHours(space.title, testDay);
+      print(
+          "new opening hours for ${space.title} on ${testDay.year}-${testDay.month}-${testDay.day} is ${newOpeningHours}.");
+      if (newOpeningHours != null) {
+        space.openingHours[0] = newOpeningHours;
+      }
+      return space;
+    }).toList();
   }
 
   @override
@@ -534,8 +548,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return result;
   }
 
-  Future<FieldOpeningHours> getFieldOpeningHours() async {
-    const baseUri = 'https://cms.lib.umich.edu/jsonapi/node/building/';
+  Future<FieldOpeningHours> getFieldOpeningHours(String spaceType) async {
+    var baseUri = 'https://cms.lib.umich.edu/jsonapi/node/$spaceType/';
 
     final uriDesign = StandardUriDesign(Uri.parse(baseUri));
 
@@ -548,7 +562,7 @@ class _MyHomePageState extends State<MyHomePage> {
       /// Fetch the collection.
       /// See other methods to query and manipulate resources.
       final response = await client.fetchCollection("", fields: {
-        "node--building": ["title", "field_hours_open"]
+        "node--$spaceType": ["title", "field_hours_open"]
       }, include: [
         "field_hours_open"
       ]);
