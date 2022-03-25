@@ -140,13 +140,6 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         pictureUrl: "images/taubman.jpeg"),
     StudySpace(
-        title: "Askwith Media Library",
-        openingHours: [
-          const OpeningHours.range(
-              TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 19, minute: 0))
-        ],
-        pictureUrl: "images/askwith_media.jpeg"),
-    StudySpace(
         title: "Music Library",
         openingHours: [
           const OpeningHours.range(
