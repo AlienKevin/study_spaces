@@ -1,10 +1,9 @@
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:json_api/client.dart';
 import 'package:json_api/routing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -92,7 +91,7 @@ class MyApp extends StatelessWidget {
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
           )),
-      home: MyHomePage(title: 'Opening Now'),
+      home: const MyHomePage(title: 'Opening Now'),
     );
   }
 }
@@ -109,7 +108,7 @@ class StudySpace {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -188,7 +187,9 @@ class _MyHomePageState extends State<MyHomePage> {
           updateOpeningHoursForNextSevenDays();
         });
       } else {
-        print("Loaded opening hours from cache");
+        if (kDebugMode) {
+          print("Loaded opening hours from cache");
+        }
         openingHours = (jsonDecode(storedOpeningHours) as Map<String, dynamic>)
             .map((title, openingHours) => MapEntry(
                 title,
@@ -209,12 +210,14 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     studySpaces = studySpaces.map((space) {
       space.openingHours.clear();
-      nextSevenDays.forEach((day) {
+      for (var day in nextSevenDays) {
         var newOpeningHours = getOpeningHours(space.title, day);
-        print(
-            "opening hours for ${space.title} on ${day.year}-${day.month}-${day.day} is ${newOpeningHours}.");
+        if (kDebugMode) {
+          print(
+              "opening hours for ${space.title} on ${day.year}-${day.month}-${day.day} is $newOpeningHours.");
+        }
         space.openingHours.add(newOpeningHours!);
-      });
+      }
       return space;
     }).toList();
   }
@@ -370,7 +373,7 @@ class _MyHomePageState extends State<MyHomePage> {
           return AlertDialog(
             contentPadding: EdgeInsets.zero,
             title: const Text("Opening Hours"),
-            content: Container(
+            content: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 450,
                 child: TimeRangePicker(
@@ -577,13 +580,13 @@ class _MyHomePageState extends State<MyHomePage> {
       ...fallAndWinter.values
     ];
     ProcessedOpeningHours result = {};
-    studySpaces.forEach((space) {
-      prioritizedHours.forEach((hours) {
+    for (var space in studySpaces) {
+      for (var hours in prioritizedHours) {
         if (hours[space.title] != null) {
           result.putIfAbsent(space.title, () => []).addAll(hours[space.title]!);
         }
-      });
-    });
+      }
+    }
     return result;
   }
 
@@ -606,7 +609,7 @@ class _MyHomePageState extends State<MyHomePage> {
         "field_hours_open"
       ]);
 
-      response.collection.forEach((resource) {
+      for (var resource in response.collection) {
         String title = resource.attributes["title"]! as String;
         if (studySpaces.map((space) => space.title).contains(title)) {
           resource.relationships["field_hours_open"]?.forEach((fieldHoursOpen) {
@@ -622,12 +625,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 .add(emptyOpeningHoursWithId);
           });
         }
-      });
-      response.included.forEach((paragraph) {
+      }
+      for (var paragraph in response.included) {
         final dynamic fieldDateRange = paragraph.attributes["field_date_range"];
         final dynamic fieldHoursOpen = paragraph.attributes["field_hours_open"];
         if (fieldDateRange == null || fieldHoursOpen == null) {
-          return;
+          continue;
         }
         // print(fieldDateRange["value"]);
         // print(fieldDateRange["end_value"]);
@@ -661,10 +664,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                 }).toList())
                             : period)
                         .toList())));
-      });
+      }
     } on RequestFailure catch (e) {
       /// Catch error response
-      e.errors.forEach((error) => print('${error.title}'));
+      for (var error in e.errors) {
+        if (kDebugMode) {
+          print(error.title);
+        }
+      }
     }
     return fieldOpeningHours;
   }
