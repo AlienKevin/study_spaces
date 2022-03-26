@@ -16,6 +16,8 @@ dependencies:
   google_fonts: ^2.3.1
   json_api: ^5.0.5
   collection: ^1.15.0
+  shared_preferences: ^2.0.13
+  json_serializable: ^6.1.5
 
 dev_dependencies:
   flutter_test:

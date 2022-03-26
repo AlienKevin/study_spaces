@@ -1,20 +1,37 @@
+import 'dart:convert';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:json_api/client.dart';
 import 'package:json_api/routing.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:string_similarity/string_similarity.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
 part 'main.freezed.dart';
+part 'main.g.dart';
 
 @freezed
 class OpeningHours with _$OpeningHours {
   const factory OpeningHours.allDay() = AllDayOpeningHours;
-  const factory OpeningHours.range(TimeOfDay start, TimeOfDay end) =
-      RangeOpeningHours;
+  const factory OpeningHours.range(@CustomTimeOfDayConverter() TimeOfDay start,
+      @CustomTimeOfDayConverter() TimeOfDay end) = RangeOpeningHours;
   const factory OpeningHours.closed() = ClosedOpeningHours;
+  factory OpeningHours.fromJson(Map<String, dynamic> json) =>
+      _$OpeningHoursFromJson(json);
+}
+
+class CustomTimeOfDayConverter implements JsonConverter<TimeOfDay, int> {
+  const CustomTimeOfDayConverter();
+
+  @override
+  TimeOfDay fromJson(int json) => intToTimeOfDay(json);
+
+  @override
+  int toJson(TimeOfDay time) => timeOfDayToInt(time);
 }
 
 @freezed
@@ -27,6 +44,7 @@ class AppState with _$AppState {
       FilterResultsAppState;
 }
 
+@JsonSerializable(explicitToJson: true)
 class OpeningDateAndHours {
   late String id;
   final DateTime startDate;
@@ -38,6 +56,10 @@ class OpeningDateAndHours {
       required this.startDate,
       required this.endDate,
       required this.hoursByDayOfWeek});
+
+  factory OpeningDateAndHours.fromJson(Map<String, dynamic> json) =>
+      _$OpeningDateAndHoursFromJson(json);
+  Map<String, dynamic> toJson() => _$OpeningDateAndHoursToJson(this);
 }
 
 typedef HoursType = String;
@@ -151,31 +173,48 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    getFieldOpeningHours("building").then((hours) {
-      openingHours = {
-        ...processFieldOpeningHours(hours),
-        ...openingHours,
-      };
-      printTestOpeningHours();
-    });
-    getFieldOpeningHours("location").then((hours) {
-      openingHours = {
-        ...processFieldOpeningHours(hours),
-        ...openingHours,
-      };
-      printTestOpeningHours();
+    SharedPreferences.getInstance().then((prefs) {
+      var storedOpeningHours = prefs.getString("openingHours");
+      if (storedOpeningHours == null) {
+        var buildingRequest = getFieldOpeningHours("building");
+        var locationRequest = getFieldOpeningHours("location");
+        Future.wait([buildingRequest, locationRequest]).then((hours) async {
+          openingHours = {
+            ...processFieldOpeningHours(hours[0]),
+            ...processFieldOpeningHours(hours[1]),
+            ...openingHours,
+          };
+          prefs.setString('openingHours', jsonEncode(openingHours));
+          updateOpeningHoursForNextSevenDays();
+        });
+      } else {
+        print("Loaded opening hours from cache");
+        openingHours = (jsonDecode(storedOpeningHours) as Map<String, dynamic>)
+            .map((title, openingHours) => MapEntry(
+                title,
+                (openingHours as List<dynamic>)
+                    .map((hours) => OpeningDateAndHours.fromJson(hours))
+                    .toList()));
+        updateOpeningHoursForNextSevenDays();
+      }
     });
   }
 
-  void printTestOpeningHours() {
-    var testDay = DateTime(2022, DateTime.march, 26);
+  void updateOpeningHoursForNextSevenDays() {
+    List<DateTime> nextSevenDays = [];
+    var nextDay = DateTime.now();
+    for (var i = 0; i < 7; ++i) {
+      nextSevenDays.add(nextDay);
+      nextDay = nextDay.add(const Duration(days: 1));
+    }
     studySpaces = studySpaces.map((space) {
-      var newOpeningHours = getOpeningHours(space.title, testDay);
-      print(
-          "new opening hours for ${space.title} on ${testDay.year}-${testDay.month}-${testDay.day} is ${newOpeningHours}.");
-      if (newOpeningHours != null) {
-        space.openingHours[0] = newOpeningHours;
-      }
+      space.openingHours.clear();
+      nextSevenDays.forEach((day) {
+        var newOpeningHours = getOpeningHours(space.title, day);
+        print(
+            "opening hours for ${space.title} on ${day.year}-${day.month}-${day.day} is ${newOpeningHours}.");
+        space.openingHours.add(newOpeningHours!);
+      });
       return space;
     }).toList();
   }
@@ -496,8 +535,6 @@ class _MyHomePageState extends State<MyHomePage> {
             }));
   }
 
-  TimeOfDay intToTimeOfDay(int n) => TimeOfDay(hour: n ~/ 100, minute: n % 100);
-
   OpeningHours? getOpeningHours(String queryTitle, DateTime queryDate) {
     // print(openingHours[queryTitle]
     //     ?.map((hours) => "${hours.startDate} - ${hours.endDate}"));
@@ -666,3 +703,7 @@ class StudySpacePage extends StatelessWidget {
     );
   }
 }
+
+TimeOfDay intToTimeOfDay(int n) => TimeOfDay(hour: n ~/ 100, minute: n % 100);
+
+int timeOfDayToInt(TimeOfDay time) => time.hour * 100 + time.minute;

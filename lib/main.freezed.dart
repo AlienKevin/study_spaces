@@ -14,6 +14,21 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+OpeningHours _$OpeningHoursFromJson(Map<String, dynamic> json) {
+  switch (json['runtimeType']) {
+    case 'allDay':
+      return AllDayOpeningHours.fromJson(json);
+    case 'range':
+      return RangeOpeningHours.fromJson(json);
+    case 'closed':
+      return ClosedOpeningHours.fromJson(json);
+
+    default:
+      throw CheckedFromJsonException(json, 'runtimeType', 'OpeningHours',
+          'Invalid union type "${json['runtimeType']}"!');
+  }
+}
+
 /// @nodoc
 class _$OpeningHoursTearOff {
   const _$OpeningHoursTearOff();
@@ -22,7 +37,8 @@ class _$OpeningHoursTearOff {
     return const AllDayOpeningHours();
   }
 
-  RangeOpeningHours range(TimeOfDay start, TimeOfDay end) {
+  RangeOpeningHours range(@CustomTimeOfDayConverter() TimeOfDay start,
+      @CustomTimeOfDayConverter() TimeOfDay end) {
     return RangeOpeningHours(
       start,
       end,
@@ -31,6 +47,10 @@ class _$OpeningHoursTearOff {
 
   ClosedOpeningHours closed() {
     return const ClosedOpeningHours();
+  }
+
+  OpeningHours fromJson(Map<String, Object?> json) {
+    return OpeningHours.fromJson(json);
   }
 }
 
@@ -42,21 +62,27 @@ mixin _$OpeningHours {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() allDay,
-    required TResult Function(TimeOfDay start, TimeOfDay end) range,
+    required TResult Function(@CustomTimeOfDayConverter() TimeOfDay start,
+            @CustomTimeOfDayConverter() TimeOfDay end)
+        range,
     required TResult Function() closed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? allDay,
-    TResult Function(TimeOfDay start, TimeOfDay end)? range,
+    TResult Function(@CustomTimeOfDayConverter() TimeOfDay start,
+            @CustomTimeOfDayConverter() TimeOfDay end)?
+        range,
     TResult Function()? closed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? allDay,
-    TResult Function(TimeOfDay start, TimeOfDay end)? range,
+    TResult Function(@CustomTimeOfDayConverter() TimeOfDay start,
+            @CustomTimeOfDayConverter() TimeOfDay end)?
+        range,
     TResult Function()? closed,
     required TResult orElse(),
   }) =>
@@ -83,6 +109,7 @@ mixin _$OpeningHours {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -121,9 +148,15 @@ class _$AllDayOpeningHoursCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$AllDayOpeningHours implements AllDayOpeningHours {
-  const _$AllDayOpeningHours();
+  const _$AllDayOpeningHours({String? $type}) : $type = $type ?? 'allDay';
+
+  factory _$AllDayOpeningHours.fromJson(Map<String, dynamic> json) =>
+      _$$AllDayOpeningHoursFromJson(json);
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
 
   @override
   String toString() {
@@ -143,7 +176,9 @@ class _$AllDayOpeningHours implements AllDayOpeningHours {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() allDay,
-    required TResult Function(TimeOfDay start, TimeOfDay end) range,
+    required TResult Function(@CustomTimeOfDayConverter() TimeOfDay start,
+            @CustomTimeOfDayConverter() TimeOfDay end)
+        range,
     required TResult Function() closed,
   }) {
     return allDay();
@@ -153,7 +188,9 @@ class _$AllDayOpeningHours implements AllDayOpeningHours {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? allDay,
-    TResult Function(TimeOfDay start, TimeOfDay end)? range,
+    TResult Function(@CustomTimeOfDayConverter() TimeOfDay start,
+            @CustomTimeOfDayConverter() TimeOfDay end)?
+        range,
     TResult Function()? closed,
   }) {
     return allDay?.call();
@@ -163,7 +200,9 @@ class _$AllDayOpeningHours implements AllDayOpeningHours {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? allDay,
-    TResult Function(TimeOfDay start, TimeOfDay end)? range,
+    TResult Function(@CustomTimeOfDayConverter() TimeOfDay start,
+            @CustomTimeOfDayConverter() TimeOfDay end)?
+        range,
     TResult Function()? closed,
     required TResult orElse(),
   }) {
@@ -206,10 +245,18 @@ class _$AllDayOpeningHours implements AllDayOpeningHours {
     }
     return orElse();
   }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AllDayOpeningHoursToJson(this);
+  }
 }
 
 abstract class AllDayOpeningHours implements OpeningHours {
   const factory AllDayOpeningHours() = _$AllDayOpeningHours;
+
+  factory AllDayOpeningHours.fromJson(Map<String, dynamic> json) =
+      _$AllDayOpeningHours.fromJson;
 }
 
 /// @nodoc
@@ -217,7 +264,9 @@ abstract class $RangeOpeningHoursCopyWith<$Res> {
   factory $RangeOpeningHoursCopyWith(
           RangeOpeningHours value, $Res Function(RangeOpeningHours) then) =
       _$RangeOpeningHoursCopyWithImpl<$Res>;
-  $Res call({TimeOfDay start, TimeOfDay end});
+  $Res call(
+      {@CustomTimeOfDayConverter() TimeOfDay start,
+      @CustomTimeOfDayConverter() TimeOfDay end});
 }
 
 /// @nodoc
@@ -250,14 +299,25 @@ class _$RangeOpeningHoursCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$RangeOpeningHours implements RangeOpeningHours {
-  const _$RangeOpeningHours(this.start, this.end);
+  const _$RangeOpeningHours(@CustomTimeOfDayConverter() this.start,
+      @CustomTimeOfDayConverter() this.end,
+      {String? $type})
+      : $type = $type ?? 'range';
+
+  factory _$RangeOpeningHours.fromJson(Map<String, dynamic> json) =>
+      _$$RangeOpeningHoursFromJson(json);
 
   @override
+  @CustomTimeOfDayConverter()
   final TimeOfDay start;
   @override
+  @CustomTimeOfDayConverter()
   final TimeOfDay end;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
 
   @override
   String toString() {
@@ -288,7 +348,9 @@ class _$RangeOpeningHours implements RangeOpeningHours {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() allDay,
-    required TResult Function(TimeOfDay start, TimeOfDay end) range,
+    required TResult Function(@CustomTimeOfDayConverter() TimeOfDay start,
+            @CustomTimeOfDayConverter() TimeOfDay end)
+        range,
     required TResult Function() closed,
   }) {
     return range(start, end);
@@ -298,7 +360,9 @@ class _$RangeOpeningHours implements RangeOpeningHours {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? allDay,
-    TResult Function(TimeOfDay start, TimeOfDay end)? range,
+    TResult Function(@CustomTimeOfDayConverter() TimeOfDay start,
+            @CustomTimeOfDayConverter() TimeOfDay end)?
+        range,
     TResult Function()? closed,
   }) {
     return range?.call(start, end);
@@ -308,7 +372,9 @@ class _$RangeOpeningHours implements RangeOpeningHours {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? allDay,
-    TResult Function(TimeOfDay start, TimeOfDay end)? range,
+    TResult Function(@CustomTimeOfDayConverter() TimeOfDay start,
+            @CustomTimeOfDayConverter() TimeOfDay end)?
+        range,
     TResult Function()? closed,
     required TResult orElse(),
   }) {
@@ -351,13 +417,23 @@ class _$RangeOpeningHours implements RangeOpeningHours {
     }
     return orElse();
   }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$RangeOpeningHoursToJson(this);
+  }
 }
 
 abstract class RangeOpeningHours implements OpeningHours {
-  const factory RangeOpeningHours(TimeOfDay start, TimeOfDay end) =
-      _$RangeOpeningHours;
+  const factory RangeOpeningHours(@CustomTimeOfDayConverter() TimeOfDay start,
+      @CustomTimeOfDayConverter() TimeOfDay end) = _$RangeOpeningHours;
 
+  factory RangeOpeningHours.fromJson(Map<String, dynamic> json) =
+      _$RangeOpeningHours.fromJson;
+
+  @CustomTimeOfDayConverter()
   TimeOfDay get start;
+  @CustomTimeOfDayConverter()
   TimeOfDay get end;
   @JsonKey(ignore: true)
   $RangeOpeningHoursCopyWith<RangeOpeningHours> get copyWith =>
@@ -384,9 +460,15 @@ class _$ClosedOpeningHoursCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$ClosedOpeningHours implements ClosedOpeningHours {
-  const _$ClosedOpeningHours();
+  const _$ClosedOpeningHours({String? $type}) : $type = $type ?? 'closed';
+
+  factory _$ClosedOpeningHours.fromJson(Map<String, dynamic> json) =>
+      _$$ClosedOpeningHoursFromJson(json);
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
 
   @override
   String toString() {
@@ -406,7 +488,9 @@ class _$ClosedOpeningHours implements ClosedOpeningHours {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() allDay,
-    required TResult Function(TimeOfDay start, TimeOfDay end) range,
+    required TResult Function(@CustomTimeOfDayConverter() TimeOfDay start,
+            @CustomTimeOfDayConverter() TimeOfDay end)
+        range,
     required TResult Function() closed,
   }) {
     return closed();
@@ -416,7 +500,9 @@ class _$ClosedOpeningHours implements ClosedOpeningHours {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? allDay,
-    TResult Function(TimeOfDay start, TimeOfDay end)? range,
+    TResult Function(@CustomTimeOfDayConverter() TimeOfDay start,
+            @CustomTimeOfDayConverter() TimeOfDay end)?
+        range,
     TResult Function()? closed,
   }) {
     return closed?.call();
@@ -426,7 +512,9 @@ class _$ClosedOpeningHours implements ClosedOpeningHours {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? allDay,
-    TResult Function(TimeOfDay start, TimeOfDay end)? range,
+    TResult Function(@CustomTimeOfDayConverter() TimeOfDay start,
+            @CustomTimeOfDayConverter() TimeOfDay end)?
+        range,
     TResult Function()? closed,
     required TResult orElse(),
   }) {
@@ -469,10 +557,18 @@ class _$ClosedOpeningHours implements ClosedOpeningHours {
     }
     return orElse();
   }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ClosedOpeningHoursToJson(this);
+  }
 }
 
 abstract class ClosedOpeningHours implements OpeningHours {
   const factory ClosedOpeningHours() = _$ClosedOpeningHours;
+
+  factory ClosedOpeningHours.fromJson(Map<String, dynamic> json) =
+      _$ClosedOpeningHours.fromJson;
 }
 
 /// @nodoc
