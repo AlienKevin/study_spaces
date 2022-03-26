@@ -409,38 +409,47 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget showListItem(StudySpace studySpace) {
-    return Card(
-        child: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Expanded(
-            child: Column(
-          children: [
-            Text(
-              studySpace.title,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            SizedBox(
-                height: Theme.of(context).textTheme.bodySmall!.fontSize! / 2),
-            Text(openingHoursToString(studySpace.openingHours[0]),
-                style: Theme.of(context).textTheme.bodyMedium),
-          ],
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-        )),
-        SizedBox(
-            width: 80,
-            height: 80,
-            child: AspectRatio(
-                aspectRatio: 1,
-                child: Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            fit: BoxFit.fitHeight,
-                            image: AssetImage(studySpace.pictureUrl)))))),
-      ]),
-    ));
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => StudySpacePage(studySpace: studySpace),
+            ));
+      },
+      child: Card(
+          child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Expanded(
+              child: Column(
+            children: [
+              Text(
+                studySpace.title,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              SizedBox(
+                  height: Theme.of(context).textTheme.bodySmall!.fontSize! / 2),
+              Text(openingHoursToString(studySpace.openingHours[0]),
+                  style: Theme.of(context).textTheme.bodyMedium),
+            ],
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+          )),
+          SizedBox(
+              width: 80,
+              height: 80,
+              child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              fit: BoxFit.fitHeight,
+                              image: AssetImage(studySpace.pictureUrl)))))),
+        ]),
+      )),
+    );
   }
 
   String openingHoursToString(OpeningHours hours) {
@@ -634,5 +643,26 @@ class _MyHomePageState extends State<MyHomePage> {
     queryFocusNode.dispose();
     queryController.dispose();
     super.dispose();
+  }
+}
+
+class StudySpacePage extends StatelessWidget {
+  const StudySpacePage({Key? key, required this.studySpace}) : super(key: key);
+
+  final StudySpace studySpace;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(studySpace.title),
+      ),
+      body: Column(children: [
+        Padding(
+            padding: EdgeInsets.all(
+                Theme.of(context).textTheme.titleMedium!.fontSize!),
+            child: Image.asset(studySpace.pictureUrl))
+      ]),
+    );
   }
 }
