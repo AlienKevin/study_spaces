@@ -173,16 +173,22 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     SharedPreferences.getInstance().then((prefs) {
+      var storedLastUpdateTime = prefs.getString("openingHoursLastUpdateTime");
+      // if openingHoursLastUpdateTime is not set, use the year 2,000 as the default value
+      // this will force us to fetch latest opening hours from M Library API
+      var lastUpdateTime = storedLastUpdateTime == null
+          ? DateTime(2000)
+          : DateTime.parse(storedLastUpdateTime);
       var storedOpeningHours = prefs.getString("openingHours");
-      if (storedOpeningHours == null) {
-        var buildingRequest = getFieldOpeningHours("building");
-        var locationRequest = getFieldOpeningHours("location");
-        Future.wait([buildingRequest, locationRequest]).then((hours) async {
-          openingHours = {
-            ...processFieldOpeningHours(hours[0]),
-            ...processFieldOpeningHours(hours[1]),
-            ...openingHours,
-          };
+      if (storedOpeningHours == null ||
+          DateTime.now()
+                  .difference(lastUpdateTime)
+                  .compareTo(const Duration(days: 7 * 3)) >
+              0) {
+        fetchNewOpeningHours().then((newOpeningHours) {
+          openingHours = newOpeningHours;
+          prefs.setString(
+              'openingHoursLastUpdateTime', DateTime.now().toIso8601String());
           prefs.setString('openingHours', jsonEncode(openingHours));
           updateOpeningHoursForNextSevenDays();
         });
@@ -198,6 +204,21 @@ class _MyHomePageState extends State<MyHomePage> {
                     .toList()));
         updateOpeningHoursForNextSevenDays();
       }
+    });
+  }
+
+  Future<ProcessedOpeningHours> fetchNewOpeningHours() async {
+    if (kDebugMode) {
+      print("Fetching new opening hours from M Library API");
+    }
+    var buildingRequest = getFieldOpeningHours("building");
+    var locationRequest = getFieldOpeningHours("location");
+    return Future.wait([buildingRequest, locationRequest]).then((hours) async {
+      return {
+        ...processFieldOpeningHours(hours[0]),
+        ...processFieldOpeningHours(hours[1]),
+        ...openingHours,
+      };
     });
   }
 
