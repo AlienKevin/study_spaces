@@ -13,6 +13,9 @@ import 'package:time_range_picker/time_range_picker.dart';
 part 'main.freezed.dart';
 part 'main.g.dart';
 
+/// Opening hours of a study space
+///
+/// Can be all day, a range from start time to end time, or closed
 @freezed
 class OpeningHours with _$OpeningHours {
   const factory OpeningHours.allDay() = AllDayOpeningHours;
@@ -23,6 +26,7 @@ class OpeningHours with _$OpeningHours {
       _$OpeningHoursFromJson(json);
 }
 
+/// Converts [TimeOfDay] to an [int] and vice versa for Json
 class CustomTimeOfDayConverter implements JsonConverter<TimeOfDay, int> {
   const CustomTimeOfDayConverter();
 
@@ -33,6 +37,7 @@ class CustomTimeOfDayConverter implements JsonConverter<TimeOfDay, int> {
   int toJson(TimeOfDay time) => timeOfDayToInt(time);
 }
 
+/// Internal states of the app
 @freezed
 class AppState with _$AppState {
   const factory AppState.home() = HomeAppState;
@@ -43,6 +48,13 @@ class AppState with _$AppState {
       FilterResultsAppState;
 }
 
+/// A list of opening hours for each day of week, applicable from [startDate]
+/// to [endDate].
+///
+/// An [id] is used to incorporate hours fetched from M Library API.
+/// Titles are not stored in the relationships of JSON:API so [id]s
+/// are the only way to find and match opening hours to study spaces.
+/// Each [HoursType] of a study space has a unique [id].
 @JsonSerializable(explicitToJson: true)
 class OpeningDateAndHours {
   late String id;
@@ -61,10 +73,18 @@ class OpeningDateAndHours {
   Map<String, dynamic> toJson() => _$OpeningDateAndHoursToJson(this);
 }
 
+/// Type of [OpeningDateAndHours] specified in JSON:API, e.g. "paragraph--hours_exceptions"
 typedef HoursType = String;
+
+/// Title of study spaces
 typedef SpaceTitle = String;
+
+/// Unprocessed [OpeningDateAndHours] for each study space, organized by [HoursType]
 typedef FieldOpeningHours
     = Map<HoursType, Map<SpaceTitle, List<OpeningDateAndHours>>>;
+
+/// Processed [OpeningDateAndHours] for each study space, listed in decreasing priorities.
+/// Priorities cf processFieldOpeningHours.
 typedef ProcessedOpeningHours = Map<SpaceTitle, List<OpeningDateAndHours>>;
 
 void main() {
@@ -207,6 +227,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  /// Fetch the latest opening hours from M Library API
   Future<ProcessedOpeningHours> fetchNewOpeningHours() async {
     if (kDebugMode) {
       print("Fetching new opening hours from M Library API");
@@ -222,6 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  /// Update the opening hours for the next 7 days of all study spaces
   void updateOpeningHoursForNextSevenDays() {
     List<DateTime> nextSevenDays = [];
     var nextDay = DateTime.now();
@@ -515,6 +537,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  /// Convert [OpeningHours] to [String] for display.
   String openingHoursToString(OpeningHours hours) {
     return hours.when(
         closed: () => "Closed",
@@ -523,6 +546,7 @@ class _MyHomePageState extends State<MyHomePage> {
             timeOfDayToString(start) + " - " + timeOfDayToString(end));
   }
 
+  /// Convert [TimeOfDay] to [String] for display.
   String timeOfDayToString(TimeOfDay time) {
     String _addLeadingZeroIfNeeded(int value) {
       if (value < 10) return '0$value';
@@ -542,6 +566,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  /// Check if [queryHours] is during the [duringHours].
   bool isOpenDuring(OpeningHours queryHours, OpeningHours duringHours) {
     return duringHours.when(
         closed: () => false,
@@ -559,6 +584,7 @@ class _MyHomePageState extends State<MyHomePage> {
             }));
   }
 
+  /// Get the [OpeningHours] of a study space with a [queryTitle] at a [queryDate].
   OpeningHours? getOpeningHours(String queryTitle, DateTime queryDate) {
     // print(openingHours[queryTitle]
     //     ?.map((hours) => "${hours.startDate} - ${hours.endDate}"));
@@ -570,13 +596,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 hours.endDate.isAtSameMomentAs(queryDate)),
         orElse: () => throw "Can't find opening hours for $queryDate.");
     if (dateAndHours != null) {
-      return dateAndHoursToHours(queryDate, dateAndHours);
+      return getHoursFromDateAndHours(queryDate, dateAndHours);
     } else {
       return null;
     }
   }
 
-  OpeningHours dateAndHoursToHours(
+  /// Get [OpeningHours] at a [queryDate] from an [OpeningDateAndHours]
+  OpeningHours getHoursFromDateAndHours(
           DateTime queryDate, OpeningDateAndHours hours) =>
       // DateTime weekdays start from Monday with a value of 1
       // M Library API weekdays start from Sunday with a value of 0
@@ -611,6 +638,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return result;
   }
 
+  /// Get [FieldOpeningHours] from M Library API for a [spaceType].
+  ///
+  /// [spaceType] can be either "building" or "location"
   Future<FieldOpeningHours> getFieldOpeningHours(String spaceType) async {
     var baseUri = 'https://cms.lib.umich.edu/jsonapi/node/$spaceType/';
 
@@ -732,6 +762,8 @@ class StudySpacePage extends StatelessWidget {
   }
 }
 
+/// Convert an [int] to a [TimeOfDay]
 TimeOfDay intToTimeOfDay(int n) => TimeOfDay(hour: n ~/ 100, minute: n % 100);
 
+/// Convert a [TimeOfDay] to an [int]
 int timeOfDayToInt(TimeOfDay time) => time.hour * 100 + time.minute;
