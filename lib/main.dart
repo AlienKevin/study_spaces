@@ -206,7 +206,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   .compareTo(const Duration(days: 7 * 3)) >
               0) {
         fetchNewOpeningHours().then((newOpeningHours) {
-          openingHours = newOpeningHours;
+          setState(() {
+            openingHours = newOpeningHours;
+          });
           prefs.setString(
               'openingHoursLastUpdateTime', DateTime.now().toIso8601String());
           prefs.setString('openingHours', jsonEncode(openingHours));
@@ -216,12 +218,15 @@ class _MyHomePageState extends State<MyHomePage> {
         if (kDebugMode) {
           print("Loaded opening hours from cache");
         }
-        openingHours = (jsonDecode(storedOpeningHours) as Map<String, dynamic>)
-            .map((title, openingHours) => MapEntry(
-                title,
-                (openingHours as List<dynamic>)
-                    .map((hours) => OpeningDateAndHours.fromJson(hours))
-                    .toList()));
+        setState(() {
+          openingHours =
+              (jsonDecode(storedOpeningHours) as Map<String, dynamic>).map(
+                  (title, openingHours) => MapEntry(
+                      title,
+                      (openingHours as List<dynamic>)
+                          .map((hours) => OpeningDateAndHours.fromJson(hours))
+                          .toList()));
+        });
         updateOpeningHoursForNextSevenDays();
       }
     });
@@ -251,18 +256,20 @@ class _MyHomePageState extends State<MyHomePage> {
       nextSevenDays.add(nextDay);
       nextDay = nextDay.add(const Duration(days: 1));
     }
-    studySpaces = studySpaces.map((space) {
-      space.openingHours.clear();
-      for (var day in nextSevenDays) {
-        var newOpeningHours = getOpeningHours(space.title, day);
-        if (kDebugMode) {
-          print(
-              "opening hours for ${space.title} on ${day.year}-${day.month}-${day.day} is $newOpeningHours.");
+    setState(() {
+      studySpaces = studySpaces.map((space) {
+        space.openingHours.clear();
+        for (var day in nextSevenDays) {
+          var newOpeningHours = getOpeningHours(space.title, day);
+          if (kDebugMode) {
+            print(
+                "opening hours for ${space.title} on ${day.year}-${day.month}-${day.day} is $newOpeningHours.");
+          }
+          space.openingHours.add(newOpeningHours!);
         }
-        space.openingHours.add(newOpeningHours!);
-      }
-      return space;
-    }).toList();
+        return space;
+      }).toList();
+    });
   }
 
   @override
