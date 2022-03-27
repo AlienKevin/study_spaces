@@ -764,19 +764,17 @@ class StudySpacePage extends StatelessWidget {
       body: Padding(
         padding:
             EdgeInsets.all(Theme.of(context).textTheme.titleMedium!.fontSize!),
-        child: Flexible(
-          child: ListView.separated(
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(8),
-            itemCount: hoursList.length,
-            itemBuilder: (BuildContext context, int index) {
-              return hoursList[index];
-            },
-            separatorBuilder: (context, index) => SizedBox(
-              height: Theme.of(context).textTheme.bodySmall!.fontSize! / 2,
-            ),
-            // itemExtent: 100,
+        child: ListView.separated(
+          shrinkWrap: true,
+          padding: const EdgeInsets.all(8),
+          itemCount: hoursList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return hoursList[index];
+          },
+          separatorBuilder: (context, index) => SizedBox(
+            height: Theme.of(context).textTheme.bodySmall!.fontSize! / 2,
           ),
+          // itemExtent: 100,
         ),
       ),
     );
