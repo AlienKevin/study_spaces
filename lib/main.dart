@@ -544,35 +544,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  /// Convert [OpeningHours] to [String] for display.
-  String openingHoursToString(OpeningHours hours) {
-    return hours.when(
-        closed: () => "Closed",
-        allDay: () => "24H",
-        range: (start, end) =>
-            timeOfDayToString(start) + " - " + timeOfDayToString(end));
-  }
-
-  /// Convert [TimeOfDay] to [String] for display.
-  String timeOfDayToString(TimeOfDay time) {
-    String _addLeadingZeroIfNeeded(int value) {
-      if (value < 10) return '0$value';
-      return value.toString();
-    }
-
-    if (time.hour > 12) {
-      return (time.hour - 12).toString() +
-          ":" +
-          _addLeadingZeroIfNeeded(time.minute) +
-          "PM";
-    } else {
-      return time.hour.toString() +
-          ":" +
-          _addLeadingZeroIfNeeded(time.minute) +
-          "AM";
-    }
-  }
-
   /// Check if [queryHours] is during the [duringHours].
   bool isOpenDuring(OpeningHours queryHours, OpeningHours duringHours) {
     return duringHours.when(
@@ -755,17 +726,109 @@ class StudySpacePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime today = DateTime.now();
+    List<Widget> hoursList = [];
+    hoursList.addAll(studySpace.openingHours.mapIndexed((index, hours) {
+      var day = today.add(Duration(days: index));
+      return Container(
+          decoration: BoxDecoration(
+            border: index == 0
+                ? Border.all(
+                    color: Theme.of(context).primaryColor,
+                    width: 3,
+                  )
+                : null,
+          ),
+          padding: index == 0
+              ? const EdgeInsets.all(8)
+              : const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+          child: Row(children: [
+            Expanded(
+                flex: 1, // 20%
+                child: Text("${day.month}/${day.day}",
+                    style: Theme.of(context).textTheme.titleLarge)),
+            Expanded(
+                flex: 1, // 20%
+                child: Text(weekdayToString(day.weekday),
+                    style: Theme.of(context).textTheme.titleLarge)),
+            Expanded(
+                flex: 2, // 20%
+                child: Text(openingHoursToString(hours),
+                    style: Theme.of(context).textTheme.titleLarge)),
+          ]));
+    }));
     return Scaffold(
       appBar: AppBar(
         title: Text(studySpace.title),
       ),
-      body: Column(children: [
-        Padding(
-            padding: EdgeInsets.all(
-                Theme.of(context).textTheme.titleMedium!.fontSize!),
-            child: Image.asset(studySpace.pictureUrl))
-      ]),
+      body: Padding(
+        padding:
+            EdgeInsets.all(Theme.of(context).textTheme.titleMedium!.fontSize!),
+        child: Flexible(
+          child: ListView.separated(
+            shrinkWrap: true,
+            padding: const EdgeInsets.all(8),
+            itemCount: hoursList.length,
+            itemBuilder: (BuildContext context, int index) {
+              return hoursList[index];
+            },
+            separatorBuilder: (context, index) => SizedBox(
+              height: Theme.of(context).textTheme.bodySmall!.fontSize! / 2,
+            ),
+            // itemExtent: 100,
+          ),
+        ),
+      ),
     );
+  }
+}
+
+/// Convert [OpeningHours] to [String] for display.
+String openingHoursToString(OpeningHours hours) {
+  return hours.when(
+      closed: () => "Closed",
+      allDay: () => "24H",
+      range: (start, end) =>
+          timeOfDayToString(start) + " - " + timeOfDayToString(end));
+}
+
+/// Convert [TimeOfDay] to [String] for display.
+/// Truncates ":00" if minute is 0
+String timeOfDayToString(TimeOfDay time) {
+  String _addLeadingZeroIfNeeded(int value) {
+    if (value < 10) return '0$value';
+    return value.toString();
+  }
+
+  if (time.hour > 12) {
+    return (time.hour - 12).toString() +
+        (time.minute == 0 ? "" : ":" + _addLeadingZeroIfNeeded(time.minute)) +
+        "PM";
+  } else {
+    return time.hour.toString() +
+        (time.minute == 0 ? "" : ":" + _addLeadingZeroIfNeeded(time.minute)) +
+        "AM";
+  }
+}
+
+String weekdayToString(int weekday) {
+  switch (weekday) {
+    case 1:
+      return "MON";
+    case 2:
+      return "TUE";
+    case 3:
+      return "WED";
+    case 4:
+      return "THU";
+    case 5:
+      return "FRI";
+    case 6:
+      return "SAT";
+    case 7:
+      return "SUN";
+    default:
+      throw "Invalid weekday $weekday.";
   }
 }
 
