@@ -417,7 +417,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       appState = const AppState.filterSearch();
     });
-    TimeOfDay _startTime = TimeOfDay.now();
+    TimeOfDay _startTime = const TimeOfDay(hour: 9, minute: 0);
     TimeOfDay _endTime = const TimeOfDay(hour: 22, minute: 0);
     await showDialog(
         context: context,
