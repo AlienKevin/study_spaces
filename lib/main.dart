@@ -44,11 +44,9 @@ class CustomTimeOfDayConverter implements JsonConverter<TimeOfDay, int> {
 @freezed
 class AppState with _$AppState {
   const factory AppState.home() = HomeAppState;
-  const factory AppState.startingSearch() = StartingSearchAppState;
   const factory AppState.keywordSearch() = KeywordSearchAppState;
   const factory AppState.filterSearch() = FilterSearchAppState;
-  const factory AppState.filterResults({required OpeningHours openingHours}) =
-      FilterResultsAppState;
+  const factory AppState.filterResults() = FilterResultsAppState;
 }
 
 /// A list of opening hours for each day of week, applicable from [startDate]
@@ -100,6 +98,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    double bodyLargeSize = 16.0;
     return MaterialApp(
       title: 'Study spaces',
       theme: ThemeData(
@@ -113,7 +112,12 @@ class MyApp extends StatelessWidget {
             enabledBorder: InputBorder.none,
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
-          )),
+          ),
+          outlinedButtonTheme: OutlinedButtonThemeData(
+              style: OutlinedButton.styleFrom(
+                  shape: const StadiumBorder(),
+                  side: const BorderSide(width: 2.0, color: Colors.grey),
+                  padding: EdgeInsets.all(bodyLargeSize)))),
       home: const MyHomePage(title: 'Opening Now'),
     );
   }
@@ -145,6 +149,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final queryController = TextEditingController();
   final FocusNode queryFocusNode = FocusNode();
   ProcessedOpeningHours openingHours = {};
+  TimeOfDay filterStartTime = const TimeOfDay(hour: 9, minute: 0);
+  TimeOfDay filterEndTime = const TimeOfDay(hour: 22, minute: 0);
 
   List<StudySpace> studySpaces = [
     StudySpace(
@@ -292,22 +298,21 @@ class _MyHomePageState extends State<MyHomePage> {
             .toList()
         : studySpaces;
     var filteredStudySpaces = appState.when(
-      filterResults: (filterOpeningHours) => studySpaces
-          .where((space) =>
-              isOpenDuring(filterOpeningHours, space.openingHours[0]))
+      filterResults: () => studySpaces
+          .where((space) => isOpenDuring(
+              OpeningHours.range(filterStartTime, filterEndTime),
+              space.openingHours[0]))
           .toList(),
       keywordSearch: () => queryFilteredStudySpaces,
       filterSearch: () => queryFilteredStudySpaces,
       home: () => queryFilteredStudySpaces,
-      startingSearch: () => queryFilteredStudySpaces,
     );
     return Scaffold(
       appBar: appState.when(
-        filterSearch: () => filterSearchAppBar(),
-        filterResults: filterResultsAppBar,
-        startingSearch: () => searchAppBar(),
-        keywordSearch: () => searchAppBar(),
-        home: () => searchAppBar(),
+        filterSearch: () => filterResultsAppBar(),
+        filterResults: () => filterResultsAppBar(),
+        keywordSearch: () => searchAndFilterAppBar(),
+        home: () => searchAndFilterAppBar(),
       ),
       body: ListView.separated(
         padding: const EdgeInsets.all(8),
@@ -320,27 +325,16 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         // itemExtent: 100,
       ),
-      floatingActionButton: Visibility(
-          visible: appState == const AppState.startingSearch(),
-          child: FloatingActionButton.extended(
-            onPressed: startFiltering,
-            label: const Text('Search with filters'),
-            icon: const Icon(Icons.filter_alt),
-            backgroundColor: Theme.of(context).primaryColor,
-          )),
     );
   }
 
-  AppBar filterResultsAppBar(OpeningHours openingHours) => AppBar(
+  AppBar filterResultsAppBar() => AppBar(
         title: Row(children: [
           backToHomeIconButton(),
           SizedBox(width: Theme.of(context).textTheme.bodyLarge!.fontSize! / 2),
           TextButton(
             style: TextButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                    Theme.of(context).textTheme.bodyLarge!.fontSize! * 2),
-              ),
+              shape: const StadiumBorder(),
               padding: EdgeInsets.all(
                   Theme.of(context).textTheme.bodyLarge!.fontSize! / 1.5),
               primary: Colors.white,
@@ -348,7 +342,8 @@ class _MyHomePageState extends State<MyHomePage> {
               backgroundColor: Theme.of(context).primaryColor,
             ),
             onPressed: startFiltering,
-            child: Text(openingHoursToString(openingHours)),
+            child: Text(openingHoursToString(
+                OpeningHours.range(filterStartTime, filterEndTime))),
           )
         ]),
         backgroundColor: Theme.of(context).canvasColor,
@@ -360,41 +355,73 @@ class _MyHomePageState extends State<MyHomePage> {
         elevation: 0,
       );
 
-  AppBar searchAppBar() => AppBar(
-        title: TextField(
-          focusNode: queryFocusNode,
-          onChanged: (String name) {
-            setState(() {
-              appState = const AppState.keywordSearch();
-              queryName = name;
-            });
-          },
-          onTap: () {
-            setState(() {
-              appState = const AppState.startingSearch();
-            });
-          },
-          decoration: InputDecoration(
-              focusedBorder: appState == const AppState.keywordSearch()
-                  ? UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor, width: 2.0),
-                    )
-                  : InputBorder.none,
-              hintText: 'Where are you studying?',
-              prefixIcon: appState == const AppState.keywordSearch()
-                  ? backToHomeIconButton()
-                  : startSearchingIconButton()),
-          controller: queryController,
-        ),
-        backgroundColor: Theme.of(context).canvasColor,
-      );
+  AppBar searchAndFilterAppBar() {
+    var textFieldBorder = OutlineInputBorder(
+      borderSide: const BorderSide(width: 2, color: Colors.grey),
+      borderRadius: BorderRadius.circular(100),
+    );
+    return AppBar(
+      toolbarHeight: 60,
+      flexibleSpace: Padding(
+          padding:
+              EdgeInsets.all(Theme.of(context).textTheme.bodyLarge!.fontSize!),
+          child: Row(children: [
+            Visibility(
+                visible: appState != const AppState.keywordSearch(),
+                child: OutlinedButton(
+                    style: Theme.of(context).outlinedButtonTheme.style,
+                    onPressed: startFiltering,
+                    child: Row(children: [
+                      Icon(Icons.filter_alt,
+                          size:
+                              Theme.of(context).textTheme.bodyLarge!.fontSize!),
+                      const Text('Search by filter'),
+                    ]))),
+            Visibility(
+                visible: appState != const AppState.keywordSearch(),
+                child: SizedBox(
+                    width: Theme.of(context).textTheme.bodyLarge!.fontSize!)),
+            Expanded(
+                child: TextField(
+              focusNode: queryFocusNode,
+              onChanged: (String name) {
+                setState(() {
+                  appState = const AppState.keywordSearch();
+                  queryName = name;
+                });
+              },
+              onTap: () {
+                setState(() {
+                  appState = const AppState.keywordSearch();
+                });
+              },
+              decoration: InputDecoration(
+                isDense: true,
+                errorBorder: textFieldBorder,
+                focusedBorder: textFieldBorder,
+                focusedErrorBorder: textFieldBorder,
+                disabledBorder: textFieldBorder,
+                enabledBorder: textFieldBorder,
+                border: textFieldBorder,
+                hintText: 'Search by keywords',
+                prefixIcon: appState == const AppState.keywordSearch()
+                    ? backToHomeIconButton()
+                    : keywordSearchIconButton(),
+                contentPadding: EdgeInsets.all(
+                    Theme.of(context).textTheme.bodyLarge!.fontSize!),
+              ),
+              controller: queryController,
+            ))
+          ])),
+      backgroundColor: Theme.of(context).canvasColor,
+    );
+  }
 
-  Widget startSearchingIconButton() => GestureDetector(
+  Widget keywordSearchIconButton() => GestureDetector(
         child: const Icon(Icons.search),
         onTap: () {
           setState(() {
-            appState = const AppState.startingSearch();
+            appState = const AppState.keywordSearch();
             queryFocusNode.requestFocus();
           });
         },
@@ -417,8 +444,8 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       appState = const AppState.filterSearch();
     });
-    TimeOfDay _startTime = const TimeOfDay(hour: 9, minute: 0);
-    TimeOfDay _endTime = const TimeOfDay(hour: 22, minute: 0);
+    TimeOfDay _startTime = filterStartTime;
+    TimeOfDay _endTime = filterEndTime;
     await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -445,9 +472,9 @@ class _MyHomePageState extends State<MyHomePage> {
                             onPressed: () {
                               Navigator.of(context).pop();
                               setState(() {
-                                appState = AppState.filterResults(
-                                    openingHours: OpeningHours.range(
-                                        _startTime, _endTime));
+                                filterStartTime = _startTime;
+                                filterEndTime = _endTime;
+                                appState = const AppState.filterResults();
                               });
                             },
                           ),

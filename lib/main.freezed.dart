@@ -149,7 +149,9 @@ class _$AllDayOpeningHoursCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$AllDayOpeningHours implements AllDayOpeningHours {
+class _$AllDayOpeningHours
+    with DiagnosticableTreeMixin
+    implements AllDayOpeningHours {
   const _$AllDayOpeningHours({String? $type}) : $type = $type ?? 'allDay';
 
   factory _$AllDayOpeningHours.fromJson(Map<String, dynamic> json) =>
@@ -159,8 +161,14 @@ class _$AllDayOpeningHours implements AllDayOpeningHours {
   final String $type;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'OpeningHours.allDay()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties..add(DiagnosticsProperty('type', 'OpeningHours.allDay'));
   }
 
   @override
@@ -300,7 +308,9 @@ class _$RangeOpeningHoursCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$RangeOpeningHours implements RangeOpeningHours {
+class _$RangeOpeningHours
+    with DiagnosticableTreeMixin
+    implements RangeOpeningHours {
   const _$RangeOpeningHours(@CustomTimeOfDayConverter() this.start,
       @CustomTimeOfDayConverter() this.end,
       {String? $type})
@@ -320,8 +330,17 @@ class _$RangeOpeningHours implements RangeOpeningHours {
   final String $type;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'OpeningHours.range(start: $start, end: $end)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'OpeningHours.range'))
+      ..add(DiagnosticsProperty('start', start))
+      ..add(DiagnosticsProperty('end', end));
   }
 
   @override
@@ -461,7 +480,9 @@ class _$ClosedOpeningHoursCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ClosedOpeningHours implements ClosedOpeningHours {
+class _$ClosedOpeningHours
+    with DiagnosticableTreeMixin
+    implements ClosedOpeningHours {
   const _$ClosedOpeningHours({String? $type}) : $type = $type ?? 'closed';
 
   factory _$ClosedOpeningHours.fromJson(Map<String, dynamic> json) =>
@@ -471,8 +492,14 @@ class _$ClosedOpeningHours implements ClosedOpeningHours {
   final String $type;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'OpeningHours.closed()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties..add(DiagnosticsProperty('type', 'OpeningHours.closed'));
   }
 
   @override
@@ -579,10 +606,6 @@ class _$AppStateTearOff {
     return const HomeAppState();
   }
 
-  StartingSearchAppState startingSearch() {
-    return const StartingSearchAppState();
-  }
-
   KeywordSearchAppState keywordSearch() {
     return const KeywordSearchAppState();
   }
@@ -591,10 +614,8 @@ class _$AppStateTearOff {
     return const FilterSearchAppState();
   }
 
-  FilterResultsAppState filterResults({required OpeningHours openingHours}) {
-    return FilterResultsAppState(
-      openingHours: openingHours,
-    );
+  FilterResultsAppState filterResults() {
+    return const FilterResultsAppState();
   }
 }
 
@@ -606,35 +627,31 @@ mixin _$AppState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() home,
-    required TResult Function() startingSearch,
     required TResult Function() keywordSearch,
     required TResult Function() filterSearch,
-    required TResult Function(OpeningHours openingHours) filterResults,
+    required TResult Function() filterResults,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? home,
-    TResult Function()? startingSearch,
     TResult Function()? keywordSearch,
     TResult Function()? filterSearch,
-    TResult Function(OpeningHours openingHours)? filterResults,
+    TResult Function()? filterResults,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? home,
-    TResult Function()? startingSearch,
     TResult Function()? keywordSearch,
     TResult Function()? filterSearch,
-    TResult Function(OpeningHours openingHours)? filterResults,
+    TResult Function()? filterResults,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(HomeAppState value) home,
-    required TResult Function(StartingSearchAppState value) startingSearch,
     required TResult Function(KeywordSearchAppState value) keywordSearch,
     required TResult Function(FilterSearchAppState value) filterSearch,
     required TResult Function(FilterResultsAppState value) filterResults,
@@ -643,7 +660,6 @@ mixin _$AppState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(HomeAppState value)? home,
-    TResult Function(StartingSearchAppState value)? startingSearch,
     TResult Function(KeywordSearchAppState value)? keywordSearch,
     TResult Function(FilterSearchAppState value)? filterSearch,
     TResult Function(FilterResultsAppState value)? filterResults,
@@ -652,7 +668,6 @@ mixin _$AppState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(HomeAppState value)? home,
-    TResult Function(StartingSearchAppState value)? startingSearch,
     TResult Function(KeywordSearchAppState value)? keywordSearch,
     TResult Function(FilterSearchAppState value)? filterSearch,
     TResult Function(FilterResultsAppState value)? filterResults,
@@ -696,12 +711,18 @@ class _$HomeAppStateCopyWithImpl<$Res> extends _$AppStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$HomeAppState implements HomeAppState {
+class _$HomeAppState with DiagnosticableTreeMixin implements HomeAppState {
   const _$HomeAppState();
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'AppState.home()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties..add(DiagnosticsProperty('type', 'AppState.home'));
   }
 
   @override
@@ -717,10 +738,9 @@ class _$HomeAppState implements HomeAppState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() home,
-    required TResult Function() startingSearch,
     required TResult Function() keywordSearch,
     required TResult Function() filterSearch,
-    required TResult Function(OpeningHours openingHours) filterResults,
+    required TResult Function() filterResults,
   }) {
     return home();
   }
@@ -729,10 +749,9 @@ class _$HomeAppState implements HomeAppState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? home,
-    TResult Function()? startingSearch,
     TResult Function()? keywordSearch,
     TResult Function()? filterSearch,
-    TResult Function(OpeningHours openingHours)? filterResults,
+    TResult Function()? filterResults,
   }) {
     return home?.call();
   }
@@ -741,10 +760,9 @@ class _$HomeAppState implements HomeAppState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? home,
-    TResult Function()? startingSearch,
     TResult Function()? keywordSearch,
     TResult Function()? filterSearch,
-    TResult Function(OpeningHours openingHours)? filterResults,
+    TResult Function()? filterResults,
     required TResult orElse(),
   }) {
     if (home != null) {
@@ -757,7 +775,6 @@ class _$HomeAppState implements HomeAppState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(HomeAppState value) home,
-    required TResult Function(StartingSearchAppState value) startingSearch,
     required TResult Function(KeywordSearchAppState value) keywordSearch,
     required TResult Function(FilterSearchAppState value) filterSearch,
     required TResult Function(FilterResultsAppState value) filterResults,
@@ -769,7 +786,6 @@ class _$HomeAppState implements HomeAppState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(HomeAppState value)? home,
-    TResult Function(StartingSearchAppState value)? startingSearch,
     TResult Function(KeywordSearchAppState value)? keywordSearch,
     TResult Function(FilterSearchAppState value)? filterSearch,
     TResult Function(FilterResultsAppState value)? filterResults,
@@ -781,7 +797,6 @@ class _$HomeAppState implements HomeAppState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(HomeAppState value)? home,
-    TResult Function(StartingSearchAppState value)? startingSearch,
     TResult Function(KeywordSearchAppState value)? keywordSearch,
     TResult Function(FilterSearchAppState value)? filterSearch,
     TResult Function(FilterResultsAppState value)? filterResults,
@@ -796,129 +811,6 @@ class _$HomeAppState implements HomeAppState {
 
 abstract class HomeAppState implements AppState {
   const factory HomeAppState() = _$HomeAppState;
-}
-
-/// @nodoc
-abstract class $StartingSearchAppStateCopyWith<$Res> {
-  factory $StartingSearchAppStateCopyWith(StartingSearchAppState value,
-          $Res Function(StartingSearchAppState) then) =
-      _$StartingSearchAppStateCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class _$StartingSearchAppStateCopyWithImpl<$Res>
-    extends _$AppStateCopyWithImpl<$Res>
-    implements $StartingSearchAppStateCopyWith<$Res> {
-  _$StartingSearchAppStateCopyWithImpl(StartingSearchAppState _value,
-      $Res Function(StartingSearchAppState) _then)
-      : super(_value, (v) => _then(v as StartingSearchAppState));
-
-  @override
-  StartingSearchAppState get _value => super._value as StartingSearchAppState;
-}
-
-/// @nodoc
-
-class _$StartingSearchAppState implements StartingSearchAppState {
-  const _$StartingSearchAppState();
-
-  @override
-  String toString() {
-    return 'AppState.startingSearch()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is StartingSearchAppState);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() home,
-    required TResult Function() startingSearch,
-    required TResult Function() keywordSearch,
-    required TResult Function() filterSearch,
-    required TResult Function(OpeningHours openingHours) filterResults,
-  }) {
-    return startingSearch();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? home,
-    TResult Function()? startingSearch,
-    TResult Function()? keywordSearch,
-    TResult Function()? filterSearch,
-    TResult Function(OpeningHours openingHours)? filterResults,
-  }) {
-    return startingSearch?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? home,
-    TResult Function()? startingSearch,
-    TResult Function()? keywordSearch,
-    TResult Function()? filterSearch,
-    TResult Function(OpeningHours openingHours)? filterResults,
-    required TResult orElse(),
-  }) {
-    if (startingSearch != null) {
-      return startingSearch();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(HomeAppState value) home,
-    required TResult Function(StartingSearchAppState value) startingSearch,
-    required TResult Function(KeywordSearchAppState value) keywordSearch,
-    required TResult Function(FilterSearchAppState value) filterSearch,
-    required TResult Function(FilterResultsAppState value) filterResults,
-  }) {
-    return startingSearch(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(HomeAppState value)? home,
-    TResult Function(StartingSearchAppState value)? startingSearch,
-    TResult Function(KeywordSearchAppState value)? keywordSearch,
-    TResult Function(FilterSearchAppState value)? filterSearch,
-    TResult Function(FilterResultsAppState value)? filterResults,
-  }) {
-    return startingSearch?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(HomeAppState value)? home,
-    TResult Function(StartingSearchAppState value)? startingSearch,
-    TResult Function(KeywordSearchAppState value)? keywordSearch,
-    TResult Function(FilterSearchAppState value)? filterSearch,
-    TResult Function(FilterResultsAppState value)? filterResults,
-    required TResult orElse(),
-  }) {
-    if (startingSearch != null) {
-      return startingSearch(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class StartingSearchAppState implements AppState {
-  const factory StartingSearchAppState() = _$StartingSearchAppState;
 }
 
 /// @nodoc
@@ -942,12 +834,20 @@ class _$KeywordSearchAppStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$KeywordSearchAppState implements KeywordSearchAppState {
+class _$KeywordSearchAppState
+    with DiagnosticableTreeMixin
+    implements KeywordSearchAppState {
   const _$KeywordSearchAppState();
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'AppState.keywordSearch()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties..add(DiagnosticsProperty('type', 'AppState.keywordSearch'));
   }
 
   @override
@@ -963,10 +863,9 @@ class _$KeywordSearchAppState implements KeywordSearchAppState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() home,
-    required TResult Function() startingSearch,
     required TResult Function() keywordSearch,
     required TResult Function() filterSearch,
-    required TResult Function(OpeningHours openingHours) filterResults,
+    required TResult Function() filterResults,
   }) {
     return keywordSearch();
   }
@@ -975,10 +874,9 @@ class _$KeywordSearchAppState implements KeywordSearchAppState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? home,
-    TResult Function()? startingSearch,
     TResult Function()? keywordSearch,
     TResult Function()? filterSearch,
-    TResult Function(OpeningHours openingHours)? filterResults,
+    TResult Function()? filterResults,
   }) {
     return keywordSearch?.call();
   }
@@ -987,10 +885,9 @@ class _$KeywordSearchAppState implements KeywordSearchAppState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? home,
-    TResult Function()? startingSearch,
     TResult Function()? keywordSearch,
     TResult Function()? filterSearch,
-    TResult Function(OpeningHours openingHours)? filterResults,
+    TResult Function()? filterResults,
     required TResult orElse(),
   }) {
     if (keywordSearch != null) {
@@ -1003,7 +900,6 @@ class _$KeywordSearchAppState implements KeywordSearchAppState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(HomeAppState value) home,
-    required TResult Function(StartingSearchAppState value) startingSearch,
     required TResult Function(KeywordSearchAppState value) keywordSearch,
     required TResult Function(FilterSearchAppState value) filterSearch,
     required TResult Function(FilterResultsAppState value) filterResults,
@@ -1015,7 +911,6 @@ class _$KeywordSearchAppState implements KeywordSearchAppState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(HomeAppState value)? home,
-    TResult Function(StartingSearchAppState value)? startingSearch,
     TResult Function(KeywordSearchAppState value)? keywordSearch,
     TResult Function(FilterSearchAppState value)? filterSearch,
     TResult Function(FilterResultsAppState value)? filterResults,
@@ -1027,7 +922,6 @@ class _$KeywordSearchAppState implements KeywordSearchAppState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(HomeAppState value)? home,
-    TResult Function(StartingSearchAppState value)? startingSearch,
     TResult Function(KeywordSearchAppState value)? keywordSearch,
     TResult Function(FilterSearchAppState value)? filterSearch,
     TResult Function(FilterResultsAppState value)? filterResults,
@@ -1065,12 +959,20 @@ class _$FilterSearchAppStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FilterSearchAppState implements FilterSearchAppState {
+class _$FilterSearchAppState
+    with DiagnosticableTreeMixin
+    implements FilterSearchAppState {
   const _$FilterSearchAppState();
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'AppState.filterSearch()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties..add(DiagnosticsProperty('type', 'AppState.filterSearch'));
   }
 
   @override
@@ -1086,10 +988,9 @@ class _$FilterSearchAppState implements FilterSearchAppState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() home,
-    required TResult Function() startingSearch,
     required TResult Function() keywordSearch,
     required TResult Function() filterSearch,
-    required TResult Function(OpeningHours openingHours) filterResults,
+    required TResult Function() filterResults,
   }) {
     return filterSearch();
   }
@@ -1098,10 +999,9 @@ class _$FilterSearchAppState implements FilterSearchAppState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? home,
-    TResult Function()? startingSearch,
     TResult Function()? keywordSearch,
     TResult Function()? filterSearch,
-    TResult Function(OpeningHours openingHours)? filterResults,
+    TResult Function()? filterResults,
   }) {
     return filterSearch?.call();
   }
@@ -1110,10 +1010,9 @@ class _$FilterSearchAppState implements FilterSearchAppState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? home,
-    TResult Function()? startingSearch,
     TResult Function()? keywordSearch,
     TResult Function()? filterSearch,
-    TResult Function(OpeningHours openingHours)? filterResults,
+    TResult Function()? filterResults,
     required TResult orElse(),
   }) {
     if (filterSearch != null) {
@@ -1126,7 +1025,6 @@ class _$FilterSearchAppState implements FilterSearchAppState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(HomeAppState value) home,
-    required TResult Function(StartingSearchAppState value) startingSearch,
     required TResult Function(KeywordSearchAppState value) keywordSearch,
     required TResult Function(FilterSearchAppState value) filterSearch,
     required TResult Function(FilterResultsAppState value) filterResults,
@@ -1138,7 +1036,6 @@ class _$FilterSearchAppState implements FilterSearchAppState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(HomeAppState value)? home,
-    TResult Function(StartingSearchAppState value)? startingSearch,
     TResult Function(KeywordSearchAppState value)? keywordSearch,
     TResult Function(FilterSearchAppState value)? filterSearch,
     TResult Function(FilterResultsAppState value)? filterResults,
@@ -1150,7 +1047,6 @@ class _$FilterSearchAppState implements FilterSearchAppState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(HomeAppState value)? home,
-    TResult Function(StartingSearchAppState value)? startingSearch,
     TResult Function(KeywordSearchAppState value)? keywordSearch,
     TResult Function(FilterSearchAppState value)? filterSearch,
     TResult Function(FilterResultsAppState value)? filterResults,
@@ -1172,9 +1068,6 @@ abstract class $FilterResultsAppStateCopyWith<$Res> {
   factory $FilterResultsAppStateCopyWith(FilterResultsAppState value,
           $Res Function(FilterResultsAppState) then) =
       _$FilterResultsAppStateCopyWithImpl<$Res>;
-  $Res call({OpeningHours openingHours});
-
-  $OpeningHoursCopyWith<$Res> get openingHours;
 }
 
 /// @nodoc
@@ -1187,95 +1080,68 @@ class _$FilterResultsAppStateCopyWithImpl<$Res>
 
   @override
   FilterResultsAppState get _value => super._value as FilterResultsAppState;
-
-  @override
-  $Res call({
-    Object? openingHours = freezed,
-  }) {
-    return _then(FilterResultsAppState(
-      openingHours: openingHours == freezed
-          ? _value.openingHours
-          : openingHours // ignore: cast_nullable_to_non_nullable
-              as OpeningHours,
-    ));
-  }
-
-  @override
-  $OpeningHoursCopyWith<$Res> get openingHours {
-    return $OpeningHoursCopyWith<$Res>(_value.openingHours, (value) {
-      return _then(_value.copyWith(openingHours: value));
-    });
-  }
 }
 
 /// @nodoc
 
-class _$FilterResultsAppState implements FilterResultsAppState {
-  const _$FilterResultsAppState({required this.openingHours});
+class _$FilterResultsAppState
+    with DiagnosticableTreeMixin
+    implements FilterResultsAppState {
+  const _$FilterResultsAppState();
 
   @override
-  final OpeningHours openingHours;
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'AppState.filterResults()';
+  }
 
   @override
-  String toString() {
-    return 'AppState.filterResults(openingHours: $openingHours)';
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties..add(DiagnosticsProperty('type', 'AppState.filterResults'));
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is FilterResultsAppState &&
-            const DeepCollectionEquality()
-                .equals(other.openingHours, openingHours));
+        (other.runtimeType == runtimeType && other is FilterResultsAppState);
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(openingHours));
-
-  @JsonKey(ignore: true)
-  @override
-  $FilterResultsAppStateCopyWith<FilterResultsAppState> get copyWith =>
-      _$FilterResultsAppStateCopyWithImpl<FilterResultsAppState>(
-          this, _$identity);
+  int get hashCode => runtimeType.hashCode;
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() home,
-    required TResult Function() startingSearch,
     required TResult Function() keywordSearch,
     required TResult Function() filterSearch,
-    required TResult Function(OpeningHours openingHours) filterResults,
+    required TResult Function() filterResults,
   }) {
-    return filterResults(openingHours);
+    return filterResults();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? home,
-    TResult Function()? startingSearch,
     TResult Function()? keywordSearch,
     TResult Function()? filterSearch,
-    TResult Function(OpeningHours openingHours)? filterResults,
+    TResult Function()? filterResults,
   }) {
-    return filterResults?.call(openingHours);
+    return filterResults?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? home,
-    TResult Function()? startingSearch,
     TResult Function()? keywordSearch,
     TResult Function()? filterSearch,
-    TResult Function(OpeningHours openingHours)? filterResults,
+    TResult Function()? filterResults,
     required TResult orElse(),
   }) {
     if (filterResults != null) {
-      return filterResults(openingHours);
+      return filterResults();
     }
     return orElse();
   }
@@ -1284,7 +1150,6 @@ class _$FilterResultsAppState implements FilterResultsAppState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(HomeAppState value) home,
-    required TResult Function(StartingSearchAppState value) startingSearch,
     required TResult Function(KeywordSearchAppState value) keywordSearch,
     required TResult Function(FilterSearchAppState value) filterSearch,
     required TResult Function(FilterResultsAppState value) filterResults,
@@ -1296,7 +1161,6 @@ class _$FilterResultsAppState implements FilterResultsAppState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(HomeAppState value)? home,
-    TResult Function(StartingSearchAppState value)? startingSearch,
     TResult Function(KeywordSearchAppState value)? keywordSearch,
     TResult Function(FilterSearchAppState value)? filterSearch,
     TResult Function(FilterResultsAppState value)? filterResults,
@@ -1308,7 +1172,6 @@ class _$FilterResultsAppState implements FilterResultsAppState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(HomeAppState value)? home,
-    TResult Function(StartingSearchAppState value)? startingSearch,
     TResult Function(KeywordSearchAppState value)? keywordSearch,
     TResult Function(FilterSearchAppState value)? filterSearch,
     TResult Function(FilterResultsAppState value)? filterResults,
@@ -1322,11 +1185,5 @@ class _$FilterResultsAppState implements FilterResultsAppState {
 }
 
 abstract class FilterResultsAppState implements AppState {
-  const factory FilterResultsAppState({required OpeningHours openingHours}) =
-      _$FilterResultsAppState;
-
-  OpeningHours get openingHours;
-  @JsonKey(ignore: true)
-  $FilterResultsAppStateCopyWith<FilterResultsAppState> get copyWith =>
-      throw _privateConstructorUsedError;
+  const factory FilterResultsAppState() = _$FilterResultsAppState;
 }
