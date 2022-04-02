@@ -33,35 +33,64 @@ class StudySpacePage extends StatelessWidget {
                 child: Text("${day.month}/${day.day}",
                     style: Theme.of(context).textTheme.titleLarge)),
             Expanded(
-                flex: 1, // 20%
+                flex: 2, // 20%
                 child: Text(weekdayToString(day.weekday),
                     style: Theme.of(context).textTheme.titleLarge)),
             Expanded(
-                flex: 2, // 20%
+                flex: 3, // 20%
                 child: Text(openingHoursToString(hours),
+                    textAlign: TextAlign.end,
                     style: Theme.of(context).textTheme.titleLarge)),
           ]));
     }));
     return Scaffold(
-      appBar: AppBar(
-        title: Text(studySpace.title),
-      ),
-      body: Padding(
-        padding:
-            EdgeInsets.all(Theme.of(context).textTheme.titleMedium!.fontSize!),
-        child: ListView.separated(
-          shrinkWrap: true,
-          padding: const EdgeInsets.all(8),
-          itemCount: hoursList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return hoursList[index];
-          },
-          separatorBuilder: (context, index) => SizedBox(
-            height: Theme.of(context).textTheme.bodySmall!.fontSize! / 2,
+        appBar: AppBar(),
+        body: Padding(
+          padding:
+              EdgeInsets.all(Theme.of(context).textTheme.bodyLarge!.fontSize!),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(studySpace.title,
+                  style: Theme.of(context).textTheme.headlineSmall),
+              SizedBox(
+                  height:
+                      Theme.of(context).textTheme.headlineSmall!.fontSize! / 2),
+              Card(
+                  child: Padding(
+                      padding: EdgeInsets.all(
+                          Theme.of(context).textTheme.bodyLarge!.fontSize!),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Opening Hours",
+                                style:
+                                    Theme.of(context).textTheme.headlineSmall),
+                            SizedBox(
+                                height: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall!
+                                        .fontSize! /
+                                    2),
+                            ListView.separated(
+                              shrinkWrap: true,
+                              itemCount: hoursList.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return hoursList[index];
+                              },
+                              separatorBuilder: (context, index) => SizedBox(
+                                height: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .fontSize! /
+                                    2,
+                              ),
+
+                              // itemExtent: 100,
+                            )
+                          ]))),
+            ],
           ),
-          // itemExtent: 100,
-        ),
-      ),
-    );
+        ));
   }
 }

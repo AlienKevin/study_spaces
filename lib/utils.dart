@@ -51,19 +51,19 @@ String timeOfDayToString(TimeOfDay time) {
 String weekdayToString(int weekday) {
   switch (weekday) {
     case 1:
-      return "MON";
+      return "Monday";
     case 2:
-      return "TUE";
+      return "Tuesday";
     case 3:
-      return "WED";
+      return "Wednesday";
     case 4:
-      return "THU";
+      return "Thursday";
     case 5:
-      return "FRI";
+      return "Friday";
     case 6:
-      return "SAT";
+      return "Saturday";
     case 7:
-      return "SUN";
+      return "Sunday";
     default:
       throw "Invalid weekday $weekday.";
   }

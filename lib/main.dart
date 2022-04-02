@@ -334,18 +334,17 @@ class _MyHomePageState extends State<MyHomePage> {
   AppBar filterResultsAppBar(OpeningHours openingHours) => AppBar(
         title: Row(children: [
           backToHomeIconButton(),
-          SizedBox(
-              width: Theme.of(context).textTheme.titleMedium!.fontSize! / 2),
+          SizedBox(width: Theme.of(context).textTheme.bodyLarge!.fontSize! / 2),
           TextButton(
             style: TextButton.styleFrom(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
-                    Theme.of(context).textTheme.titleMedium!.fontSize! * 2),
+                    Theme.of(context).textTheme.bodyLarge!.fontSize! * 2),
               ),
               padding: EdgeInsets.all(
-                  Theme.of(context).textTheme.titleMedium!.fontSize! / 1.5),
+                  Theme.of(context).textTheme.bodyLarge!.fontSize! / 1.5),
               primary: Colors.white,
-              textStyle: Theme.of(context).textTheme.titleMedium,
+              textStyle: Theme.of(context).textTheme.bodyLarge,
               backgroundColor: Theme.of(context).primaryColor,
             ),
             onPressed: startFiltering,
@@ -514,7 +513,8 @@ class _MyHomePageState extends State<MyHomePage> {
       },
       child: Card(
           child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding:
+            EdgeInsets.all(Theme.of(context).textTheme.bodyLarge!.fontSize!),
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Expanded(
               child: Column(
