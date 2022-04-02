@@ -423,82 +423,91 @@ class _MyHomePageState extends State<MyHomePage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            contentPadding: EdgeInsets.zero,
-            title: const Text("Opening Hours"),
-            content: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 450,
-                child: TimeRangePicker(
-                    paintingStyle: PaintingStyle.fill,
-                    strokeColor:
-                        Theme.of(context).primaryColor.withOpacity(0.5),
-                    timeTextStyle: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(color: Colors.white),
-                    activeTimeTextStyle: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(color: Colors.white),
-                    hideButtons: true,
-                    onStartChange: (start) {
-                      setState(() {
-                        _startTime = start;
-                      });
-                    },
-                    onEndChange: (end) {
-                      setState(() {
-                        _endTime = end;
-                      });
-                    },
-                    start: _startTime,
-                    end: _endTime,
-                    interval: const Duration(minutes: 30),
-                    minDuration: const Duration(minutes: 30),
-                    snap: true,
-                    use24HourFormat: false,
-                    strokeWidth: 4,
-                    ticks: 24,
-                    ticksOffset: -7,
-                    ticksLength: 15,
-                    ticksColor: Colors.grey,
-                    labels: [
-                      "12 am",
-                      "3 am",
-                      "6 am",
-                      "9 am",
-                      "12 pm",
-                      "3 pm",
-                      "6 pm",
-                      "9 pm"
-                    ].asMap().entries.map((e) {
-                      return ClockLabel.fromIndex(
-                          idx: e.key, length: 8, text: e.value);
-                    }).toList(),
-                    labelOffset: 35,
-                    rotateLabels: false,
-                    padding: 60)),
-            actions: <Widget>[
-              TextButton(
-                  child: const Text('Back'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    setState(() {
-                      appState = const AppState.home();
-                    });
-                  }),
-              TextButton(
-                child: const Text('Filter'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  setState(() {
-                    appState = AppState.filterResults(
-                        openingHours: OpeningHours.range(_startTime, _endTime));
-                  });
-                },
-              ),
-            ],
-          );
+              contentPadding: EdgeInsets.zero,
+              content: Column(mainAxisSize: MainAxisSize.min, children: [
+                Padding(
+                    padding: EdgeInsets.all(
+                        Theme.of(context).textTheme.bodyLarge!.fontSize!),
+                    child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                              child: const Text('Cancel'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  appState = const AppState.home();
+                                });
+                              }),
+                          TextButton(
+                            child: const Text('Confirm'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              setState(() {
+                                appState = AppState.filterResults(
+                                    openingHours: OpeningHours.range(
+                                        _startTime, _endTime));
+                              });
+                            },
+                          ),
+                        ])),
+                Text("Opening Hours",
+                    style: Theme.of(context).textTheme.titleLarge),
+                SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 450,
+                    child: TimeRangePicker(
+                        paintingStyle: PaintingStyle.fill,
+                        strokeColor:
+                            Theme.of(context).primaryColor.withOpacity(0.5),
+                        timeTextStyle: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(color: Colors.white),
+                        activeTimeTextStyle: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(color: Colors.white),
+                        hideButtons: true,
+                        onStartChange: (start) {
+                          setState(() {
+                            _startTime = start;
+                          });
+                        },
+                        onEndChange: (end) {
+                          setState(() {
+                            _endTime = end;
+                          });
+                        },
+                        start: _startTime,
+                        end: _endTime,
+                        interval: const Duration(minutes: 30),
+                        minDuration: const Duration(minutes: 30),
+                        snap: true,
+                        use24HourFormat: false,
+                        strokeWidth: 4,
+                        ticks: 24,
+                        ticksOffset: -7,
+                        ticksLength: 15,
+                        ticksColor: Colors.grey,
+                        labels: [
+                          "12 am",
+                          "3 am",
+                          "6 am",
+                          "9 am",
+                          "12 pm",
+                          "3 pm",
+                          "6 pm",
+                          "9 pm"
+                        ].asMap().entries.map((e) {
+                          return ClockLabel.fromIndex(
+                              idx: e.key, length: 8, text: e.value);
+                        }).toList(),
+                        labelOffset: 35,
+                        rotateLabels: false,
+                        padding: 60))
+              ]));
         });
   }
 
