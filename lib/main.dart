@@ -360,6 +360,7 @@ class _MyHomePageState extends State<MyHomePage> {
       borderSide: const BorderSide(width: 2, color: Colors.grey),
       borderRadius: BorderRadius.circular(100),
     );
+    var textFieldPadding = Theme.of(context).textTheme.bodyLarge!.fontSize!;
     return AppBar(
       toolbarHeight: 60,
       flexibleSpace: Padding(
@@ -405,8 +406,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 prefixIcon: appState == const AppState.keywordSearch()
                     ? backToHomeIconButton()
                     : keywordSearchIconButton(),
-                contentPadding: EdgeInsets.all(
-                    Theme.of(context).textTheme.bodyLarge!.fontSize!),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 0, horizontal: textFieldPadding),
               ),
               controller: queryController,
             ))
