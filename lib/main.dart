@@ -372,7 +372,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: OutlinedButton.icon(
                   style: Theme.of(context).outlinedButtonTheme.style,
                   onPressed: startFiltering,
-                  label: const Text('Search by filter'),
+                  label: const Text('Filter'),
                   icon: Icon(Icons.filter_alt,
                       size: Theme.of(context).textTheme.bodyLarge!.fontSize!),
                 )),
