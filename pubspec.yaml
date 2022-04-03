@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
   string_similarity: ^2.0.0
   time_range_picker: ^2.1.0
   freezed_annotation:
