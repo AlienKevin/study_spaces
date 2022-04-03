@@ -368,15 +368,13 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Row(children: [
             Visibility(
                 visible: appState != const AppState.keywordSearch(),
-                child: OutlinedButton(
-                    style: Theme.of(context).outlinedButtonTheme.style,
-                    onPressed: startFiltering,
-                    child: Row(children: [
-                      Icon(Icons.filter_alt,
-                          size:
-                              Theme.of(context).textTheme.bodyLarge!.fontSize!),
-                      const Text('Search by filter'),
-                    ]))),
+                child: OutlinedButton.icon(
+                  style: Theme.of(context).outlinedButtonTheme.style,
+                  onPressed: startFiltering,
+                  label: const Text('Search by filter'),
+                  icon: Icon(Icons.filter_alt,
+                      size: Theme.of(context).textTheme.bodyLarge!.fontSize!),
+                )),
             Visibility(
                 visible: appState != const AppState.keywordSearch(),
                 child: SizedBox(
