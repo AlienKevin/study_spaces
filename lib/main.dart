@@ -99,26 +99,27 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    double bodyLargeSize = 16.0;
     return MaterialApp(
       title: 'Study spaces',
       theme: ThemeData(
-          textTheme: GoogleFonts.robotoTextTheme(
-            Theme.of(context).textTheme,
-          ),
-          primarySwatch: Colors.blue,
-          inputDecorationTheme: const InputDecorationTheme(
-            border: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            errorBorder: InputBorder.none,
-            disabledBorder: InputBorder.none,
-          ),
-          outlinedButtonTheme: OutlinedButtonThemeData(
-              style: OutlinedButton.styleFrom(
-                  shape: const StadiumBorder(),
-                  side: const BorderSide(width: 2.0, color: Colors.grey),
-                  padding: EdgeInsets.all(bodyLargeSize)))),
+        textTheme: GoogleFonts.robotoTextTheme(
+          Theme.of(context).textTheme,
+        ),
+        primarySwatch: Colors.blue,
+        inputDecorationTheme: const InputDecorationTheme(
+          border: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          errorBorder: InputBorder.none,
+          disabledBorder: InputBorder.none,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(99.0),
+                        side: BorderSide.none)))),
+      ),
       home: const MyHomePage(title: 'Opening Now'),
     );
   }
@@ -370,12 +371,12 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Row(children: [
             Visibility(
                 visible: appState != const AppState.keywordSearch(),
-                child: OutlinedButton.icon(
-                  style: Theme.of(context).outlinedButtonTheme.style,
+                child: ElevatedButton.icon(
+                  // style: Theme.of(context).outlinedButtonTheme.style,
                   onPressed: startFiltering,
-                  label: const Text('Filter'),
                   icon: Icon(Icons.filter_alt,
                       size: Theme.of(context).textTheme.bodyLarge!.fontSize!),
+                  label: const Text('Filter'),
                 )),
             Visibility(
                 visible: appState != const AppState.keywordSearch(),
