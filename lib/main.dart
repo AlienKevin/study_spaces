@@ -156,46 +156,46 @@ class _MyHomePageState extends State<MyHomePage> {
     StudySpace(
         title: "Art, Architecture, and Engineering Library",
         openingHours: [const OpeningHours.allDay()],
-        pictureUrl: "images/duderstadt.jpeg"),
+        pictureUrl: "thumbnails/duderstadt.webp"),
     StudySpace(
         title: "Hatcher Library",
         openingHours: [
           const OpeningHours.range(
               TimeOfDay(hour: 8, minute: 0), TimeOfDay(hour: 19, minute: 0))
         ],
-        pictureUrl: "images/hatcher.jpeg"),
+        pictureUrl: "thumbnails/hatcher.webp"),
     StudySpace(
         title: "Shapiro Library",
         openingHours: [const OpeningHours.allDay()],
-        pictureUrl: "images/shapiro.jpeg"),
+        pictureUrl: "thumbnails/shapiro.webp"),
     StudySpace(
         title: "Fine Arts Library",
         openingHours: [
           const OpeningHours.range(
               TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
         ],
-        pictureUrl: "images/fine_arts.jpeg"),
+        pictureUrl: "thumbnails/fine_arts.webp"),
     StudySpace(
         title: "Asia Library",
         openingHours: [
           const OpeningHours.range(
               TimeOfDay(hour: 8, minute: 0), TimeOfDay(hour: 19, minute: 0))
         ],
-        pictureUrl: "images/asian.jpeg"),
+        pictureUrl: "thumbnails/asia.webp"),
     StudySpace(
         title: "Taubman Health Sciences Library",
         openingHours: [
           const OpeningHours.range(
               TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
         ],
-        pictureUrl: "images/taubman.jpeg"),
+        pictureUrl: "thumbnails/taubman.webp"),
     StudySpace(
         title: "Music Library",
         openingHours: [
           const OpeningHours.range(
               TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
         ],
-        pictureUrl: "images/music.jpeg")
+        pictureUrl: "thumbnails/music.webp")
   ];
 
   @override
