@@ -9,7 +9,8 @@ import 'package:json_api/routing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:string_similarity/string_similarity.dart';
 import 'package:study_spaces/studySpacePage.dart';
-import 'package:time_range_picker/time_range_picker.dart';
+import 'package:time_range_picker/time_range_picker.dart'
+    deferred as time_range_picker;
 
 import 'utils.dart';
 
@@ -483,56 +484,66 @@ class _MyHomePageState extends State<MyHomePage> {
                 SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: 450,
-                    child: TimeRangePicker(
-                        paintingStyle: PaintingStyle.fill,
-                        strokeColor:
-                            Theme.of(context).primaryColor.withOpacity(0.5),
-                        timeTextStyle: Theme.of(context)
-                            .textTheme
-                            .titleLarge
-                            ?.copyWith(color: Colors.white),
-                        activeTimeTextStyle: Theme.of(context)
-                            .textTheme
-                            .titleLarge
-                            ?.copyWith(color: Colors.white),
-                        hideButtons: true,
-                        onStartChange: (start) {
-                          setState(() {
-                            _startTime = start;
-                          });
-                        },
-                        onEndChange: (end) {
-                          setState(() {
-                            _endTime = end;
-                          });
-                        },
-                        start: _startTime,
-                        end: _endTime,
-                        interval: const Duration(minutes: 30),
-                        minDuration: const Duration(minutes: 30),
-                        snap: true,
-                        use24HourFormat: false,
-                        strokeWidth: 4,
-                        ticks: 24,
-                        ticksOffset: -7,
-                        ticksLength: 15,
-                        ticksColor: Colors.grey,
-                        labels: [
-                          "12 am",
-                          "3 am",
-                          "6 am",
-                          "9 am",
-                          "12 pm",
-                          "3 pm",
-                          "6 pm",
-                          "9 pm"
-                        ].asMap().entries.map((e) {
-                          return ClockLabel.fromIndex(
-                              idx: e.key, length: 8, text: e.value);
-                        }).toList(),
-                        labelOffset: 35,
-                        rotateLabels: false,
-                        padding: 60))
+                    child: FutureBuilder(
+                        future: time_range_picker.loadLibrary(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            return time_range_picker.TimeRangePicker(
+                                paintingStyle: PaintingStyle.fill,
+                                strokeColor: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.5),
+                                timeTextStyle: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(color: Colors.white),
+                                activeTimeTextStyle: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(color: Colors.white),
+                                hideButtons: true,
+                                onStartChange: (start) {
+                                  setState(() {
+                                    _startTime = start;
+                                  });
+                                },
+                                onEndChange: (end) {
+                                  setState(() {
+                                    _endTime = end;
+                                  });
+                                },
+                                start: _startTime,
+                                end: _endTime,
+                                interval: const Duration(minutes: 30),
+                                minDuration: const Duration(minutes: 30),
+                                snap: true,
+                                use24HourFormat: false,
+                                strokeWidth: 4,
+                                ticks: 24,
+                                ticksOffset: -7,
+                                ticksLength: 15,
+                                ticksColor: Colors.grey,
+                                labels: [
+                                  "12 am",
+                                  "3 am",
+                                  "6 am",
+                                  "9 am",
+                                  "12 pm",
+                                  "3 pm",
+                                  "6 pm",
+                                  "9 pm"
+                                ].asMap().entries.map((e) {
+                                  return time_range_picker.ClockLabel.fromIndex(
+                                      idx: e.key, length: 8, text: e.value);
+                                }).toList(),
+                                labelOffset: 35,
+                                rotateLabels: false,
+                                padding: 60);
+                          } else {
+                            return const Text("Loading Time Picker...");
+                          }
+                        }))
               ]));
         });
   }
