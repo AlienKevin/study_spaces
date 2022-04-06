@@ -14,7 +14,7 @@ jobs:
         with:
           channel: 'stable'
       - run: flutter pub get
-      - uses: AlienKevin/flutter-gh-pages@v9
+      - uses: AlienKevin/flutter-gh-pages@v10
         with:
           baseHref: /study_spaces/
           customArgs: --source-maps
