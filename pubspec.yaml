@@ -26,6 +26,10 @@ dev_dependencies:
   freezed: ^1.1.1
 
 flutter:
-  uses-material-design: true
+  uses-material-design: false
+  fonts:
+    - family: MaterialIconsSelected
+      fonts:
+        - asset: fonts/MaterialIconsSelected.ttf
   assets:
     - thumbnails/

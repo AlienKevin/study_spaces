@@ -1,0 +1,44 @@
+{
+  "name": "MaterialIconsSelected",
+  "css_prefix_text": "",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "58656a60a61897effa4f794463a648e5",
+      "css": "arrow_back_ios_new",
+      "code": 59393,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M740.4 157.1L666.7 83.3 250 500 666.7 916.7 740.4 842.9 397.5 500Z",
+        "width": 1000
+      },
+      "search": [
+        "arrow_back_ios_new_black_24dp"
+      ]
+    },
+    {
+      "uid": "4a16224f78499986d12a907f5bb9f1c9",
+      "css": "filter_alt",
+      "code": 59394,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M177.1 233.8C261.2 341.7 416.7 541.7 416.7 541.7V791.7C416.7 814.6 435.4 833.3 458.3 833.3H541.7C564.6 833.3 583.3 814.6 583.3 791.7V541.7C583.3 541.7 738.3 341.7 822.5 233.8 843.8 206.3 824.2 166.7 789.6 166.7H210C175.4 166.7 155.8 206.3 177.1 233.8Z",
+        "width": 1000
+      },
+      "search": [
+        "filter_alt_black_24dp"
+      ]
+    },
+    {
+      "uid": "4dffe5e59760395857c5e7cbf7e2d20a",
+      "css": "search",
+      "code": 59392,
+      "src": "material"
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
+import 'MaterialIconsSelected.dart';
 import 'main.dart';
 import 'utils.dart';
 
@@ -44,7 +45,13 @@ class StudySpacePage extends StatelessWidget {
           ]));
     }));
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+            leading: IconButton(
+          icon: const Icon(MaterialIconsSelected.arrow_back_ios_new),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        )),
         body: Padding(
           padding:
               EdgeInsets.all(Theme.of(context).textTheme.bodyLarge!.fontSize!),

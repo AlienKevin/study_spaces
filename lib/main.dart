@@ -12,6 +12,7 @@ import 'package:study_spaces/studySpacePage.dart';
 import 'package:time_range_picker/time_range_picker.dart'
     deferred as time_range_picker;
 
+import 'MaterialIconsSelected.dart';
 import 'utils.dart';
 
 part 'main.freezed.dart';
@@ -374,7 +375,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: ElevatedButton.icon(
                   // style: Theme.of(context).outlinedButtonTheme.style,
                   onPressed: startFiltering,
-                  icon: Icon(Icons.filter_alt,
+                  icon: Icon(MaterialIconsSelected.filter_alt,
                       size: Theme.of(context).textTheme.bodyLarge!.fontSize!),
                   label: const Text('Filter'),
                 )),
@@ -419,7 +420,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget keywordSearchIconButton() => GestureDetector(
-        child: const Icon(Icons.search),
+        child: const Icon(MaterialIconsSelected.search),
         onTap: () {
           setState(() {
             appState = const AppState.keywordSearch();
@@ -429,7 +430,7 @@ class _MyHomePageState extends State<MyHomePage> {
       );
 
   Widget backToHomeIconButton() => GestureDetector(
-        child: Icon(Icons.arrow_back_ios_new,
+        child: Icon(MaterialIconsSelected.arrow_back_ios_new,
             color: Theme.of(context).primaryColor),
         onTap: () {
           setState(() {
