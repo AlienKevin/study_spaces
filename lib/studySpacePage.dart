@@ -29,15 +29,15 @@ class StudySpacePage extends StatelessWidget {
               : const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           child: Row(children: [
             Expanded(
-                flex: 1, // 20%
+                flex: 25,
                 child: Text("${day.month}/${day.day}",
                     style: Theme.of(context).textTheme.titleLarge)),
             Expanded(
-                flex: 2, // 20%
+                flex: 20,
                 child: Text(weekdayToString(day.weekday),
                     style: Theme.of(context).textTheme.titleLarge)),
             Expanded(
-                flex: 3, // 20%
+                flex: 55,
                 child: Text(openingHoursToString(hours),
                     textAlign: TextAlign.end,
                     style: Theme.of(context).textTheme.titleLarge)),
