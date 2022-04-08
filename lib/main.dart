@@ -6,9 +6,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:json_api/client.dart';
 import 'package:json_api/routing.dart';
+import 'package:mstudy/studySpacePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:string_similarity/string_similarity.dart';
-import 'package:study_spaces/studySpacePage.dart';
 import 'package:time_range_picker/time_range_picker.dart'
     deferred as time_range_picker;
 
@@ -535,9 +535,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                     .withOpacity(0.5),
                                 timeTextStyle:
                                     Theme.of(context).textTheme.titleLarge,
-                                activeTimeTextStyle: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge,
+                                activeTimeTextStyle:
+                                    Theme.of(context).textTheme.titleLarge,
                                 hideButtons: true,
                                 onStartChange: (start) {
                                   setState(() {
