@@ -1,5 +1,5 @@
-name: study_spaces
-description: Study spaces on UM campus
+name: mstudy
+description: Find study spaces at the University of Michigan, Ann Arbor
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
