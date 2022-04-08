@@ -56,10 +56,13 @@ class StudySpacePage extends StatelessWidget {
           padding:
               EdgeInsets.all(Theme.of(context).textTheme.bodyLarge!.fontSize!),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(studySpace.title,
-                  style: Theme.of(context).textTheme.headlineSmall),
+              Text(
+                studySpace.title,
+                style: Theme.of(context).textTheme.headlineSmall,
+                textAlign: TextAlign.center,
+              ),
               SizedBox(
                   height:
                       Theme.of(context).textTheme.headlineSmall!.fontSize! / 2),
