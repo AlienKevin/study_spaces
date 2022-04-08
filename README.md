@@ -28,3 +28,33 @@ of icons packaged:
 1. fluttericon.com only accepts `<path>` in SVG, so newer versions of material icons may need manual
    conversion to work on fluttericon.com.
 2. Reference this guide for more details: https://medium.com/codechai/how-to-use-custom-icons-in-flutter-834a079d977
+
+## Generate App and Web Icons
+
+### Generate Web Icons
+
+Icon location: `web/icons/Icon-192.png` and `web/icons/Icon-512.png`
+
+Tool: https://appiconmaker.co/Home
+
+You can generate and download `Icon-192.png` and `Icon-512.png` under the Android section
+
+### Test PWA Maskable Icons
+
+Icon location: `web/icons/Icon-maskable-192.png` and `web/icons/Icon-maskable-512.png`
+
+Tool: https://maskable.app/
+
+Tutorial: https://web.dev/maskable-icon/
+
+### Generate Favicon
+
+Icon location: `web/favicon.png`
+
+Tool: https://realfavicongenerator.net/
+
+### Update Splash Icon
+
+Icon location: `assets/splash.png`
+
+Copy `Icon-512.png` to the above location and rename it to `splash.png`.
