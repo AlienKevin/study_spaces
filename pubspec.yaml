@@ -32,4 +32,4 @@ flutter:
       fonts:
         - asset: fonts/MaterialIconsSelected.ttf
   assets:
-    - thumbnails/
+    - assets/
