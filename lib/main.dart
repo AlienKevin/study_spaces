@@ -94,33 +94,73 @@ void main() {
   runApp(const MyApp());
 }
 
+const maizeColor = Color(0xFFFFCB05);
+const blueColor = Color(0xFF00274C);
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Study spaces',
-      theme: ThemeData(
-        textTheme: GoogleFonts.robotoTextTheme(
-          Theme.of(context).textTheme,
-        ),
-        primarySwatch: Colors.blue,
+    final Map<int, Color> maizeColorMap = {
+      50: maizeColor,
+      100: maizeColor,
+      200: maizeColor,
+      300: maizeColor,
+      400: maizeColor,
+      500: maizeColor,
+      600: maizeColor,
+      700: maizeColor,
+      800: maizeColor,
+      900: maizeColor,
+    };
+    final Map<int, Color> blueColorMap = {
+      50: blueColor,
+      100: blueColor,
+      200: blueColor,
+      300: blueColor,
+      400: blueColor,
+      500: blueColor,
+      600: blueColor,
+      700: blueColor,
+      800: blueColor,
+      900: blueColor,
+    };
+    final maizeSwatch = MaterialColor(maizeColor.value, maizeColorMap);
+    final blueSwatch = MaterialColor(blueColor.value, blueColorMap);
+    final theme = ThemeData(
+        textTheme:
+            GoogleFonts.robotoTextTheme(Theme.of(context).textTheme.apply(
+                  bodyColor: blueSwatch,
+                  displayColor: blueSwatch,
+                  decorationColor: blueSwatch,
+                )),
+        primarySwatch: maizeSwatch,
         inputDecorationTheme: const InputDecorationTheme(
           border: InputBorder.none,
           focusedBorder: InputBorder.none,
           enabledBorder: InputBorder.none,
           errorBorder: InputBorder.none,
           disabledBorder: InputBorder.none,
+          iconColor: blueColor,
+          prefixIconColor: blueColor,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
+                foregroundColor:
+                    MaterialStateProperty.resolveWith((_) => blueColor),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(99.0),
                         side: BorderSide.none)))),
-      ),
+        textButtonTheme: TextButtonThemeData(
+            style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.resolveWith((_) => blueColor),
+        )));
+    return MaterialApp(
+      title: 'Study spaces',
+      theme: theme,
       home: const MyHomePage(title: 'Opening Now'),
     );
   }
@@ -337,15 +377,7 @@ class _MyHomePageState extends State<MyHomePage> {
             backToHomeIconButton(),
             SizedBox(
                 width: Theme.of(context).textTheme.bodyLarge!.fontSize! / 2),
-            TextButton(
-              style: TextButton.styleFrom(
-                shape: const StadiumBorder(),
-                padding: EdgeInsets.all(
-                    Theme.of(context).textTheme.bodyLarge!.fontSize! / 1.5),
-                primary: Colors.white,
-                textStyle: Theme.of(context).textTheme.bodyLarge,
-                backgroundColor: Theme.of(context).primaryColor,
-              ),
+            ElevatedButton(
               onPressed: startFiltering,
               child: Text(openingHoursToString(
                   OpeningHours.range(filterStartTime, filterEndTime))),
@@ -389,6 +421,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       width: Theme.of(context).textTheme.bodyLarge!.fontSize!)),
               Expanded(
                   child: TextField(
+                cursorColor: blueColor,
                 focusNode: queryFocusNode,
                 onChanged: (String name) {
                   setState(() {
@@ -435,8 +468,7 @@ class _MyHomePageState extends State<MyHomePage> {
       );
 
   Widget backToHomeIconButton() => GestureDetector(
-        child: Icon(MaterialIconsSelected.arrow_back_ios_new,
-            color: Theme.of(context).primaryColor),
+        child: const Icon(MaterialIconsSelected.arrow_back_ios_new),
         onTap: () {
           setState(() {
             appState = const AppState.home();
@@ -501,14 +533,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                 strokeColor: Theme.of(context)
                                     .primaryColor
                                     .withOpacity(0.5),
-                                timeTextStyle: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.copyWith(color: Colors.white),
+                                timeTextStyle:
+                                    Theme.of(context).textTheme.titleLarge,
                                 activeTimeTextStyle: Theme.of(context)
                                     .textTheme
-                                    .titleLarge
-                                    ?.copyWith(color: Colors.white),
+                                    .titleLarge,
                                 hideButtons: true,
                                 onStartChange: (start) {
                                   setState(() {
