@@ -46,12 +46,19 @@ class StudySpacePage extends StatelessWidget {
     }));
     return Scaffold(
         appBar: AppBar(
-            leading: IconButton(
-          icon: const Icon(MaterialIconsSelected.arrow_back_ios_new),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        )),
+          leading: TextButton.icon(
+            icon: const Icon(MaterialIconsSelected.arrow_back_ios_new),
+            label: Text(
+              "Back",
+              style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.titleMedium!.fontSize!),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          leadingWidth: 100,
+        ),
         body: Padding(
           padding:
               EdgeInsets.all(Theme.of(context).textTheme.bodyLarge!.fontSize!),
