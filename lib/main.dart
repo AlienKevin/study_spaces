@@ -332,23 +332,26 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   AppBar filterResultsAppBar() => AppBar(
-        title: Row(children: [
-          backToHomeIconButton(),
-          SizedBox(width: Theme.of(context).textTheme.bodyLarge!.fontSize! / 2),
-          TextButton(
-            style: TextButton.styleFrom(
-              shape: const StadiumBorder(),
-              padding: EdgeInsets.all(
-                  Theme.of(context).textTheme.bodyLarge!.fontSize! / 1.5),
-              primary: Colors.white,
-              textStyle: Theme.of(context).textTheme.bodyLarge,
-              backgroundColor: Theme.of(context).primaryColor,
-            ),
-            onPressed: startFiltering,
-            child: Text(openingHoursToString(
-                OpeningHours.range(filterStartTime, filterEndTime))),
-          )
-        ]),
+        title: SafeArea(
+          child: Row(children: [
+            backToHomeIconButton(),
+            SizedBox(
+                width: Theme.of(context).textTheme.bodyLarge!.fontSize! / 2),
+            TextButton(
+              style: TextButton.styleFrom(
+                shape: const StadiumBorder(),
+                padding: EdgeInsets.all(
+                    Theme.of(context).textTheme.bodyLarge!.fontSize! / 1.5),
+                primary: Colors.white,
+                textStyle: Theme.of(context).textTheme.bodyLarge,
+                backgroundColor: Theme.of(context).primaryColor,
+              ),
+              onPressed: startFiltering,
+              child: Text(openingHoursToString(
+                  OpeningHours.range(filterStartTime, filterEndTime))),
+            )
+          ]),
+        ),
         backgroundColor: Theme.of(context).canvasColor,
       );
 
@@ -366,55 +369,57 @@ class _MyHomePageState extends State<MyHomePage> {
     var textFieldPadding = Theme.of(context).textTheme.bodyLarge!.fontSize!;
     return AppBar(
       toolbarHeight: 60,
-      flexibleSpace: Padding(
-          padding:
-              EdgeInsets.all(Theme.of(context).textTheme.bodyLarge!.fontSize!),
-          child: Row(children: [
-            Visibility(
-                visible: appState != const AppState.keywordSearch(),
-                child: ElevatedButton.icon(
-                  // style: Theme.of(context).outlinedButtonTheme.style,
-                  onPressed: startFiltering,
-                  icon: Icon(MaterialIconsSelected.filter_alt,
-                      size: Theme.of(context).textTheme.bodyLarge!.fontSize!),
-                  label: const Text('Filter'),
-                )),
-            Visibility(
-                visible: appState != const AppState.keywordSearch(),
-                child: SizedBox(
-                    width: Theme.of(context).textTheme.bodyLarge!.fontSize!)),
-            Expanded(
-                child: TextField(
-              focusNode: queryFocusNode,
-              onChanged: (String name) {
-                setState(() {
-                  appState = const AppState.keywordSearch();
-                  queryName = name;
-                });
-              },
-              onTap: () {
-                setState(() {
-                  appState = const AppState.keywordSearch();
-                });
-              },
-              decoration: InputDecoration(
-                isDense: true,
-                errorBorder: textFieldBorder,
-                focusedBorder: textFieldBorder,
-                focusedErrorBorder: textFieldBorder,
-                disabledBorder: textFieldBorder,
-                enabledBorder: textFieldBorder,
-                border: textFieldBorder,
-                hintText: 'Search by keywords',
-                prefixIcon: appState == const AppState.keywordSearch()
-                    ? backToHomeIconButton()
-                    : keywordSearchIconButton(),
-                contentPadding: EdgeInsets.symmetric(
-                    vertical: 0, horizontal: textFieldPadding),
-              ),
-              controller: queryController,
-            ))
-          ])),
+      flexibleSpace: SafeArea(
+        child: Padding(
+            padding: EdgeInsets.all(
+                Theme.of(context).textTheme.bodyLarge!.fontSize!),
+            child: Row(children: [
+              Visibility(
+                  visible: appState != const AppState.keywordSearch(),
+                  child: ElevatedButton.icon(
+                    // style: Theme.of(context).outlinedButtonTheme.style,
+                    onPressed: startFiltering,
+                    icon: Icon(MaterialIconsSelected.filter_alt,
+                        size: Theme.of(context).textTheme.bodyLarge!.fontSize!),
+                    label: const Text('Filter'),
+                  )),
+              Visibility(
+                  visible: appState != const AppState.keywordSearch(),
+                  child: SizedBox(
+                      width: Theme.of(context).textTheme.bodyLarge!.fontSize!)),
+              Expanded(
+                  child: TextField(
+                focusNode: queryFocusNode,
+                onChanged: (String name) {
+                  setState(() {
+                    appState = const AppState.keywordSearch();
+                    queryName = name;
+                  });
+                },
+                onTap: () {
+                  setState(() {
+                    appState = const AppState.keywordSearch();
+                  });
+                },
+                decoration: InputDecoration(
+                  isDense: true,
+                  errorBorder: textFieldBorder,
+                  focusedBorder: textFieldBorder,
+                  focusedErrorBorder: textFieldBorder,
+                  disabledBorder: textFieldBorder,
+                  enabledBorder: textFieldBorder,
+                  border: textFieldBorder,
+                  hintText: 'Search by keywords',
+                  prefixIcon: appState == const AppState.keywordSearch()
+                      ? backToHomeIconButton()
+                      : keywordSearchIconButton(),
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: 0, horizontal: textFieldPadding),
+                ),
+                controller: queryController,
+              ))
+            ])),
+      ),
       backgroundColor: Theme.of(context).canvasColor,
     );
   }
