@@ -29,7 +29,26 @@ of icons packaged:
    conversion to work on fluttericon.com.
 2. Reference this guide for more details: https://medium.com/codechai/how-to-use-custom-icons-in-flutter-834a079d977
 
-## Generate App and Web Icons
+## Generate App and Web Icons Locally
+
+1. Install PNG compression tool pngquant
+   `brew install pngquant`
+
+2. Install ImageMagick tool
+   `brew install imagemagick`
+
+3. Put the new icons (must be 512x512) in as `assets/Icon-512.png` and `assets/Icon-maskable-512.png`
+
+4. See this tutorial on [maskable icons](https://web.dev/maskable-icon/). You should also test your
+   maskable icons using [this online tool](https://maskable.app/).
+
+5. Run `generate_icons.sh`. You can only run this script *once* on the new icons!
+   Running multiple times may *increase* the size of the icons because of repeated redundant compression.
+
+## \[Deprecated Method\] Generate App and Web Icons with Web Tools
+
+<details>
+<summary>See More</summary>
 
 ### Generate Web Icons
 
@@ -58,3 +77,5 @@ Tool: https://realfavicongenerator.net/
 Icon location: `assets/splash.png`
 
 Copy `Icon-512.png` to the above location and rename it to `splash.png`.
+
+</details>
