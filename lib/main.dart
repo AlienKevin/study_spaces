@@ -340,16 +340,33 @@ class _MyHomePageState extends State<MyHomePage> {
                 }))
             .toList()
         : studySpaces;
-    var filteredStudySpaces = appState.when(
-      filterResults: () => studySpaces
-          .where((space) => isOpenDuring(
-              OpeningHours.range(filterStartTime, filterEndTime),
-              space.openingHours[0]))
-          .toList(),
-      keywordSearch: () => queryFilteredStudySpaces,
-      filterSearch: () => queryFilteredStudySpaces,
-      home: () => queryFilteredStudySpaces,
-    );
+    var filteredStudySpaces = appState
+        .when(
+          filterResults: () => studySpaces
+              .where((space) => isOpenDuring(
+                  OpeningHours.range(filterStartTime, filterEndTime),
+                  space.openingHours[0]))
+              .toList(),
+          keywordSearch: () => queryFilteredStudySpaces,
+          filterSearch: () => queryFilteredStudySpaces,
+          home: () => queryFilteredStudySpaces,
+        )
+        .sorted((space1, space2) => space1.openingHours[0].when(
+              allDay: () => space2.openingHours[0].when(
+                  allDay: () => 0,
+                  range: (_start, _end) => -1,
+                  closed: () => -1),
+              range: (TimeOfDay space1Start, TimeOfDay space1End) =>
+                  space2.openingHours[0].when(
+                      allDay: () => 1,
+                      range: (space2Start, space2End) =>
+                          timeOfDayLessThanEqual(space2End, space1End)
+                              ? -1
+                              : (space2End == space1End ? 0 : 1),
+                      closed: () => -1),
+              closed: () => space2.openingHours[0].when(
+                  allDay: () => 1, range: (_start, _end) => 1, closed: () => 0),
+            ));
     return Scaffold(
       appBar: appState.when(
         filterSearch: () => filterResultsAppBar(),
