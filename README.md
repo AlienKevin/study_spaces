@@ -18,7 +18,7 @@ We rely on fluttericon.com to generate the custom icon font for us. To add or ch
 of icons packaged:
 
 1. Go to fluttericon.com
-2. Drag and drop the `fluttericon-config.json` to the website
+2. Drag and drop the `fluttericon_config.json` to the website
 3. Search for new icons to include or drag and drop custom SVGs to the website.
 4. Download a zip from the website
 5. Replace the `fonts/MaterialIconsSelected.ttf` and `lib/MaterialIconsSelected.dart` with the new files in the zip folder
@@ -29,6 +29,9 @@ of icons packaged:
    conversion to work on fluttericon.com.
 2. Reference this guide for more details: https://medium.com/codechai/how-to-use-custom-icons-in-flutter-834a079d977
 
+## Generate App Name
+Run `./generate_app_name.sh` to generate new app names for Android, iOS, and Web.
+
 ## Generate App and Web Icons Locally
 
 1. Install PNG compression tool pngquant
@@ -37,9 +40,9 @@ of icons packaged:
 2. Install ImageMagick tool
    `brew install imagemagick`
 
-3. Put the new icons (must be 512x512) in as `assets/Icon-512.png` and `assets/Icon-maskable-512.png`
+3. Put the new icons (must be 512x512) in as `assets/icon_512.png` and `assets/icon_maskable_512.png`
 
-4. See this tutorial on [maskable icons](https://web.dev/maskable-icon/). You should also test your
+4. See this tutorial on [maskable icons](https://web.dev/maskable_icon/). You should also test your
    maskable icons using [this online tool](https://maskable.app/).
 
 5. Run `generate_icons.sh`. You can only run this script *once* on the new icons!
@@ -52,19 +55,19 @@ of icons packaged:
 
 ### Generate Web Icons
 
-Icon location: `web/icons/Icon-192.png` and `web/icons/Icon-512.png`
+Icon location: `web/icons/icon_192.png` and `web/icons/icon_512.png`
 
 Tool: https://appiconmaker.co/Home
 
-You can generate and download `Icon-192.png` and `Icon-512.png` under the Android section
+You can generate and download `icon_192.png` and `icon_512.png` under the Android section
 
 ### Test PWA Maskable Icons
 
-Icon location: `web/icons/Icon-maskable-192.png` and `web/icons/Icon-maskable-512.png`
+Icon location: `web/icons/icon_maskable_192.png` and `web/icons/icon_maskable_512.png`
 
 Tool: https://maskable.app/
 
-Tutorial: https://web.dev/maskable-icon/
+Tutorial: https://web.dev/maskable_icon/
 
 ### Generate Favicon
 
@@ -76,6 +79,6 @@ Tool: https://realfavicongenerator.net/
 
 Icon location: `assets/splash.png`
 
-Copy `Icon-512.png` to the above location and rename it to `splash.png`.
+Copy `icon_512.png` to the above location and rename it to `splash.png`.
 
 </details>

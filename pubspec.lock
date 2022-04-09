@@ -202,6 +202,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.2"
+  flutter_launcher_name:
+    dependency: "direct dev"
+    description:
+      path: "."
+      ref: "0.11.1"
+      resolved-ref: "21fe097680f5f8b92ac649e59efd8e2e264336f8"
+      url: "https://github.com/AlienKevin/flutter_launcher_name"
+    source: git
+    version: "0.0.2"
   flutter_lints:
     dependency: "direct dev"
     description:
