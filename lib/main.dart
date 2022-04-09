@@ -442,6 +442,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   enabledBorder: textFieldBorder,
                   border: textFieldBorder,
                   hintText: 'Search by keywords',
+                  hintStyle: Theme.of(context).textTheme.bodyMedium,
                   prefixIcon: appState == const AppState.keywordSearch()
                       ? backToHomeIconButton()
                       : keywordSearchIconButton(),
