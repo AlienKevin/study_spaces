@@ -372,25 +372,24 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   AppBar filterResultsAppBar() => AppBar(
-        title: SafeArea(
-          child: Row(children: [
-            backToHomeIconButton(),
-            SizedBox(
-                width: Theme.of(context).textTheme.bodyLarge!.fontSize! / 2),
-            ElevatedButton(
-              onPressed: startFiltering,
-              child: Text(openingHoursToString(
-                  OpeningHours.range(filterStartTime, filterEndTime))),
-            )
-          ]),
+        toolbarHeight: 60,
+        flexibleSpace: SafeArea(
+          child: Padding(
+              padding: EdgeInsets.all(
+                  Theme.of(context).textTheme.bodyLarge!.fontSize!),
+              child: Row(children: [
+                backToHomeIconButton(),
+                SizedBox(
+                    width:
+                        Theme.of(context).textTheme.bodyLarge!.fontSize! / 2),
+                ElevatedButton(
+                  onPressed: startFiltering,
+                  child: Text(openingHoursToString(
+                      OpeningHours.range(filterStartTime, filterEndTime))),
+                )
+              ])),
         ),
         backgroundColor: Theme.of(context).canvasColor,
-      );
-
-  AppBar filterSearchAppBar() => AppBar(
-        toolbarHeight: 10,
-        backgroundColor: Theme.of(context).canvasColor,
-        elevation: 0,
       );
 
   AppBar searchAndFilterAppBar() {
