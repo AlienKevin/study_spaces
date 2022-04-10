@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:json_api/client.dart';
 import 'package:json_api/routing.dart';
@@ -166,11 +167,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Position {
-  final double longitude;
+class BuildingPosition {
   final double latitude;
+  final double longitude;
 
-  Position({required this.longitude, required this.latitude});
+  BuildingPosition({
+    required this.latitude,
+    required this.longitude,
+  });
 }
 
 class PhoneNumber {
@@ -185,7 +189,7 @@ class StudySpace {
   final String title;
   List<OpeningHours> openingHours;
   final String pictureUrl;
-  final Position position;
+  final BuildingPosition buildingPosition;
   final String address;
   final PhoneNumber phoneNumber;
 
@@ -193,7 +197,7 @@ class StudySpace {
     required this.title,
     required this.openingHours,
     required this.pictureUrl,
-    required this.position,
+    required this.buildingPosition,
     required this.address,
     required this.phoneNumber,
   });
@@ -223,7 +227,8 @@ class _MyHomePageState extends State<MyHomePage> {
       openingHours: [const OpeningHours.allDay()],
       pictureUrl: "assets/duderstadt.webp",
       address: "2281 Bonisteel Blvd",
-      position: Position(latitude: 42.291165, longitude: -83.715716),
+      buildingPosition:
+          BuildingPosition(latitude: 42.291165, longitude: -83.715716),
       phoneNumber: PhoneNumber("734", "647", "5747"),
     ),
     StudySpace(
@@ -234,7 +239,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
       pictureUrl: "assets/hatcher.webp",
       address: "913 S. University Avenue",
-      position: Position(
+      buildingPosition: BuildingPosition(
           latitude: 42.276334,
           longitude: -83.737981), // Uses Hatcher Library South
       phoneNumber: PhoneNumber("734", "764", "0401"),
@@ -244,7 +249,8 @@ class _MyHomePageState extends State<MyHomePage> {
       openingHours: [const OpeningHours.allDay()],
       pictureUrl: "assets/shapiro.webp",
       address: "919 S. University Ave",
-      position: Position(latitude: 42.275615, longitude: -83.737183),
+      buildingPosition:
+          BuildingPosition(latitude: 42.275615, longitude: -83.737183),
       phoneNumber: PhoneNumber("734", "764", "7490"),
     ),
     StudySpace(
@@ -255,7 +261,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
       pictureUrl: "assets/fine_arts.webp",
       address: "855 S. University Ave",
-      position: Position(latitude: 42.274944, longitude: -83.738995),
+      buildingPosition:
+          BuildingPosition(latitude: 42.274944, longitude: -83.738995),
       phoneNumber: PhoneNumber("734", "764", "5405"),
     ),
     StudySpace(
@@ -267,7 +274,8 @@ class _MyHomePageState extends State<MyHomePage> {
         pictureUrl: "assets/asia.webp",
         address:
             "913 S. University Ave", // located on 4th floor of Hatcher North
-        position: Position(latitude: 42.276334, longitude: -83.737981),
+        buildingPosition:
+            BuildingPosition(latitude: 42.276334, longitude: -83.737981),
         phoneNumber: PhoneNumber("734", "764", "0406")),
     StudySpace(
       title: "Taubman Health Sciences Library",
@@ -277,7 +285,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
       pictureUrl: "assets/taubman.webp",
       address: "1135 Catherine St",
-      position: Position(latitude: 42.283548, longitude: -83.734451),
+      buildingPosition:
+          BuildingPosition(latitude: 42.283548, longitude: -83.734451),
       phoneNumber: PhoneNumber("734", "764", "1210"),
     ),
     StudySpace(
@@ -288,13 +297,19 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         pictureUrl: "assets/music.webp",
         address: "1100 Baits Dr",
-        position: Position(latitude: 42.290373, longitude: -83.721006),
+        buildingPosition:
+            BuildingPosition(latitude: 42.290373, longitude: -83.721006),
         phoneNumber: PhoneNumber("734", "764", "2512"))
   ];
 
   @override
   void initState() {
     super.initState();
+    if (kDebugMode) {
+      getCurrentPosition().then((position) {
+        print("Current position is $position");
+      });
+    }
     SharedPreferences.getInstance().then((prefs) {
       var storedLastUpdateTime = prefs.getString("openingHoursLastUpdateTime");
       // if openingHoursLastUpdateTime is not set, use the year 2,000 as the default value
@@ -845,4 +860,45 @@ class _MyHomePageState extends State<MyHomePage> {
     queryController.dispose();
     super.dispose();
   }
+}
+
+/// Determine the current position of the device.
+///
+/// When the location services are not enabled or permissions
+/// are denied the `Future` will return an error.
+Future<Position> getCurrentPosition() async {
+  bool serviceEnabled;
+  LocationPermission permission;
+
+  // Test if location services are enabled.
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    // Location services are not enabled don't continue
+    // accessing the position and request users of the
+    // App to enable the location services.
+    return Future.error('Location services are disabled.');
+  }
+
+  permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      // Permissions are denied, next time you could try
+      // requesting permissions again (this is also where
+      // Android's shouldShowRequestPermissionRationale
+      // returned true. According to Android guidelines
+      // your App should show an explanatory UI now.
+      return Future.error('Location permissions are denied');
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    // Permissions are denied forever, handle appropriately.
+    return Future.error(
+        'Location permissions are permanently denied, we cannot request permissions.');
+  }
+
+  // When we reach here, permissions are granted and we can
+  // continue accessing the position of the device.
+  return await Geolocator.getCurrentPosition();
 }
