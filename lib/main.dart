@@ -166,15 +166,37 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class Position {
+  final double longitude;
+  final double latitude;
+
+  Position({required this.longitude, required this.latitude});
+}
+
+class PhoneNumber {
+  final String area;
+  final String exchange;
+  final String number;
+
+  PhoneNumber(this.area, this.exchange, this.number);
+}
+
 class StudySpace {
   final String title;
   List<OpeningHours> openingHours;
   final String pictureUrl;
+  final Position position;
+  final String address;
+  final PhoneNumber phoneNumber;
 
-  StudySpace(
-      {required this.title,
-      required this.openingHours,
-      required this.pictureUrl});
+  StudySpace({
+    required this.title,
+    required this.openingHours,
+    required this.pictureUrl,
+    required this.position,
+    required this.address,
+    required this.phoneNumber,
+  });
 }
 
 class MyHomePage extends StatefulWidget {
@@ -197,48 +219,77 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<StudySpace> studySpaces = [
     StudySpace(
-        title: "Art, Architecture, and Engineering Library",
-        openingHours: [const OpeningHours.allDay()],
-        pictureUrl: "assets/duderstadt.webp"),
+      title: "Art, Architecture, and Engineering Library",
+      openingHours: [const OpeningHours.allDay()],
+      pictureUrl: "assets/duderstadt.webp",
+      address: "2281 Bonisteel Blvd",
+      position: Position(latitude: 42.291165, longitude: -83.715716),
+      phoneNumber: PhoneNumber("734", "647", "5747"),
+    ),
     StudySpace(
-        title: "Hatcher Library",
-        openingHours: [
-          const OpeningHours.range(
-              TimeOfDay(hour: 8, minute: 0), TimeOfDay(hour: 19, minute: 0))
-        ],
-        pictureUrl: "assets/hatcher.webp"),
+      title: "Hatcher Library",
+      openingHours: [
+        const OpeningHours.range(
+            TimeOfDay(hour: 8, minute: 0), TimeOfDay(hour: 19, minute: 0))
+      ],
+      pictureUrl: "assets/hatcher.webp",
+      address: "913 S. University Avenue",
+      position: Position(
+          latitude: 42.276334,
+          longitude: -83.737981), // Uses Hatcher Library South
+      phoneNumber: PhoneNumber("734", "764", "0401"),
+    ),
     StudySpace(
-        title: "Shapiro Library",
-        openingHours: [const OpeningHours.allDay()],
-        pictureUrl: "assets/shapiro.webp"),
+      title: "Shapiro Library",
+      openingHours: [const OpeningHours.allDay()],
+      pictureUrl: "assets/shapiro.webp",
+      address: "919 S. University Ave",
+      position: Position(latitude: 42.275615, longitude: -83.737183),
+      phoneNumber: PhoneNumber("734", "764", "7490"),
+    ),
     StudySpace(
-        title: "Fine Arts Library",
-        openingHours: [
-          const OpeningHours.range(
-              TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
-        ],
-        pictureUrl: "assets/fine_arts.webp"),
+      title: "Fine Arts Library",
+      openingHours: [
+        const OpeningHours.range(
+            TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
+      ],
+      pictureUrl: "assets/fine_arts.webp",
+      address: "855 S. University Ave",
+      position: Position(latitude: 42.274944, longitude: -83.738995),
+      phoneNumber: PhoneNumber("734", "764", "5405"),
+    ),
     StudySpace(
         title: "Asia Library",
         openingHours: [
           const OpeningHours.range(
               TimeOfDay(hour: 8, minute: 0), TimeOfDay(hour: 19, minute: 0))
         ],
-        pictureUrl: "assets/asia.webp"),
+        pictureUrl: "assets/asia.webp",
+        address:
+            "913 S. University Ave", // located on 4th floor of Hatcher North
+        position: Position(latitude: 42.276334, longitude: -83.737981),
+        phoneNumber: PhoneNumber("734", "764", "0406")),
     StudySpace(
-        title: "Taubman Health Sciences Library",
-        openingHours: [
-          const OpeningHours.range(
-              TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
-        ],
-        pictureUrl: "assets/taubman.webp"),
+      title: "Taubman Health Sciences Library",
+      openingHours: [
+        const OpeningHours.range(
+            TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
+      ],
+      pictureUrl: "assets/taubman.webp",
+      address: "1135 Catherine St",
+      position: Position(latitude: 42.283548, longitude: -83.734451),
+      phoneNumber: PhoneNumber("734", "764", "1210"),
+    ),
     StudySpace(
         title: "Music Library",
         openingHours: [
           const OpeningHours.range(
               TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
         ],
-        pictureUrl: "assets/music.webp")
+        pictureUrl: "assets/music.webp",
+        address: "1100 Baits Dr",
+        position: Position(latitude: 42.290373, longitude: -83.721006),
+        phoneNumber: PhoneNumber("734", "764", "2512"))
   ];
 
   @override
