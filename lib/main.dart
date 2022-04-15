@@ -192,6 +192,7 @@ class StudySpace {
   final BuildingPosition buildingPosition;
   final String address;
   final PhoneNumber phoneNumber;
+  final bool connectedToMLibraryApi;
 
   StudySpace({
     required this.title,
@@ -200,6 +201,7 @@ class StudySpace {
     required this.buildingPosition,
     required this.address,
     required this.phoneNumber,
+    required this.connectedToMLibraryApi,
   });
 }
 
@@ -230,6 +232,7 @@ class _MyHomePageState extends State<MyHomePage> {
       buildingPosition:
           BuildingPosition(latitude: 42.291165, longitude: -83.715716),
       phoneNumber: PhoneNumber("734", "647", "5747"),
+      connectedToMLibraryApi: true,
     ),
     StudySpace(
       title: "Hatcher Library",
@@ -243,6 +246,7 @@ class _MyHomePageState extends State<MyHomePage> {
           latitude: 42.276334,
           longitude: -83.737981), // Uses Hatcher Library South
       phoneNumber: PhoneNumber("734", "764", "0401"),
+      connectedToMLibraryApi: true,
     ),
     StudySpace(
       title: "Shapiro Library",
@@ -252,6 +256,7 @@ class _MyHomePageState extends State<MyHomePage> {
       buildingPosition:
           BuildingPosition(latitude: 42.275615, longitude: -83.737183),
       phoneNumber: PhoneNumber("734", "764", "7490"),
+      connectedToMLibraryApi: true,
     ),
     StudySpace(
       title: "Fine Arts Library",
@@ -264,19 +269,21 @@ class _MyHomePageState extends State<MyHomePage> {
       buildingPosition:
           BuildingPosition(latitude: 42.274944, longitude: -83.738995),
       phoneNumber: PhoneNumber("734", "764", "5405"),
+      connectedToMLibraryApi: true,
     ),
     StudySpace(
-        title: "Asia Library",
-        openingHours: [
-          const OpeningHours.range(
-              TimeOfDay(hour: 8, minute: 0), TimeOfDay(hour: 19, minute: 0))
-        ],
-        pictureUrl: "assets/asia.webp",
-        address:
-            "913 S. University Ave", // located on 4th floor of Hatcher North
-        buildingPosition:
-            BuildingPosition(latitude: 42.276334, longitude: -83.737981),
-        phoneNumber: PhoneNumber("734", "764", "0406")),
+      title: "Asia Library",
+      openingHours: [
+        const OpeningHours.range(
+            TimeOfDay(hour: 8, minute: 0), TimeOfDay(hour: 19, minute: 0))
+      ],
+      pictureUrl: "assets/asia.webp",
+      address: "913 S. University Ave", // located on 4th floor of Hatcher North
+      buildingPosition:
+          BuildingPosition(latitude: 42.276334, longitude: -83.737981),
+      phoneNumber: PhoneNumber("734", "764", "0406"),
+      connectedToMLibraryApi: true,
+    ),
     StudySpace(
       title: "Taubman Health Sciences Library",
       openingHours: [
@@ -288,18 +295,21 @@ class _MyHomePageState extends State<MyHomePage> {
       buildingPosition:
           BuildingPosition(latitude: 42.283548, longitude: -83.734451),
       phoneNumber: PhoneNumber("734", "764", "1210"),
+      connectedToMLibraryApi: true,
     ),
     StudySpace(
-        title: "Music Library",
-        openingHours: [
-          const OpeningHours.range(
-              TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
-        ],
-        pictureUrl: "assets/music.webp",
-        address: "1100 Baits Dr",
-        buildingPosition:
-            BuildingPosition(latitude: 42.290373, longitude: -83.721006),
-        phoneNumber: PhoneNumber("734", "764", "2512"))
+      title: "Music Library",
+      openingHours: [
+        const OpeningHours.range(
+            TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
+      ],
+      pictureUrl: "assets/music.webp",
+      address: "1100 Baits Dr",
+      buildingPosition:
+          BuildingPosition(latitude: 42.290373, longitude: -83.721006),
+      phoneNumber: PhoneNumber("734", "764", "2512"),
+      connectedToMLibraryApi: true,
+    )
   ];
 
   @override
@@ -308,6 +318,15 @@ class _MyHomePageState extends State<MyHomePage> {
     if (kDebugMode) {
       getCurrentPosition().then((position) {
         print("Current position is $position");
+        for (var space in studySpaces) {
+          var distance = Geolocator.distanceBetween(
+              position.latitude,
+              position.longitude,
+              space.buildingPosition.latitude,
+              space.buildingPosition.longitude);
+          print(
+              "Distance from current position to ${space.title} is ${distance}m.");
+        }
       });
     }
     SharedPreferences.getInstance().then((prefs) {
@@ -367,6 +386,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   /// Update the opening hours for the next 7 days of all study spaces
+  /// connected to the M library API
   void updateOpeningHoursForNextSevenDays() {
     List<DateTime> nextSevenDays = [];
     var nextDay = DateTime.now();
@@ -375,7 +395,9 @@ class _MyHomePageState extends State<MyHomePage> {
       nextDay = nextDay.add(const Duration(days: 1));
     }
     setState(() {
-      studySpaces = studySpaces.map((space) {
+      studySpaces = studySpaces
+          .where((space) => space.connectedToMLibraryApi)
+          .map((space) {
         space.openingHours.clear();
         for (var day in nextSevenDays) {
           var newOpeningHours = getOpeningHours(space.title, day);
@@ -755,13 +777,13 @@ class _MyHomePageState extends State<MyHomePage> {
       ...fallAndWinter.values
     ];
     ProcessedOpeningHours result = {};
-    for (var space in studySpaces) {
+    studySpaces.where((space) => space.connectedToMLibraryApi).forEach((space) {
       for (var hours in prioritizedHours) {
         if (hours[space.title] != null) {
           result.putIfAbsent(space.title, () => []).addAll(hours[space.title]!);
         }
       }
-    }
+    });
     return result;
   }
 
@@ -789,7 +811,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
       for (var resource in response.collection) {
         String title = resource.attributes["title"]! as String;
-        if (studySpaces.map((space) => space.title).contains(title)) {
+        if (studySpaces
+            .where((space) => space.connectedToMLibraryApi)
+            .map((space) => space.title)
+            .contains(title)) {
           resource.relationships["field_hours_open"]?.forEach((fieldHoursOpen) {
             var emptyOpeningHoursWithId = OpeningDateAndHours(
               id: fieldHoursOpen.id,
