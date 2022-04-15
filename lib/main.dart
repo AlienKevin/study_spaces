@@ -185,6 +185,20 @@ class PhoneNumber {
   PhoneNumber(this.area, this.exchange, this.number);
 }
 
+class Area {
+  final String title;
+  final String floor;
+  final bool indoor;
+  final String pictureUrl;
+
+  Area({
+    required this.title,
+    required this.floor,
+    required this.indoor,
+    required this.pictureUrl,
+  });
+}
+
 class StudySpace {
   final String title;
   List<OpeningHours> openingHours;
@@ -193,6 +207,7 @@ class StudySpace {
   final String address;
   final PhoneNumber phoneNumber;
   final bool connectedToMLibraryApi;
+  final List<Area> areas;
 
   StudySpace({
     required this.title,
@@ -202,6 +217,7 @@ class StudySpace {
     required this.address,
     required this.phoneNumber,
     required this.connectedToMLibraryApi,
+    required this.areas,
   });
 }
 
@@ -233,6 +249,7 @@ class _MyHomePageState extends State<MyHomePage> {
           BuildingPosition(latitude: 42.291165, longitude: -83.715716),
       phoneNumber: PhoneNumber("734", "647", "5747"),
       connectedToMLibraryApi: true,
+      areas: [],
     ),
     StudySpace(
       title: "Hatcher Library",
@@ -247,6 +264,14 @@ class _MyHomePageState extends State<MyHomePage> {
           longitude: -83.737981), // Uses Hatcher Library South
       phoneNumber: PhoneNumber("734", "764", "0401"),
       connectedToMLibraryApi: true,
+      areas: [
+        Area(
+          title: "Asia Library",
+          floor: "4",
+          pictureUrl: "assets/asia.webp",
+          indoor: true,
+        )
+      ],
     ),
     StudySpace(
       title: "Shapiro Library",
@@ -257,6 +282,7 @@ class _MyHomePageState extends State<MyHomePage> {
           BuildingPosition(latitude: 42.275615, longitude: -83.737183),
       phoneNumber: PhoneNumber("734", "764", "7490"),
       connectedToMLibraryApi: true,
+      areas: [],
     ),
     StudySpace(
       title: "Fine Arts Library",
@@ -270,19 +296,7 @@ class _MyHomePageState extends State<MyHomePage> {
           BuildingPosition(latitude: 42.274944, longitude: -83.738995),
       phoneNumber: PhoneNumber("734", "764", "5405"),
       connectedToMLibraryApi: true,
-    ),
-    StudySpace(
-      title: "Asia Library",
-      openingHours: [
-        const OpeningHours.range(
-            TimeOfDay(hour: 8, minute: 0), TimeOfDay(hour: 19, minute: 0))
-      ],
-      pictureUrl: "assets/asia.webp",
-      address: "913 S. University Ave", // located on 4th floor of Hatcher North
-      buildingPosition:
-          BuildingPosition(latitude: 42.276334, longitude: -83.737981),
-      phoneNumber: PhoneNumber("734", "764", "0406"),
-      connectedToMLibraryApi: true,
+      areas: [],
     ),
     StudySpace(
       title: "Taubman Health Sciences Library",
@@ -296,6 +310,7 @@ class _MyHomePageState extends State<MyHomePage> {
           BuildingPosition(latitude: 42.283548, longitude: -83.734451),
       phoneNumber: PhoneNumber("734", "764", "1210"),
       connectedToMLibraryApi: true,
+      areas: [],
     ),
     StudySpace(
       title: "Music Library",
@@ -309,6 +324,7 @@ class _MyHomePageState extends State<MyHomePage> {
           BuildingPosition(latitude: 42.290373, longitude: -83.721006),
       phoneNumber: PhoneNumber("734", "764", "2512"),
       connectedToMLibraryApi: true,
+      areas: [],
     )
   ];
 
