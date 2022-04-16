@@ -77,7 +77,10 @@ class AreasCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    var cardContentWidth = MediaQuery.of(context).size.width * 0.7;
+    var cardContentHeight = cardContentWidth;
+    return SizedBox(
+      height: cardContentHeight,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: areas.length,
@@ -106,11 +109,16 @@ class AreasCard extends StatelessWidget {
                       height:
                           Theme.of(context).textTheme.headlineSmall!.fontSize! /
                               2),
-                  Image.asset(
-                    areas[index].pictureUrl,
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    fit: BoxFit.fitHeight,
-                  ),
+                  SizedBox(
+                      width: cardContentWidth,
+                      child: AspectRatio(
+                          aspectRatio: 1.5,
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      fit: BoxFit.fitHeight,
+                                      image: AssetImage(
+                                          areas[index].pictureUrl)))))),
                 ],
               ),
             )),
@@ -147,41 +155,45 @@ class StudySpacePage extends StatelessWidget {
         body: Padding(
           padding:
               EdgeInsets.all(Theme.of(context).textTheme.bodyLarge!.fontSize!),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                studySpace.title,
-                style: Theme.of(context).textTheme.headlineSmall,
-                textAlign: TextAlign.start,
-              ),
-              SizedBox(
-                  height:
-                      Theme.of(context).textTheme.headlineSmall!.fontSize! / 2),
-              OpeningHourCard(openingHours: studySpace.openingHours),
-              SizedBox(
-                  height:
-                      Theme.of(context).textTheme.headlineSmall!.fontSize! / 2),
-              Visibility(
-                visible: studySpace.areas.isNotEmpty,
-                child: Text(
-                  "Areas",
-                  style: Theme.of(context).textTheme.titleLarge,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  studySpace.title,
+                  style: Theme.of(context).textTheme.headlineSmall,
                   textAlign: TextAlign.start,
                 ),
-              ),
-              Visibility(
-                visible: studySpace.areas.isNotEmpty,
-                child: SizedBox(
+                SizedBox(
                     height:
                         Theme.of(context).textTheme.headlineSmall!.fontSize! /
                             2),
-              ),
-              Visibility(
+                OpeningHourCard(openingHours: studySpace.openingHours),
+                SizedBox(
+                    height:
+                        Theme.of(context).textTheme.headlineSmall!.fontSize! /
+                            2),
+                Visibility(
                   visible: studySpace.areas.isNotEmpty,
-                  child: AreasCard(areas: studySpace.areas)),
-            ],
+                  child: Text(
+                    "Areas",
+                    style: Theme.of(context).textTheme.titleLarge,
+                    textAlign: TextAlign.start,
+                  ),
+                ),
+                Visibility(
+                  visible: studySpace.areas.isNotEmpty,
+                  child: SizedBox(
+                      height:
+                          Theme.of(context).textTheme.headlineSmall!.fontSize! /
+                              2),
+                ),
+                Visibility(
+                    visible: studySpace.areas.isNotEmpty,
+                    child: AreasCard(areas: studySpace.areas)),
+              ],
+            ),
           ),
         ));
   }
