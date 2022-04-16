@@ -78,7 +78,7 @@ class AreasCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var cardContentWidth = MediaQuery.of(context).size.width * 0.7;
-    var cardContentHeight = cardContentWidth;
+    var cardContentHeight = cardContentWidth * 1.1;
     return SizedBox(
       height: cardContentHeight,
       child: ListView.separated(
@@ -193,6 +193,13 @@ class StudySpacePage extends StatelessWidget {
                 Visibility(
                     visible: studySpace.areas.isNotEmpty,
                     child: AreasCard(areas: studySpace.areas)),
+                Visibility(
+                  visible: studySpace.areas.isNotEmpty,
+                  child: SizedBox(
+                      height:
+                          Theme.of(context).textTheme.headlineSmall!.fontSize! /
+                              2),
+                ),
               ],
             ),
           ),
