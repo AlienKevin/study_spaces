@@ -5,16 +5,17 @@ import 'MaterialIconsSelected.dart';
 import 'main.dart';
 import 'utils.dart';
 
-class StudySpacePage extends StatelessWidget {
-  const StudySpacePage({Key? key, required this.studySpace}) : super(key: key);
+class OpeningHourCard extends StatelessWidget {
+  const OpeningHourCard({Key? key, required this.openingHours})
+      : super(key: key);
 
-  final StudySpace studySpace;
+  final List<OpeningHours> openingHours;
 
   @override
   Widget build(BuildContext context) {
-    DateTime today = DateTime.now();
     List<Widget> hoursList = [];
-    hoursList.addAll(studySpace.openingHours.mapIndexed((index, hours) {
+    DateTime today = DateTime.now();
+    hoursList.addAll(openingHours.mapIndexed((index, hours) {
       var day = today.add(Duration(days: index));
       return Container(
           decoration: BoxDecoration(
@@ -44,6 +45,93 @@ class StudySpacePage extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleLarge)),
           ]));
     }));
+    return Card(
+        margin: EdgeInsets.zero,
+        child: Padding(
+            padding: EdgeInsets.all(
+                Theme.of(context).textTheme.bodyLarge!.fontSize!),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text("Opening Hours",
+                  style: Theme.of(context).textTheme.headlineSmall),
+              SizedBox(
+                  height:
+                      Theme.of(context).textTheme.headlineSmall!.fontSize! / 2),
+              ListView.separated(
+                shrinkWrap: true,
+                itemCount: hoursList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return hoursList[index];
+                },
+                separatorBuilder: (context, index) => SizedBox(
+                  height: Theme.of(context).textTheme.bodySmall!.fontSize! / 2,
+                ),
+
+                // itemExtent: 100,
+              )
+            ])));
+  }
+}
+
+class AreasCard extends StatelessWidget {
+  const AreasCard({Key? key, required this.areas}) : super(key: key);
+
+  final List<Area> areas;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: areas.length,
+        itemBuilder: (BuildContext context, int index) => Card(
+            margin: EdgeInsets.zero,
+            child: Padding(
+              padding: EdgeInsets.all(
+                  Theme.of(context).textTheme.bodyLarge!.fontSize!),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    areas[index].title,
+                    style: Theme.of(context).textTheme.titleLarge,
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(
+                      height:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize! /
+                              2),
+                  Text(
+                    "Floor: ${areas[index].floor}",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  SizedBox(
+                      height:
+                          Theme.of(context).textTheme.headlineSmall!.fontSize! /
+                              2),
+                  Image.asset(
+                    areas[index].pictureUrl,
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    fit: BoxFit.fitHeight,
+                  ),
+                ],
+              ),
+            )),
+        separatorBuilder: (context, index) => SizedBox(
+          width: Theme.of(context).textTheme.bodySmall!.fontSize! / 2,
+        ),
+      ),
+    );
+  }
+}
+
+class StudySpacePage extends StatelessWidget {
+  const StudySpacePage({Key? key, required this.studySpace}) : super(key: key);
+
+  final StudySpace studySpace;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           leading: TextButton.icon(
@@ -63,7 +151,8 @@ class StudySpacePage extends StatelessWidget {
           padding:
               EdgeInsets.all(Theme.of(context).textTheme.bodyLarge!.fontSize!),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 studySpace.title,
@@ -73,39 +162,28 @@ class StudySpacePage extends StatelessWidget {
               SizedBox(
                   height:
                       Theme.of(context).textTheme.headlineSmall!.fontSize! / 2),
-              Card(
-                  child: Padding(
-                      padding: EdgeInsets.all(
-                          Theme.of(context).textTheme.bodyLarge!.fontSize!),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Opening Hours",
-                                style:
-                                    Theme.of(context).textTheme.headlineSmall),
-                            SizedBox(
-                                height: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall!
-                                        .fontSize! /
-                                    2),
-                            ListView.separated(
-                              shrinkWrap: true,
-                              itemCount: hoursList.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return hoursList[index];
-                              },
-                              separatorBuilder: (context, index) => SizedBox(
-                                height: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .fontSize! /
-                                    2,
-                              ),
-
-                              // itemExtent: 100,
-                            )
-                          ]))),
+              OpeningHourCard(openingHours: studySpace.openingHours),
+              SizedBox(
+                  height:
+                      Theme.of(context).textTheme.headlineSmall!.fontSize! / 2),
+              Visibility(
+                visible: studySpace.areas.isNotEmpty,
+                child: Text(
+                  "Areas",
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  textAlign: TextAlign.start,
+                ),
+              ),
+              Visibility(
+                visible: studySpace.areas.isNotEmpty,
+                child: SizedBox(
+                    height:
+                        Theme.of(context).textTheme.headlineSmall!.fontSize! /
+                            2),
+              ),
+              Visibility(
+                  visible: studySpace.areas.isNotEmpty,
+                  child: AreasCard(areas: studySpace.areas)),
             ],
           ),
         ));
