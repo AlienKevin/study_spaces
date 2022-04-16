@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:json_api/client.dart';
 import 'package:json_api/routing.dart';
+import 'package:mstudy/studySpaceList.dart' as study_space_sist;
 import 'package:mstudy/studySpacePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:string_similarity/string_similarity.dart';
@@ -171,18 +172,10 @@ class BuildingPosition {
   final double latitude;
   final double longitude;
 
-  BuildingPosition({
+  const BuildingPosition({
     required this.latitude,
     required this.longitude,
   });
-}
-
-class PhoneNumber {
-  final String area;
-  final String exchange;
-  final String number;
-
-  PhoneNumber(this.area, this.exchange, this.number);
 }
 
 class Area {
@@ -205,7 +198,7 @@ class StudySpace {
   final String pictureUrl;
   final BuildingPosition buildingPosition;
   final String address;
-  final PhoneNumber phoneNumber;
+  final int phoneNumber;
   final bool connectedToMLibraryApi;
   final List<Area> areas;
 
@@ -238,95 +231,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ProcessedOpeningHours openingHours = {};
   TimeOfDay filterStartTime = const TimeOfDay(hour: 9, minute: 0);
   TimeOfDay filterEndTime = const TimeOfDay(hour: 22, minute: 0);
-
-  List<StudySpace> studySpaces = [
-    StudySpace(
-      title: "Art, Architecture, and Engineering Library",
-      openingHours: [const OpeningHours.allDay()],
-      pictureUrl: "assets/duderstadt.webp",
-      address: "2281 Bonisteel Blvd",
-      buildingPosition:
-          BuildingPosition(latitude: 42.291165, longitude: -83.715716),
-      phoneNumber: PhoneNumber("734", "647", "5747"),
-      connectedToMLibraryApi: true,
-      areas: [],
-    ),
-    StudySpace(
-      title: "Hatcher Library",
-      openingHours: [
-        const OpeningHours.range(
-            TimeOfDay(hour: 8, minute: 0), TimeOfDay(hour: 19, minute: 0))
-      ],
-      pictureUrl: "assets/hatcher.webp",
-      address: "913 S. University Avenue",
-      buildingPosition: BuildingPosition(
-          latitude: 42.276334,
-          longitude: -83.737981), // Uses Hatcher Library South
-      phoneNumber: PhoneNumber("734", "764", "0401"),
-      connectedToMLibraryApi: true,
-      areas: [
-        Area(
-          title: "Asia Library",
-          floor: "4",
-          pictureUrl: "assets/asia.webp",
-          indoor: true,
-        )
-      ],
-    ),
-    StudySpace(
-      title: "Shapiro Library",
-      openingHours: [const OpeningHours.allDay()],
-      pictureUrl: "assets/shapiro.webp",
-      address: "919 S. University Ave",
-      buildingPosition:
-          BuildingPosition(latitude: 42.275615, longitude: -83.737183),
-      phoneNumber: PhoneNumber("734", "764", "7490"),
-      connectedToMLibraryApi: true,
-      areas: [],
-    ),
-    StudySpace(
-      title: "Fine Arts Library",
-      openingHours: [
-        const OpeningHours.range(
-            TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
-      ],
-      pictureUrl: "assets/fine_arts.webp",
-      address: "855 S. University Ave",
-      buildingPosition:
-          BuildingPosition(latitude: 42.274944, longitude: -83.738995),
-      phoneNumber: PhoneNumber("734", "764", "5405"),
-      connectedToMLibraryApi: true,
-      areas: [],
-    ),
-    StudySpace(
-      title: "Taubman Health Sciences Library",
-      openingHours: [
-        const OpeningHours.range(
-            TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
-      ],
-      pictureUrl: "assets/taubman.webp",
-      address: "1135 Catherine St",
-      buildingPosition:
-          BuildingPosition(latitude: 42.283548, longitude: -83.734451),
-      phoneNumber: PhoneNumber("734", "764", "1210"),
-      connectedToMLibraryApi: true,
-      areas: [],
-    ),
-    StudySpace(
-      title: "Music Library",
-      openingHours: [
-        const OpeningHours.range(
-            TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 17, minute: 0))
-      ],
-      pictureUrl: "assets/music.webp",
-      address: "1100 Baits Dr",
-      buildingPosition:
-          BuildingPosition(latitude: 42.290373, longitude: -83.721006),
-      phoneNumber: PhoneNumber("734", "764", "2512"),
-      connectedToMLibraryApi: true,
-      areas: [],
-    )
-  ];
+  List<StudySpace> studySpaces = study_space_sist.studySpaces;
 
   @override
   void initState() {
@@ -411,9 +316,9 @@ class _MyHomePageState extends State<MyHomePage> {
       nextDay = nextDay.add(const Duration(days: 1));
     }
     setState(() {
-      studySpaces = studySpaces
+      studySpaces
           .where((space) => space.connectedToMLibraryApi)
-          .map((space) {
+          .forEach((space) {
         space.openingHours.clear();
         for (var day in nextSevenDays) {
           var newOpeningHours = getOpeningHours(space.title, day);
@@ -423,8 +328,7 @@ class _MyHomePageState extends State<MyHomePage> {
           }
           space.openingHours.add(newOpeningHours!);
         }
-        return space;
-      }).toList();
+      });
     });
   }
 

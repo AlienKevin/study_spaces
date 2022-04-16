@@ -2,10 +2,10 @@
 
 Find study spaces at the University of Michigan, Ann Arbor
 
-## Generate Study Space Thumbnails
+## Generate Image Assets
 
-Run the `generate_thumbnails.sh` to convert jpeg images in `images/` folder to webp images. The script
-then outputs the webp images to `thumbnails/`
+Run the `generate_images.sh` to convert jpeg images in `images/` folder to webp images.
+The script then outputs the webp images to `assets/`
 
 ## Generate Selected Material Icons
 
