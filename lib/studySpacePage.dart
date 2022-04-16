@@ -33,31 +33,28 @@ class OpeningHourCard extends StatelessWidget {
             Expanded(
                 flex: 25,
                 child: Text("${day.month}/${day.day}",
-                    style: Theme.of(context).textTheme.titleLarge)),
+                    style: Theme.of(context).textTheme.titleMedium)),
             Expanded(
                 flex: 20,
                 child: Text(weekdayToString(day.weekday),
-                    style: Theme.of(context).textTheme.titleLarge)),
+                    style: Theme.of(context).textTheme.titleMedium)),
             Expanded(
                 flex: 55,
                 child: Text(openingHoursToString(hours),
                     textAlign: TextAlign.end,
-                    style: Theme.of(context).textTheme.titleLarge)),
+                    style: Theme.of(context).textTheme.titleMedium)),
           ]));
     }));
-    return Card(
-        margin: EdgeInsets.zero,
-        child: Padding(
-            padding: EdgeInsets.all(
-                Theme.of(context).textTheme.bodyLarge!.fontSize!),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text("Opening Hours",
-                  style: Theme.of(context).textTheme.headlineSmall),
-              SizedBox(
-                  height:
-                      Theme.of(context).textTheme.headlineSmall!.fontSize! / 2),
-              ListView.separated(
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text("Opening Hours", style: Theme.of(context).textTheme.titleLarge),
+      SizedBox(
+          height: Theme.of(context).textTheme.headlineSmall!.fontSize! / 2),
+      Card(
+          margin: EdgeInsets.zero,
+          child: Padding(
+              padding: EdgeInsets.all(
+                  Theme.of(context).textTheme.bodyLarge!.fontSize!),
+              child: ListView.separated(
                 shrinkWrap: true,
                 itemCount: hoursList.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -68,8 +65,8 @@ class OpeningHourCard extends StatelessWidget {
                 ),
 
                 // itemExtent: 100,
-              )
-            ])));
+              )))
+    ]);
   }
 }
 
@@ -94,7 +91,7 @@ class AreasCard extends StatelessWidget {
                 children: [
                   Text(
                     areas[index].title,
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.headlineSmall,
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(
@@ -103,7 +100,7 @@ class AreasCard extends StatelessWidget {
                               2),
                   Text(
                     "Floor: ${areas[index].floor}",
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   SizedBox(
                       height:
@@ -157,7 +154,7 @@ class StudySpacePage extends StatelessWidget {
               Text(
                 studySpace.title,
                 style: Theme.of(context).textTheme.headlineSmall,
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.start,
               ),
               SizedBox(
                   height:
@@ -170,7 +167,7 @@ class StudySpacePage extends StatelessWidget {
                 visible: studySpace.areas.isNotEmpty,
                 child: Text(
                   "Areas",
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  style: Theme.of(context).textTheme.titleLarge,
                   textAlign: TextAlign.start,
                 ),
               ),
