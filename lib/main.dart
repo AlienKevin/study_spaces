@@ -194,7 +194,8 @@ class Area {
 
 class StudySpace {
   final String title;
-  List<OpeningHours> openingHours;
+  List<OpeningHours>
+      openingHours; // From Monday (list index 0) to Sunday (list index 6)
   final String pictureUrl;
   final BuildingPosition buildingPosition;
   final String address;
@@ -319,14 +320,13 @@ class _MyHomePageState extends State<MyHomePage> {
       studySpaces
           .where((space) => space.connectedToMLibraryApi)
           .forEach((space) {
-        space.openingHours.clear();
         for (var day in nextSevenDays) {
           var newOpeningHours = getOpeningHours(space.title, day);
           if (kDebugMode) {
             print(
                 "opening hours for ${space.title} on ${day.year}-${day.month}-${day.day} is $newOpeningHours.");
           }
-          space.openingHours.add(newOpeningHours!);
+          space.openingHours[day.weekday - 1] = newOpeningHours!;
         }
       });
     });
@@ -348,31 +348,32 @@ class _MyHomePageState extends State<MyHomePage> {
                 }))
             .toList()
         : studySpaces;
+    final openingHoursIndex = getOpeningHoursIndex();
     var filteredStudySpaces = appState
         .when(
           filterResults: () => studySpaces
               .where((space) => isOpenDuring(
                   OpeningHours.range(filterStartTime, filterEndTime),
-                  space.openingHours[0]))
+                  space.openingHours[openingHoursIndex]))
               .toList(),
           keywordSearch: () => queryFilteredStudySpaces,
           filterSearch: () => queryFilteredStudySpaces,
           home: () => queryFilteredStudySpaces,
         )
-        .sorted((space1, space2) => space1.openingHours[0].when(
-              allDay: () => space2.openingHours[0].when(
+        .sorted((space1, space2) => space1.openingHours[openingHoursIndex].when(
+              allDay: () => space2.openingHours[openingHoursIndex].when(
                   allDay: () => 0,
                   range: (_start, _end) => -1,
                   closed: () => -1),
               range: (TimeOfDay space1Start, TimeOfDay space1End) =>
-                  space2.openingHours[0].when(
+                  space2.openingHours[openingHoursIndex].when(
                       allDay: () => 1,
                       range: (space2Start, space2End) =>
                           timeOfDayLessThanEqual(space2End, space1End)
                               ? -1
                               : (space2End == space1End ? 0 : 1),
                       closed: () => -1),
-              closed: () => space2.openingHours[0].when(
+              closed: () => space2.openingHours[openingHoursIndex].when(
                   allDay: () => 1, range: (_start, _end) => 1, closed: () => 0),
             ));
     return Scaffold(
@@ -609,6 +610,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget showListItem(StudySpace studySpace) {
+    var openingHoursIndex = getOpeningHoursIndex();
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -631,7 +633,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(
                   height: Theme.of(context).textTheme.bodySmall!.fontSize! / 2),
-              Text(openingHoursToString(studySpace.openingHours[0]),
+              Text(
+                  openingHoursToString(
+                      studySpace.openingHours[openingHoursIndex]),
                   style: Theme.of(context).textTheme.bodyMedium),
             ],
             mainAxisAlignment: MainAxisAlignment.start,
@@ -806,6 +810,10 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 }
+
+/// Weekday values start on Monday as 1 all the way to Sunday as 7
+/// We need to subtract 1 from all weekday values to get 0-based list index
+int getOpeningHoursIndex() => DateTime.now().weekday - 1;
 
 /// Determine the current position of the device.
 ///

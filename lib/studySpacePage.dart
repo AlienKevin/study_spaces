@@ -15,7 +15,7 @@ class OpeningHourCard extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> hoursList = [];
     DateTime today = DateTime.now();
-    hoursList.addAll(openingHours.mapIndexed((index, hours) {
+    hoursList.addAll(openingHours.mapIndexed((index, _) {
       var day = today.add(Duration(days: index));
       return Container(
           decoration: BoxDecoration(
@@ -40,7 +40,7 @@ class OpeningHourCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleMedium)),
             Expanded(
                 flex: 55,
-                child: Text(openingHoursToString(hours),
+                child: Text(openingHoursToString(openingHours[day.weekday - 1]),
                     textAlign: TextAlign.end,
                     style: Theme.of(context).textTheme.titleMedium)),
           ]));
