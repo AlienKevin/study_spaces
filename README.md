@@ -2,6 +2,24 @@
 
 Find study spaces at the University of Michigan, Ann Arbor
 
+## Image Format Guidelines
+
+### File Format Requirement
+
+All images in `images/buildings/` and `images/areas` must be JPEG files.
+
+### Image Size Recommendations
+
+* `images/buildings/*.jpeg` needs to be at least 200x200px
+* `images/areas/*.jpeg` needs to be at least 600x400px
+
+### Aspect Ratio Recommendations
+
+* `images/buildings/*.jpeg` needs an aspect ratio of 1:1 (square)
+* `images/areas/*.jpeg` needs an aspect ratio of 1.5:1 (width is 1.5 times longer than height)
+
+If an image does not meet the above recommended aspect ratios, they will be scaled and cropped dynamically.
+
 ## Generate Image Assets
 
 Run the `generate_images.sh` to convert jpeg images in `images/` folder to webp images.
@@ -30,6 +48,7 @@ of icons packaged:
 2. Reference this guide for more details: https://medium.com/codechai/how-to-use-custom-icons-in-flutter-834a079d977
 
 ## Generate App Name
+
 Run `./generate_app_name.sh` to generate new app names for Android, iOS, and Web.
 
 ## Generate App and Web Icons Locally
