@@ -82,6 +82,7 @@ class AreasCard extends StatelessWidget {
     return SizedBox(
       height: cardContentHeight,
       child: ListView.separated(
+        clipBehavior: Clip.none,
         scrollDirection: Axis.horizontal,
         itemCount: areas.length,
         itemBuilder: (BuildContext context, int index) => Card(
