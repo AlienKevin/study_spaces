@@ -38,7 +38,7 @@ List<StudySpace> studySpaces = [
       Area(
         title: "Asia Library",
         floor: "4",
-        pictureUrl: "assets/asia.webp",
+        pictureUrl: "assets/hatcher_asia.webp",
         indoor: true,
       )
     ],
