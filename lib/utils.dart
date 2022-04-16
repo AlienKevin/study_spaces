@@ -31,20 +31,25 @@ String openingHoursToString(OpeningHours hours) {
 
 /// Convert [TimeOfDay] to [String] for display.
 /// Truncates ":00" if minute is 0
+/// For the algorithm to convert from 24H to 12H times,
+/// see https://www.wikihow.com/Convert-from-24-Hour-to-12-Hour-Time
 String timeOfDayToString(TimeOfDay time) {
   String _addLeadingZeroIfNeeded(int value) {
     if (value < 10) return '0$value';
     return value.toString();
   }
 
+  String minuteToString(int minutes) =>
+      (time.minute == 0 ? "" : ":" + _addLeadingZeroIfNeeded(time.minute));
+
   if (time.hour > 12) {
-    return (time.hour - 12).toString() +
-        (time.minute == 0 ? "" : ":" + _addLeadingZeroIfNeeded(time.minute)) +
-        "PM";
+    return (time.hour - 12).toString() + minuteToString(time.minute) + "PM";
+  } else if (time.hour == 12) {
+    return time.hour.toString() + minuteToString(time.minute) + "PM";
+  } else if (time.hour == 0) {
+    return "12" + minuteToString(time.minute) + "AM";
   } else {
-    return time.hour.toString() +
-        (time.minute == 0 ? "" : ":" + _addLeadingZeroIfNeeded(time.minute)) +
-        "AM";
+    return time.hour.toString() + minuteToString(time.minute) + "AM";
   }
 }
 
