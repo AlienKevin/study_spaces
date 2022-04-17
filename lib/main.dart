@@ -420,7 +420,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   AppBar searchAndFilterAppBar() {
     var textFieldBorder = OutlineInputBorder(
-      borderSide: const BorderSide(width: 2, color: Colors.grey),
+      borderSide: const BorderSide(width: 2, color: blueColor),
       borderRadius: BorderRadius.circular(100),
     );
     var textFieldPadding = Theme.of(context).textTheme.bodyLarge!.fontSize!;
