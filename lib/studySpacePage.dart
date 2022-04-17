@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:map_launcher/map_launcher.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'MaterialIconsSelected.dart';
@@ -184,18 +184,8 @@ class StudySpacePage extends StatelessWidget {
                       if (kDebugMode) {
                         print("Tapped on the address of ${studySpace.title}.");
                       }
-                      final availableMaps = await MapLauncher.installedMaps;
-                      if (kDebugMode) {
-                        print(availableMaps);
-                      }
-
-                      await availableMaps.first.showDirections(
-                        destinationTitle: studySpace.title,
-                        destination: Coords(
-                            studySpace.buildingPosition.latitude,
-                            studySpace.buildingPosition.longitude),
-                        directionsMode: DirectionsMode.walking,
-                      );
+                      MapsLauncher.launchQuery(
+                          "${studySpace.title}, ${studySpace.address}");
                     },
                     icon: Icon(MaterialIconsSelected.place,
                         size: Theme.of(context).textTheme.bodyLarge!.fontSize!),
