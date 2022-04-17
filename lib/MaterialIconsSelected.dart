@@ -14,4 +14,6 @@ class MaterialIconsSelected {
       IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData place =
       IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData call =
+      IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

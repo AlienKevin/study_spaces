@@ -208,7 +208,7 @@ class StudySpace {
   final String pictureUrl;
   final BuildingPosition buildingPosition;
   final String address;
-  final int phoneNumber;
+  final String phoneNumber;
   final bool connectedToMLibraryApi;
   final List<Area> areas;
 

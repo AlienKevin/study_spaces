@@ -9,7 +9,7 @@ List<StudySpace> studySpaces = [
     address: "2281 Bonisteel Blvd",
     buildingPosition:
         const BuildingPosition(latitude: 42.291165, longitude: -83.715716),
-    phoneNumber: 7346475747,
+    phoneNumber: "734-647-5747",
     connectedToMLibraryApi: true,
     areas: [],
   ),
@@ -32,7 +32,7 @@ List<StudySpace> studySpaces = [
     buildingPosition: const BuildingPosition(
         latitude: 42.276334,
         longitude: -83.737981), // Uses Hatcher Library South
-    phoneNumber: 7347640401,
+    phoneNumber: "734-764-0401",
     connectedToMLibraryApi: true,
     areas: [
       Area(
@@ -58,7 +58,7 @@ List<StudySpace> studySpaces = [
     address: "919 S. University Ave",
     buildingPosition:
         const BuildingPosition(latitude: 42.275615, longitude: -83.737183),
-    phoneNumber: 7347647490,
+    phoneNumber: "734-764-7490",
     connectedToMLibraryApi: true,
     areas: [],
   ),
@@ -76,7 +76,7 @@ List<StudySpace> studySpaces = [
     address: "855 S. University Ave",
     buildingPosition:
         const BuildingPosition(latitude: 42.274944, longitude: -83.738995),
-    phoneNumber: 7347645405,
+    phoneNumber: "734-764-5405",
     connectedToMLibraryApi: true,
     areas: [],
   ),
@@ -94,7 +94,7 @@ List<StudySpace> studySpaces = [
     address: "1135 Catherine St",
     buildingPosition:
         const BuildingPosition(latitude: 42.283548, longitude: -83.734451),
-    phoneNumber: 7347641210,
+    phoneNumber: "734-764-1210",
     connectedToMLibraryApi: true,
     areas: [],
   ),
@@ -112,7 +112,7 @@ List<StudySpace> studySpaces = [
     address: "1100 Baits Dr",
     buildingPosition:
         const BuildingPosition(latitude: 42.290373, longitude: -83.721006),
-    phoneNumber: 7347642512,
+    phoneNumber: "734-764-2512",
     connectedToMLibraryApi: true,
     areas: [],
   ),
@@ -132,7 +132,7 @@ List<StudySpace> studySpaces = [
     address: "701 E. University",
     buildingPosition: const BuildingPosition(
         latitude: 42.272745760362035, longitude: -83.73550729385826),
-    phoneNumber: 7347633164,
+    phoneNumber: "734-763-3164",
     connectedToMLibraryApi: false,
     areas: [
       Area(
