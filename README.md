@@ -40,6 +40,7 @@ of icons packaged:
 3. Search for new icons to include or drag and drop custom SVGs to the website.
 4. Download a zip from the website
 5. Replace the `fonts/MaterialIconsSelected.ttf` and `lib/MaterialIconsSelected.dart` with the new files in the zip folder
+6. Replace the old `fluttericon_config.json` with the new one in the downloaded zip
 
 ### Note
 
