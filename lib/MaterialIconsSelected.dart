@@ -12,4 +12,6 @@ class MaterialIconsSelected {
       IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData filter_alt =
       IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData place =
+      IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'MaterialIconsSelected.dart';
@@ -164,7 +165,20 @@ class StudySpacePage extends StatelessWidget {
                 Text(
                   studySpace.title,
                   style: Theme.of(context).textTheme.headlineSmall,
-                  textAlign: TextAlign.start,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                    height:
+                        Theme.of(context).textTheme.bodyLarge!.fontSize! / 2),
+                OutlinedButton.icon(
+                  onPressed: () {
+                    if (kDebugMode) {
+                      print("Tapped on the address of ${studySpace.title}.");
+                    }
+                  },
+                  icon: Icon(MaterialIconsSelected.place,
+                      size: Theme.of(context).textTheme.bodyLarge!.fontSize!),
+                  label: Text(studySpace.address),
                 ),
                 SizedBox(
                     height:

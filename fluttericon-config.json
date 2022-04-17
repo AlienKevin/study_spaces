@@ -39,6 +39,12 @@
       "css": "search",
       "code": 59392,
       "src": "material"
+    },
+    {
+      "uid": "c6627578c788203e59230fd86b275436",
+      "css": "place",
+      "code": 59395,
+      "src": "material"
     }
   ]
 }

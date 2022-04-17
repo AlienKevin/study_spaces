@@ -156,6 +156,15 @@ class MyApp extends StatelessWidget {
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(99.0),
                         side: BorderSide.none)))),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+            style: ButtonStyle(
+                foregroundColor:
+                    MaterialStateProperty.resolveWith((_) => blueColor),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(99.0))),
+                side: MaterialStateProperty.all(
+                    const BorderSide(color: blueColor, width: 2.0)))),
         textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
           foregroundColor: MaterialStateProperty.resolveWith((_) => blueColor),
