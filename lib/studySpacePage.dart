@@ -170,33 +170,35 @@ class StudySpacePage extends StatelessWidget {
                 ),
                 SizedBox(
                     height:
-                        Theme.of(context).textTheme.bodyLarge!.fontSize! / 2),
-                OutlinedButton.icon(
-                  onPressed: () async {
-                    if (kDebugMode) {
-                      print("Tapped on the address of ${studySpace.title}.");
-                    }
-                    final availableMaps = await MapLauncher.installedMaps;
-                    if (kDebugMode) {
-                      print(availableMaps);
-                    }
-
-                    await availableMaps.first.showDirections(
-                      destinationTitle: studySpace.title,
-                      destination: Coords(studySpace.buildingPosition.latitude,
-                          studySpace.buildingPosition.longitude),
-                      directionsMode: DirectionsMode.walking,
-                    );
-                  },
-                  icon: Icon(MaterialIconsSelected.place,
-                      size: Theme.of(context).textTheme.bodyLarge!.fontSize!),
-                  label: Text(studySpace.address),
-                ),
+                        Theme.of(context).textTheme.headlineSmall!.fontSize! /
+                            2),
+                OpeningHourCard(openingHours: studySpace.openingHours),
                 SizedBox(
                     height:
                         Theme.of(context).textTheme.headlineSmall!.fontSize! /
                             2),
-                OpeningHourCard(openingHours: studySpace.openingHours),
+                Text("Address", style: Theme.of(context).textTheme.titleLarge),
+                OutlinedButton.icon(
+                    onPressed: () async {
+                      if (kDebugMode) {
+                        print("Tapped on the address of ${studySpace.title}.");
+                      }
+                      final availableMaps = await MapLauncher.installedMaps;
+                      if (kDebugMode) {
+                        print(availableMaps);
+                      }
+
+                      await availableMaps.first.showDirections(
+                        destinationTitle: studySpace.title,
+                        destination: Coords(
+                            studySpace.buildingPosition.latitude,
+                            studySpace.buildingPosition.longitude),
+                        directionsMode: DirectionsMode.walking,
+                      );
+                    },
+                    icon: Icon(MaterialIconsSelected.place,
+                        size: Theme.of(context).textTheme.bodyLarge!.fontSize!),
+                    label: Text(studySpace.address)),
                 SizedBox(
                     height:
                         Theme.of(context).textTheme.headlineSmall!.fontSize! /
