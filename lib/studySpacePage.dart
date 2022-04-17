@@ -194,7 +194,7 @@ class StudySpacePage extends StatelessWidget {
                           if (kDebugMode) {
                             print(
                                 "Tapped on the contact of ${studySpace.title}.");
-                            launch("tel://${studySpace.phoneNumber}");
+                            launch("tel:${studySpace.phoneNumber}");
                           }
                         },
                         icon: const Icon(MaterialIconsSelected.call),
