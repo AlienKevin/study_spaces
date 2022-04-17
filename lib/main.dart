@@ -7,7 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:json_api/client.dart';
 import 'package:json_api/routing.dart';
-import 'package:mstudy/studySpaceList.dart' as study_space_sist;
+import 'package:mstudy/studySpaceList.dart' as study_space_list;
 import 'package:mstudy/studySpacePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:string_similarity/string_similarity.dart';
@@ -241,7 +241,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ProcessedOpeningHours openingHours = {};
   TimeOfDay filterStartTime = const TimeOfDay(hour: 9, minute: 0);
   TimeOfDay filterEndTime = const TimeOfDay(hour: 22, minute: 0);
-  List<StudySpace> studySpaces = study_space_sist.studySpaces;
+  List<StudySpace> studySpaces = study_space_list.studySpaces;
 
   @override
   void initState() {
