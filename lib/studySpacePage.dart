@@ -167,40 +167,44 @@ class StudySpacePage extends StatelessWidget {
                 Text(
                   studySpace.title,
                   style: Theme.of(context).textTheme.headlineSmall,
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.start,
                 ),
                 SizedBox(
                     height:
-                        Theme.of(context).textTheme.headlineSmall!.fontSize! /
-                            2),
-                OpeningHourCard(openingHours: studySpace.openingHours),
+                        Theme.of(context).textTheme.bodyLarge!.fontSize! / 2),
+                Row(
+                  children: [
+                    OutlinedButton.icon(
+                        onPressed: () async {
+                          if (kDebugMode) {
+                            print(
+                                "Tapped on the address of ${studySpace.title}.");
+                          }
+                          MapsLauncher.launchQuery(
+                              "${studySpace.title}, ${studySpace.address}");
+                        },
+                        icon: const Icon(MaterialIconsSelected.place),
+                        label: const Text("Map")),
+                    SizedBox(
+                        width:
+                            Theme.of(context).textTheme.bodyLarge!.fontSize! /
+                                2),
+                    OutlinedButton.icon(
+                        onPressed: () async {
+                          if (kDebugMode) {
+                            print(
+                                "Tapped on the contact of ${studySpace.title}.");
+                            launch("tel://${studySpace.phoneNumber}");
+                          }
+                        },
+                        icon: const Icon(MaterialIconsSelected.call),
+                        label: const Text("Call")),
+                  ],
+                ),
                 SizedBox(
                     height:
-                        Theme.of(context).textTheme.headlineSmall!.fontSize! /
-                            2),
-                Text("Address", style: Theme.of(context).textTheme.titleLarge),
-                OutlinedButton.icon(
-                    onPressed: () async {
-                      if (kDebugMode) {
-                        print("Tapped on the address of ${studySpace.title}.");
-                      }
-                      MapsLauncher.launchQuery(
-                          "${studySpace.title}, ${studySpace.address}");
-                    },
-                    icon: Icon(MaterialIconsSelected.place,
-                        size: Theme.of(context).textTheme.bodyLarge!.fontSize!),
-                    label: Text(studySpace.address)),
-                Text("Contact", style: Theme.of(context).textTheme.titleLarge),
-                OutlinedButton.icon(
-                    onPressed: () async {
-                      if (kDebugMode) {
-                        print("Tapped on the contact of ${studySpace.title}.");
-                        launch("tel://${studySpace.phoneNumber}");
-                      }
-                    },
-                    icon: Icon(MaterialIconsSelected.call,
-                        size: Theme.of(context).textTheme.bodyLarge!.fontSize!),
-                    label: Text(studySpace.phoneNumber)),
+                        Theme.of(context).textTheme.bodyLarge!.fontSize! / 2),
+                OpeningHourCard(openingHours: studySpace.openingHours),
                 SizedBox(
                     height:
                         Theme.of(context).textTheme.headlineSmall!.fontSize! /
