@@ -59,6 +59,7 @@ class OpeningHourCard extends StatelessWidget {
                   Theme.of(context).textTheme.bodyLarge!.fontSize!),
               child: ListView.separated(
                 shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: hoursList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return hoursList[index];
