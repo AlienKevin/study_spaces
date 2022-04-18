@@ -7,8 +7,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:json_api/client.dart';
 import 'package:json_api/routing.dart';
-import 'package:mstudy/studySpaceList.dart' as study_space_list;
-import 'package:mstudy/studySpacePage.dart';
+import 'package:mstudy/buildingList.dart' as building_list;
+import 'package:mstudy/buildingPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:string_similarity/string_similarity.dart';
 import 'package:time_range_picker/time_range_picker.dart'
@@ -20,7 +20,7 @@ import 'utils.dart';
 part 'main.freezed.dart';
 part 'main.g.dart';
 
-/// Opening hours of a study space
+/// Opening hours of a building
 ///
 /// Can be all day, a range from start time to end time, or closed
 @freezed
@@ -58,8 +58,8 @@ class AppState with _$AppState {
 ///
 /// An [id] is used to incorporate hours fetched from M Library API.
 /// Titles are not stored in the relationships of JSON:API so [id]s
-/// are the only way to find and match opening hours to study spaces.
-/// Each [HoursType] of a study space has a unique [id].
+/// are the only way to find and match opening hours to buildings.
+/// Each [HoursType] of a building has a unique [id].
 @JsonSerializable(explicitToJson: true)
 class OpeningDateAndHours {
   late String id;
@@ -81,14 +81,14 @@ class OpeningDateAndHours {
 /// Type of [OpeningDateAndHours] specified in JSON:API, e.g. "paragraph--hours_exceptions"
 typedef HoursType = String;
 
-/// Title of study spaces
+/// Title of buildings
 typedef SpaceTitle = String;
 
-/// Unprocessed [OpeningDateAndHours] for each study space, organized by [HoursType]
+/// Unprocessed [OpeningDateAndHours] for each building, organized by [HoursType]
 typedef FieldOpeningHours
     = Map<HoursType, Map<SpaceTitle, List<OpeningDateAndHours>>>;
 
-/// Processed [OpeningDateAndHours] for each study space, listed in decreasing priorities.
+/// Processed [OpeningDateAndHours] for each building, listed in decreasing priorities.
 /// Priorities cf processFieldOpeningHours.
 typedef ProcessedOpeningHours = Map<SpaceTitle, List<OpeningDateAndHours>>;
 
@@ -170,7 +170,7 @@ class MyApp extends StatelessWidget {
           foregroundColor: MaterialStateProperty.resolveWith((_) => blueColor),
         )));
     return MaterialApp(
-      title: 'Study spaces',
+      title: 'Buildings',
       theme: theme,
       home: const MyHomePage(title: 'Opening Now'),
     );
@@ -207,7 +207,7 @@ class Area {
 
 Id getAreaId(Id buildingId, Id areaId) => "${buildingId}_$areaId";
 
-class StudySpace {
+class Building {
   final String title;
   final String id;
   List<OpeningHours>
@@ -218,7 +218,7 @@ class StudySpace {
   final bool connectedToMLibraryApi;
   final List<Area> areas;
 
-  StudySpace({
+  Building({
     required this.title,
     required this.id,
     required this.openingHours,
@@ -253,7 +253,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ProcessedOpeningHours openingHours = {};
   TimeOfDay filterStartTime = const TimeOfDay(hour: 9, minute: 0);
   TimeOfDay filterEndTime = const TimeOfDay(hour: 22, minute: 0);
-  List<StudySpace> studySpaces = study_space_list.studySpaces;
+  List<Building> buildings = building_list.buildings;
 
   @override
   void initState() {
@@ -261,7 +261,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (kDebugMode) {
       getCurrentPosition().then((position) {
         print("Current position is $position");
-        for (var space in studySpaces) {
+        for (var space in buildings) {
           var distance = Geolocator.distanceBetween(
               position.latitude,
               position.longitude,
@@ -328,7 +328,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  /// Update the opening hours for the next 7 days of all study spaces
+  /// Update the opening hours for the next 7 days of all buildings
   /// connected to the M library API
   void updateOpeningHoursForNextSevenDays() {
     List<DateTime> nextSevenDays = [];
@@ -338,9 +338,7 @@ class _MyHomePageState extends State<MyHomePage> {
       nextDay = nextDay.add(const Duration(days: 1));
     }
     setState(() {
-      studySpaces
-          .where((space) => space.connectedToMLibraryApi)
-          .forEach((space) {
+      buildings.where((space) => space.connectedToMLibraryApi).forEach((space) {
         for (var day in nextSevenDays) {
           var newOpeningHours = getOpeningHours(space.title, day);
           if (kDebugMode) {
@@ -356,8 +354,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     var wordBoundary = RegExp(r'\W');
-    var queryFilteredStudySpaces = queryName.isNotEmpty
-        ? studySpaces
+    var queryFilteredBuildings = queryName.isNotEmpty
+        ? buildings
             .where((space) =>
                 space.title.toLowerCase().split(wordBoundary).any((word) {
                   return queryName
@@ -368,18 +366,18 @@ class _MyHomePageState extends State<MyHomePage> {
                   });
                 }))
             .toList()
-        : studySpaces;
+        : buildings;
     final openingHoursIndex = getOpeningHoursIndex();
-    var filteredStudySpaces = appState
+    var filteredBuildings = appState
         .when(
-          filterResults: () => studySpaces
+          filterResults: () => buildings
               .where((space) => isOpenDuring(
                   OpeningHours.range(filterStartTime, filterEndTime),
                   space.openingHours[openingHoursIndex]))
               .toList(),
-          keywordSearch: () => queryFilteredStudySpaces,
-          filterSearch: () => queryFilteredStudySpaces,
-          home: () => queryFilteredStudySpaces,
+          keywordSearch: () => queryFilteredBuildings,
+          filterSearch: () => queryFilteredBuildings,
+          home: () => queryFilteredBuildings,
         )
         .sorted((space1, space2) => space1.openingHours[openingHoursIndex].when(
               allDay: () => space2.openingHours[openingHoursIndex].when(
@@ -406,9 +404,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: ListView.separated(
         padding: const EdgeInsets.all(8),
-        itemCount: filteredStudySpaces.length,
+        itemCount: filteredBuildings.length,
         itemBuilder: (BuildContext context, int index) {
-          return showListItem(filteredStudySpaces[index]);
+          return showListItem(filteredBuildings[index]);
         },
         separatorBuilder: (context, index) => SizedBox(
           height: Theme.of(context).textTheme.bodySmall!.fontSize! / 2,
@@ -630,14 +628,14 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  Widget showListItem(StudySpace studySpace) {
+  Widget showListItem(Building building) {
     var openingHoursIndex = getOpeningHoursIndex();
     return GestureDetector(
       onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => StudySpacePage(studySpace: studySpace),
+              builder: (context) => BuildingPage(building: building),
             ));
       },
       child: Card(
@@ -649,14 +647,14 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(
             children: [
               Text(
-                studySpace.title,
+                building.title,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               SizedBox(
                   height: Theme.of(context).textTheme.bodySmall!.fontSize! / 2),
               Text(
                   openingHoursToString(
-                      studySpace.openingHours[openingHoursIndex]),
+                      building.openingHours[openingHoursIndex]),
                   style: Theme.of(context).textTheme.bodyMedium),
             ],
             mainAxisAlignment: MainAxisAlignment.start,
@@ -672,14 +670,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               fit: BoxFit.fitHeight,
-                              image: AssetImage(
-                                  getImageUrl(id: studySpace.id))))))),
+                              image:
+                                  AssetImage(getImageUrl(id: building.id))))))),
         ]),
       )),
     );
   }
 
-  /// Get the [OpeningHours] of a study space with a [queryTitle] at a [queryDate].
+  /// Get the [OpeningHours] of a building with a [queryTitle] at a [queryDate].
   OpeningHours? getOpeningHours(String queryTitle, DateTime queryDate) {
     // print(openingHours[queryTitle]
     //     ?.map((hours) => "${hours.startDate} - ${hours.endDate}"));
@@ -723,7 +721,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ...fallAndWinter.values
     ];
     ProcessedOpeningHours result = {};
-    studySpaces.where((space) => space.connectedToMLibraryApi).forEach((space) {
+    buildings.where((space) => space.connectedToMLibraryApi).forEach((space) {
       for (var hours in prioritizedHours) {
         if (hours[space.title] != null) {
           result.putIfAbsent(space.title, () => []).addAll(hours[space.title]!);
@@ -743,7 +741,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final client = RoutingClient(uriDesign);
 
-    // A Map from fieldHoursOpen.type (eg paragraph__hours_exceptions) to a Map from study space title to its opening hours
+    // A Map from fieldHoursOpen.type (eg paragraph__hours_exceptions) to a Map from building title to its opening hours
     FieldOpeningHours fieldOpeningHours = {};
 
     try {
@@ -757,7 +755,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       for (var resource in response.collection) {
         String title = resource.attributes["title"]! as String;
-        if (studySpaces
+        if (buildings
             .where((space) => space.connectedToMLibraryApi)
             .map((space) => space.title)
             .contains(title)) {

@@ -142,10 +142,10 @@ class AreasCard extends StatelessWidget {
   }
 }
 
-class StudySpacePage extends StatelessWidget {
-  const StudySpacePage({Key? key, required this.studySpace}) : super(key: key);
+class BuildingPage extends StatelessWidget {
+  const BuildingPage({Key? key, required this.building}) : super(key: key);
 
-  final StudySpace studySpace;
+  final Building building;
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +173,7 @@ class StudySpacePage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  studySpace.title,
+                  building.title,
                   style: Theme.of(context).textTheme.headlineSmall,
                   textAlign: TextAlign.start,
                 ),
@@ -186,10 +186,10 @@ class StudySpacePage extends StatelessWidget {
                         onPressed: () async {
                           if (kDebugMode) {
                             print(
-                                "Tapped on the address of ${studySpace.title}.");
+                                "Tapped on the address of ${building.title}.");
                           }
                           MapsLauncher.launchQuery(
-                              "${studySpace.title}, ${studySpace.address}");
+                              "${building.title}, ${building.address}");
                         },
                         icon: const Icon(MaterialIconsSelected.place),
                         label: const Text("Map")),
@@ -201,9 +201,9 @@ class StudySpacePage extends StatelessWidget {
                         onPressed: () async {
                           if (kDebugMode) {
                             print(
-                                "Tapped on the contact of ${studySpace.title}.");
+                                "Tapped on the contact of ${building.title}.");
                           }
-                          launch("tel://${studySpace.phoneNumber}");
+                          launch("tel://${building.phoneNumber}");
                         },
                         icon: const Icon(MaterialIconsSelected.call),
                         label: const Text("Call")),
@@ -212,13 +212,13 @@ class StudySpacePage extends StatelessWidget {
                 SizedBox(
                     height:
                         Theme.of(context).textTheme.bodyLarge!.fontSize! / 2),
-                OpeningHourCard(openingHours: studySpace.openingHours),
+                OpeningHourCard(openingHours: building.openingHours),
                 SizedBox(
                     height:
                         Theme.of(context).textTheme.headlineSmall!.fontSize! /
                             2),
                 Visibility(
-                  visible: studySpace.areas.isNotEmpty,
+                  visible: building.areas.isNotEmpty,
                   child: Text(
                     "Areas",
                     style: Theme.of(context).textTheme.titleLarge,
@@ -226,18 +226,18 @@ class StudySpacePage extends StatelessWidget {
                   ),
                 ),
                 Visibility(
-                  visible: studySpace.areas.isNotEmpty,
+                  visible: building.areas.isNotEmpty,
                   child: SizedBox(
                       height:
                           Theme.of(context).textTheme.headlineSmall!.fontSize! /
                               2),
                 ),
                 Visibility(
-                    visible: studySpace.areas.isNotEmpty,
+                    visible: building.areas.isNotEmpty,
                     child: AreasCard(
-                        buildingId: studySpace.id, areas: studySpace.areas)),
+                        buildingId: building.id, areas: building.areas)),
                 Visibility(
-                  visible: studySpace.areas.isNotEmpty,
+                  visible: building.areas.isNotEmpty,
                   child: SizedBox(
                       height:
                           Theme.of(context).textTheme.headlineSmall!.fontSize! /

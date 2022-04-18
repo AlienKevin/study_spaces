@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mstudy/main.dart';
 
-List<StudySpace> studySpaces = [
-  StudySpace(
+List<Building> buildings = [
+  Building(
     title: "Art, Architecture, and Engineering Library",
     id: "duderstadt",
     openingHours: List.filled(7, const OpeningHours.allDay()),
@@ -13,7 +13,7 @@ List<StudySpace> studySpaces = [
     connectedToMLibraryApi: true,
     areas: [],
   ),
-  StudySpace(
+  Building(
     title: "Hatcher Library",
     id: "hatcher",
     openingHours: [
@@ -43,7 +43,7 @@ List<StudySpace> studySpaces = [
       )
     ],
   ),
-  StudySpace(
+  Building(
     title: "Shapiro Library",
     id: "shapiro",
     openingHours: [
@@ -62,7 +62,7 @@ List<StudySpace> studySpaces = [
     connectedToMLibraryApi: true,
     areas: [],
   ),
-  StudySpace(
+  Building(
     title: "Fine Arts Library",
     id: "fine_arts",
     openingHours: [
@@ -80,7 +80,7 @@ List<StudySpace> studySpaces = [
     connectedToMLibraryApi: true,
     areas: [],
   ),
-  StudySpace(
+  Building(
     title: "Taubman Health Sciences Library",
     id: "taubman",
     openingHours: [
@@ -98,7 +98,7 @@ List<StudySpace> studySpaces = [
     connectedToMLibraryApi: true,
     areas: [],
   ),
-  StudySpace(
+  Building(
     title: "Music Library",
     id: "music",
     openingHours: [
@@ -116,7 +116,7 @@ List<StudySpace> studySpaces = [
     connectedToMLibraryApi: true,
     areas: [],
   ),
-  StudySpace(
+  Building(
     title: "East Quad",
     id: "east_quad",
     openingHours: [
