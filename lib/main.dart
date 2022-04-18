@@ -402,19 +402,39 @@ class _MyHomePageState extends State<MyHomePage> {
         keywordSearch: () => searchAndFilterAppBar(),
         home: () => searchAndFilterAppBar(),
       ),
-      body: ListView.separated(
+      body: LayoutBuilder(
+          builder: (context, constraints) => constraints.maxWidth <= 500
+              ? showNarrowList(filteredBuildings)
+              : showWideList(filteredBuildings, constraints.maxWidth)),
+    );
+  }
+
+  Widget showNarrowList(List<Building> filteredBuildings) => ListView.separated(
         padding: const EdgeInsets.all(8),
         itemCount: filteredBuildings.length,
         itemBuilder: (BuildContext context, int index) {
-          return showListItem(filteredBuildings[index]);
+          return showNarrowListItem(filteredBuildings[index]);
         },
         separatorBuilder: (context, index) => SizedBox(
           height: Theme.of(context).textTheme.bodySmall!.fontSize! / 2,
         ),
         // itemExtent: 100,
-      ),
-    );
-  }
+      );
+
+  Widget showWideList(List<Building> filteredBuildings, double maxWidth) =>
+      Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: GridView.count(
+            childAspectRatio: 1.05,
+            padding: const EdgeInsets.all(8),
+            children: filteredBuildings.map(showWideListItem).toList(),
+            crossAxisSpacing:
+                Theme.of(context).textTheme.bodySmall!.fontSize! / 2,
+            crossAxisCount: maxWidth > 800 ? 3 : 2,
+          ),
+        ),
+      );
 
   AppBar filterResultsAppBar() => AppBar(
         toolbarHeight: 60,
@@ -628,7 +648,7 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  Widget showListItem(Building building) {
+  Widget showNarrowListItem(Building building) {
     var openingHoursIndex = getOpeningHoursIndex();
     return GestureDetector(
       onTap: () {
@@ -674,6 +694,55 @@ class _MyHomePageState extends State<MyHomePage> {
                                   AssetImage(getImageUrl(id: building.id))))))),
         ]),
       )),
+    );
+  }
+
+  Widget showWideListItem(Building building) {
+    var openingHoursIndex = getOpeningHoursIndex();
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BuildingPage(building: building),
+            ));
+      },
+      child: Card(
+        child: Padding(
+          padding:
+              EdgeInsets.all(Theme.of(context).textTheme.bodyLarge!.fontSize!),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  building.title,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                SizedBox(
+                    height:
+                        Theme.of(context).textTheme.bodySmall!.fontSize! / 2),
+                Text(
+                    openingHoursToString(
+                        building.openingHours[openingHoursIndex]),
+                    style: Theme.of(context).textTheme.bodyMedium),
+                const Spacer(),
+                LayoutBuilder(
+                    builder:
+                        (BuildContext context, BoxConstraints constraints) =>
+                            AspectRatio(
+                                aspectRatio: 1.5,
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                  fit: BoxFit.fitWidth,
+                                  image: AssetImage(
+                                    getImageUrl(id: building.id),
+                                  ),
+                                ))))),
+              ]),
+        ),
+      ),
     );
   }
 
