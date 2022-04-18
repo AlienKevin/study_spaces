@@ -4,8 +4,8 @@ import 'package:mstudy/main.dart';
 List<StudySpace> studySpaces = [
   StudySpace(
     title: "Art, Architecture, and Engineering Library",
+    id: "duderstadt",
     openingHours: List.filled(7, const OpeningHours.allDay()),
-    pictureUrl: "assets/duderstadt.webp",
     address: "2281 Bonisteel Blvd",
     buildingPosition:
         const BuildingPosition(latitude: 42.291165, longitude: -83.715716),
@@ -15,6 +15,7 @@ List<StudySpace> studySpaces = [
   ),
   StudySpace(
     title: "Hatcher Library",
+    id: "hatcher",
     openingHours: [
       ...List.filled(
           4,
@@ -27,7 +28,6 @@ List<StudySpace> studySpaces = [
       const OpeningHours.range(
           TimeOfDay(hour: 13, minute: 0), TimeOfDay(hour: 19, minute: 0)),
     ],
-    pictureUrl: "assets/hatcher.webp",
     address: "913 S. University Avenue",
     buildingPosition: const BuildingPosition(
         latitude: 42.276334,
@@ -37,14 +37,15 @@ List<StudySpace> studySpaces = [
     areas: [
       Area(
         title: "Asia Library",
+        id: "asia",
         floor: "4",
-        pictureUrl: "assets/hatcher_asia.webp",
         indoor: true,
       )
     ],
   ),
   StudySpace(
     title: "Shapiro Library",
+    id: "shapiro",
     openingHours: [
       ...List.filled(4, const OpeningHours.allDay()),
       const OpeningHours.range(
@@ -54,7 +55,6 @@ List<StudySpace> studySpaces = [
       const OpeningHours.range(
           TimeOfDay(hour: 10, minute: 0), TimeOfDay(hour: 0, minute: 0)),
     ],
-    pictureUrl: "assets/shapiro.webp",
     address: "919 S. University Ave",
     buildingPosition:
         const BuildingPosition(latitude: 42.275615, longitude: -83.737183),
@@ -64,6 +64,7 @@ List<StudySpace> studySpaces = [
   ),
   StudySpace(
     title: "Fine Arts Library",
+    id: "fine_arts",
     openingHours: [
       ...List.filled(
           5,
@@ -72,7 +73,6 @@ List<StudySpace> studySpaces = [
       const OpeningHours.closed(),
       const OpeningHours.closed(),
     ],
-    pictureUrl: "assets/fine_arts.webp",
     address: "855 S. University Ave",
     buildingPosition:
         const BuildingPosition(latitude: 42.274944, longitude: -83.738995),
@@ -82,6 +82,7 @@ List<StudySpace> studySpaces = [
   ),
   StudySpace(
     title: "Taubman Health Sciences Library",
+    id: "taubman",
     openingHours: [
       ...List.filled(
           5,
@@ -90,7 +91,6 @@ List<StudySpace> studySpaces = [
       const OpeningHours.closed(),
       const OpeningHours.closed(),
     ],
-    pictureUrl: "assets/taubman.webp",
     address: "1135 Catherine St",
     buildingPosition:
         const BuildingPosition(latitude: 42.283548, longitude: -83.734451),
@@ -100,6 +100,7 @@ List<StudySpace> studySpaces = [
   ),
   StudySpace(
     title: "Music Library",
+    id: "music",
     openingHours: [
       ...List.filled(
           5,
@@ -108,7 +109,6 @@ List<StudySpace> studySpaces = [
       const OpeningHours.closed(),
       const OpeningHours.closed(),
     ],
-    pictureUrl: "assets/music.webp",
     address: "1100 Baits Dr",
     buildingPosition:
         const BuildingPosition(latitude: 42.290373, longitude: -83.721006),
@@ -118,6 +118,7 @@ List<StudySpace> studySpaces = [
   ),
   StudySpace(
     title: "East Quad",
+    id: "east_quad",
     openingHours: [
       ...List.filled(
           5,
@@ -128,7 +129,6 @@ List<StudySpace> studySpaces = [
       const OpeningHours.range(
           TimeOfDay(hour: 9, minute: 0), TimeOfDay(hour: 20, minute: 0)),
     ],
-    pictureUrl: "assets/east_quad.webp",
     address: "701 E. University",
     buildingPosition: const BuildingPosition(
         latitude: 42.272745760362035, longitude: -83.73550729385826),
@@ -137,21 +137,22 @@ List<StudySpace> studySpaces = [
     areas: [
       Area(
         title: "Blue Cafe",
+        id: "blue_cafe",
         floor: "Main",
         indoor: true,
-        pictureUrl: 'assets/east_quad_blue_cafe.webp',
       ),
       Area(
         title: "Open Space",
+        id: "open_space",
         floor: "Lower Level",
         indoor: true,
-        pictureUrl: 'assets/east_quad_open_space.webp',
       ),
       Area(
         title: "Study Rooms",
+        id: "study_rooms",
         floor: "Lower Level",
         indoor: true,
-        pictureUrl: 'assets/image_coming_soon.webp',
+        hasImage: false,
       ),
     ],
   )

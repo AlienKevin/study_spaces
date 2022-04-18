@@ -187,25 +187,31 @@ class BuildingPosition {
   });
 }
 
+typedef Id = String;
+
 class Area {
   final String title;
+  final Id id;
   final String floor;
   final bool indoor;
-  final String pictureUrl;
+  final bool hasImage;
 
   Area({
     required this.title,
     required this.floor,
     required this.indoor,
-    required this.pictureUrl,
+    required this.id,
+    this.hasImage = true,
   });
 }
 
+Id getAreaId(Id buildingId, Id areaId) => "${buildingId}_$areaId";
+
 class StudySpace {
   final String title;
+  final String id;
   List<OpeningHours>
       openingHours; // From Monday (list index 0) to Sunday (list index 6)
-  final String pictureUrl;
   final BuildingPosition buildingPosition;
   final String address;
   final String phoneNumber;
@@ -214,8 +220,8 @@ class StudySpace {
 
   StudySpace({
     required this.title,
+    required this.id,
     required this.openingHours,
-    required this.pictureUrl,
     required this.buildingPosition,
     required this.address,
     required this.phoneNumber,
@@ -223,6 +229,12 @@ class StudySpace {
     required this.areas,
   });
 }
+
+String getImageUrl({
+  required Id id,
+  hasImage = true,
+}) =>
+    hasImage ? "assets/$id.webp" : "assets/image_coming_soon.webp";
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -660,7 +672,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               fit: BoxFit.fitHeight,
-                              image: AssetImage(studySpace.pictureUrl)))))),
+                              image: AssetImage(
+                                  getImageUrl(id: studySpace.id))))))),
         ]),
       )),
     );

@@ -74,8 +74,10 @@ class OpeningHourCard extends StatelessWidget {
 }
 
 class AreasCard extends StatelessWidget {
-  const AreasCard({Key? key, required this.areas}) : super(key: key);
+  const AreasCard({Key? key, required this.buildingId, required this.areas})
+      : super(key: key);
 
+  final String buildingId;
   final List<Area> areas;
 
   @override
@@ -88,44 +90,50 @@ class AreasCard extends StatelessWidget {
         clipBehavior: Clip.none,
         scrollDirection: Axis.horizontal,
         itemCount: areas.length,
-        itemBuilder: (BuildContext context, int index) => Card(
-            margin: EdgeInsets.zero,
-            child: Padding(
-              padding: EdgeInsets.all(
-                  Theme.of(context).textTheme.bodyLarge!.fontSize!),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    areas[index].title,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                    textAlign: TextAlign.left,
-                  ),
-                  SizedBox(
-                      height:
-                          Theme.of(context).textTheme.bodyMedium!.fontSize! /
-                              2),
-                  Text(
-                    "Floor: ${areas[index].floor}",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  SizedBox(
-                      height:
-                          Theme.of(context).textTheme.headlineSmall!.fontSize! /
-                              2),
-                  SizedBox(
-                      width: cardContentWidth,
-                      child: AspectRatio(
-                          aspectRatio: 1.5,
-                          child: Container(
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      fit: BoxFit.fitHeight,
-                                      image: AssetImage(
-                                          areas[index].pictureUrl)))))),
-                ],
-              ),
-            )),
+        itemBuilder: (BuildContext context, int index) {
+          var area = areas[index];
+          return Card(
+              margin: EdgeInsets.zero,
+              child: Padding(
+                padding: EdgeInsets.all(
+                    Theme.of(context).textTheme.bodyLarge!.fontSize!),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      area.title,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(
+                        height:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize! /
+                                2),
+                    Text(
+                      "Floor: ${area.floor}",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    SizedBox(
+                        height: Theme.of(context)
+                                .textTheme
+                                .headlineSmall!
+                                .fontSize! /
+                            2),
+                    SizedBox(
+                        width: cardContentWidth,
+                        child: AspectRatio(
+                            aspectRatio: 1.5,
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        fit: BoxFit.fitHeight,
+                                        image: AssetImage(getImageUrl(
+                                            id: getAreaId(buildingId, area.id),
+                                            hasImage: area.hasImage))))))),
+                  ],
+                ),
+              ));
+        },
         separatorBuilder: (context, index) => SizedBox(
           width: Theme.of(context).textTheme.bodySmall!.fontSize! / 2,
         ),
@@ -226,7 +234,8 @@ class StudySpacePage extends StatelessWidget {
                 ),
                 Visibility(
                     visible: studySpace.areas.isNotEmpty,
-                    child: AreasCard(areas: studySpace.areas)),
+                    child: AreasCard(
+                        buildingId: studySpace.id, areas: studySpace.areas)),
                 Visibility(
                   visible: studySpace.areas.isNotEmpty,
                   child: SizedBox(
